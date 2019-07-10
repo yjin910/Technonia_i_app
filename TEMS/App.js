@@ -1,19 +1,48 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  AsyncStorage
+} from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
-}
+import LoginScreen from './components/LoginScreen';
+import ProfileScreen from './components/ProfileScreen'
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+/* create default stack navigator */
+const AppStackNavigator = createStackNavigator({
+  Login: { screen: LoginScreen },
+  Profile: { screen: ProfileScreen }
 });
+
+/* create logged-in stack navigator */
+const LoggedInStackNavigator = createStackNavigator({
+  Profile: { screen: ProfileScreen }
+});
+
+
+export default class App extends React.Component {
+  /**
+   * Check if the user is logged in already.
+   */
+  checkIfLoggedIn = async () => {
+    const id = await AsyncStorage.getItem('TEMS@id', undefined);
+
+    if (id) this.setState({ isLoggedIn: true, id: id });
+  }
+
+  componentWillMount = () => {
+    this.checkLoggedIn();
+  }
+
+  render() {
+    const { isLoggedIn } = this.state;
+
+    let Container;
+
+    if (isLoggedIn) {
+      Container = createAppContainer(LoggedInStackNavigator);
+    } else {
+      Container = createAppContainer(AppStackNavigator);
+    }
+
+    return (<Container />)
+  }
+}
