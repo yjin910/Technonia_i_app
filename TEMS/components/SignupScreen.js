@@ -28,12 +28,12 @@ export default class SignupScreen extends React.Component {
         toSignInScreen: PropTypes.func.isRequired
     }
 
-    sendUserInfo = async () => {
+    sendUserInfo = async (id, password) => {
         try {
-            const { id, password } = this.state;
+            //TODO send user info to server for log in
 
-            //TODO
-
+            //navigate to the log in screen
+            this.props.toSignInScreen();
         } catch (err) {
             console.log(err);
             alert('failed to sign up');
@@ -55,18 +55,13 @@ export default class SignupScreen extends React.Component {
 
     /* This method checks if the user filled all text inputs */
     checkIfTheUserFilledAllTextInput = async () => {
-        const toSignInScreen = this.props.toSignInScreen;
-
         const { id, password, password_confirm } = this.state;
 
         if (id !== '') {
             if (password !== '') {
                 if (password_confirm == password) {
                     //store the user information in the local storage
-                    await this.sendUserInfo();
-
-                    //navigate to the log in screen
-                    toSignInScreen();
+                    await this.sendUserInfo(id, password);
                 }
             } else {
                 alert('Please input password');
@@ -77,7 +72,7 @@ export default class SignupScreen extends React.Component {
     }
 
     render() {
-        const toSignInScreen = this.checkIfTheUserFilledAllTextInput;
+        const signUp = this.checkIfTheUserFilledAllTextInput;
         const { toSignInScreen } = this.props;
         return (
             <View style={styles.container}>
@@ -109,7 +104,7 @@ export default class SignupScreen extends React.Component {
                     onChangeText={this._addPasswordConfirm}
                     ref={(input) => this.password = input}
                 />
-                <TouchableOpacity style={styles.buttonBox} onPress={() => toSignInScreen()}>
+                <TouchableOpacity style={styles.buttonBox} onPress={() => signUp()}>
                     <Text style={styles.buttonText}>Sign up</Text>
                 </TouchableOpacity>
                 <View style={styles.textContainer}>
