@@ -5,7 +5,7 @@
 TEMS stands for Technonia Environment Monitoring System.
 As the name of the project depicts, the main aim of this app is to monitor the environment data with a mobile phone.
 
-## Target
+## Target environmet
 
 As the react native supports both Android and iOS, the app should be able to run on both Android and iOS environment.
 
@@ -19,9 +19,13 @@ Currently, I am testing this app with Android emulator.
 
 1. Sign in
 
-The app will send GET request to the server. The request will contain user's email address and password.
+The app will send POST request to the server. The request will contain user's email address and password.
 
-    GET /login ?email={email}&pw={password}
+    POST /login
+    {
+        email: email_address
+        password: password
+    }
 
 The server will check if the given email address is registered.
 If so, the server will then check if the password is correct.
