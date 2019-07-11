@@ -57,7 +57,9 @@ Otherwise (if success), the server will send ok message to the client.
 
 3. Reset password
 
-TODO
+To reset the password, the registered email address is required.
+
+Basically, what the TEMS app do for password reset process is generating a new password and send the generated password to the given email address.
 
 
 ## TODO

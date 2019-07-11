@@ -6,6 +6,8 @@ import {
 export default class DeviceCard extends React.Component {
 
     render() {
-        //
+        return (
+            <View></View>
+        );
     }
 }

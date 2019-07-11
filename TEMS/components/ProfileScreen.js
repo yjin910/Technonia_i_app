@@ -22,7 +22,7 @@ export default class ProfileScreen extends React.Component {
         super(props);
 
         this.state = {
-            //
+            //TODO
         }
     }
 
