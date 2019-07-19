@@ -1,12 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createStackNavigator, createAppContainer } from 'react-navigation'
+import BluetoothScanner from './src/BluetoothScanner';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+const AppStackNavigator = createStackNavigator({
+  Scanner: { screen: BluetoothScanner }
+});
+
+export default class App extends React.Component {
+  render() {
+    let Container = createAppContainer(AppStackNavigator);
+
+    return (<Container />);
+  }
 }
 
 const styles = StyleSheet.create({
