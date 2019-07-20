@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
-import BluetoothScanner from './src/BluetoothScanner';
+import BluetoothManager from './src/BLEManager';
 
 const AppStackNavigator = createStackNavigator({
-  Scanner: { screen: BluetoothScanner }
+  Manager: { screen: BluetoothManager }
 });
 
 export default class App extends React.Component {
@@ -13,12 +13,3 @@ export default class App extends React.Component {
     return (<Container />);
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
