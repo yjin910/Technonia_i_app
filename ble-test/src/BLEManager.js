@@ -1,19 +1,16 @@
 import React from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     TouchableHighlight,
-    NativeAppEventEmitter,
     NativeEventEmitter,
     NativeModules,
     Platform,
     PermissionsAndroid,
     ListView,
     ScrollView,
-    AppState,
-    Dimensions
+    AppState
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 
