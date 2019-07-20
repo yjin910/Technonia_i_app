@@ -5,17 +5,15 @@ import { BleManager } from "react-native-ble-plx"
 import BluetoothScanner from './BluetoothScanner';
 
 
-const uuids = [];
+const targetDeviceName = '';
 
 export default class BluetoothManager extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            //TODO
+            info: ''
         }
-
-        this.char_uuid = ''
     }
 
     componentDidMount = () => {
@@ -44,16 +42,66 @@ export default class BluetoothManager extends React.Component {
     startScan = (uuid_array, options) => {
         this.bleManager.startDeviceScan(uuid_array, options, (err, device) => {
             if (err) {
-                //TODO alert error
-                alert("Error occurred while scanning ble devices");
+                this.error(err.message)
             } else {
-                //TODO
+                console.log('Found: ' + device.name);
+
+                // check the device name
+                if (device.name === targetDeviceName) {
+                    this.info("Connecting to TI Sensor");
+                    this.stopScan();
+
+                    //TODO
+                    device.connect()
+                        .then((device) => {
+                            this.info("Discovering services and characteristics")
+                            return device.discoverAllServicesAndCharacteristics()
+                        })
+                        .then((device) => {
+                            this.info("Setting notifications")
+                            return this.setupNotifications(device)
+                        })
+                        .then(() => {
+                            this.info("Listening...")
+                        }, (error) => {
+                            this.error(error.message)
+                        })
+                }
+
             }
         });
     }
 
     stopScan = () => {
         this.bleManager.stopDeviceScan();
+    }
+
+    setupNotifications = async (device) => {
+        for (const id in this.sensors) {
+            const service = this.serviceUUID(id)
+            const characteristicW = this.writeUUID(id)
+            const characteristicN = this.notifyUUID(id)
+
+            const characteristic = await device.writeCharacteristicWithResponseForService(
+                service, characteristicW, "AQ==" /* 0x01 in hex */
+            )
+
+            device.monitorCharacteristicForService(service, characteristicN, (error, characteristic) => {
+                if (error) {
+                    this.error(error.message)
+                    return
+                }
+                this.updateValue(characteristic.uuid, characteristic.value)
+            })
+        }
+    }
+
+    info = (message) => {
+        this.setState({ info: message })
+    }
+
+    error = (message) => {
+        this.setState({ info: "ERROR: " + message })
     }
 
     render() {
