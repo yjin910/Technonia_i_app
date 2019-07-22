@@ -22,6 +22,8 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
+const TARGET_BLE_DEVICE_NAME = 'TEMS_BLE_Server';
+
 const BLE_NOTIFICATION_TIMEOUT = 200;
 const BLE_RETRIEVE_SERVICE_TIMEOUT = 900;
 
@@ -151,6 +153,9 @@ export default class BluetoothManager extends React.Component {
             BleManager.disconnect(peripheral.id);
         } else {
             const id = peripheral.id;
+            const name = peripheral.name;
+
+            if (!name.startsWith(TARGET_BLE_DEVICE_NAME)) return;
 
             BleManager.connect(id)
                 .then(() => {
@@ -159,24 +164,24 @@ export default class BluetoothManager extends React.Component {
                     if (p) {
                         p.connected = true;
                         peripherals.set(id, p);
-                        this.setState({ peripherals });
+                        this.setState({ peripherals: peripherals });
                     }
                     //TODO debugging message
                     console.log('Connected to ' + id);
-                    alert('Connected to ' + id);
+                    alert('Connected to ' + id + ' (' + name + ')');
 
                     setTimeout(() => {
 
                         BleManager.retrieveServices(id)
                             .then((peripheralInfo) => {
-                                //TODO fill in the service uuid and characteristic uuid
-                                let service_uuid = '';
-                                let characteristic_uuid = '';
+                                let service_uuid = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+                                let characteristic_uuid = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
                                 // set timeout to start notification for given service
                                 setTimeout(() => {
                                     BleManager.startNotification(id, service_uuid, characteristic_uuid)
                                         .then(() => {
+                                            //TODO
                                             alert(peripheralInfo);
                                             console.log(peripheralInfo);
                                         })
