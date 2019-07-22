@@ -22,6 +22,9 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
+const BLE_NOTIFICATION_TIMEOUT = 200;
+const BLE_RETRIEVE_SERVICE_TIMEOUT = 900;
+
 export default class BluetoothManager extends React.Component {
     constructor(props) {
         super(props);
@@ -139,6 +142,61 @@ export default class BluetoothManager extends React.Component {
         });
     }
 
+    connectToPeripheral = (peripheral) => {
+        if (!peripheral) {
+            return;
+        }
+
+        if (peripheral.connected) {
+            BleManager.disconnect(peripheral.id);
+        } else {
+            const id = peripheral.id;
+
+            BleManager.connect(id)
+                .then(() => {
+                    let peripherals = this.state.peripherals;
+                    let p = peripherals.get(id);
+                    if (p) {
+                        p.connected = true;
+                        peripherals.set(id, p);
+                        this.setState({ peripherals });
+                    }
+                    //TODO debugging message
+                    console.log('Connected to ' + id);
+                    alert('Connected to ' + id);
+
+                    setTimeout(() => {
+
+                        BleManager.retrieveServices(id)
+                            .then((peripheralInfo) => {
+                                //TODO fill in the service uuid and characteristic uuid
+                                let service_uuid = '';
+                                let characteristic_uuid = '';
+
+                                // set timeout to start notification for given service
+                                setTimeout(() => {
+                                    BleManager.startNotification(id, service_uuid, characteristic_uuid)
+                                        .then(() => {
+                                            alert(peripheralInfo);
+                                            console.log(peripheralInfo);
+                                        })
+                                        .catch((error) => {
+                                            console.log('Notification error', error);
+                                        })
+                                }, BLE_NOTIFICATION_TIMEOUT);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                                alert('Error in BleManager.retrieveServices()'); //TODO
+                            })
+
+                    }, BLE_RETRIEVE_SERVICE_TIMEOUT);
+                })
+                .catch((error) => {
+                    console.log('Connection error', error);
+                });
+        }
+    }
 
     render() {
         let list = Array.from(this.state.peripherals.values());
