@@ -15,4 +15,5 @@ DerivedData
 xcuserdata
 *.iml
 .gradle
-android/.gradle
+android/.gradle/
+.idea/
