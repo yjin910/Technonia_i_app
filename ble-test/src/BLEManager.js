@@ -223,7 +223,7 @@ export default class BluetoothManager extends React.Component {
                         renderRow={(item) => {
                             const color = item.connected ? 'green' : '#fff';
                             return (
-                                <TouchableHighlight onPress={() => console.log(item)}>
+                                <TouchableHighlight onPress={() => this.connectToPeripheral(item)}>
                                     <View style={[styles.row, { backgroundColor: color }]}>
                                         <Text style={{ fontSize: 12, textAlign: 'center', color: '#333333', padding: 10 }}>{item.name}</Text>
                                         <Text style={{ fontSize: 8, textAlign: 'center', color: '#333333', padding: 10 }}>{item.id}</Text>
