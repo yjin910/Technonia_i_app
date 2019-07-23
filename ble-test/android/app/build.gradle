@@ -103,7 +103,7 @@ android {
 
     defaultConfig {
         applicationId "com.ble_test"
-        minSdkVersion 19
+        minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"

@@ -6,6 +6,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "convert-string": "^0.1.0",
+    "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "0.59.8",

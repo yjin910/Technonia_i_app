@@ -13,8 +13,9 @@ import {
     AppState
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
+import { stringToBytes } from 'convert-string';
 
-import BluetoothScanner from './BluetoothScanner';
+import WiFiSetting from './WiFiSetting';
 
 
 const BleManagerModule = NativeModules.BleManager;
@@ -22,10 +23,12 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
-const TARGET_BLE_DEVICE_NAME = 'TEMS_BLE_Server';
+const TARGET_BLE_DEVICE_NAME = 'ESP32';
+const WIFI_NAME_SERVICE_UUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+const WIFI_PW_SERVICE_UUID = '4fafc202-1fb5-459e-8fcc-c5c9c331914b';
+const WIFI_NAME_CHARACTERISTIC_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+const WIFI_PW_CHARACTERISTIC_UUID = 'bed5483e-36e1-4688-b7f5-ea07361b26a8';
 
-const BLE_NOTIFICATION_TIMEOUT = 200;
-const BLE_RETRIEVE_SERVICE_TIMEOUT = 900;
 
 export default class BluetoothManager extends React.Component {
     constructor(props) {
@@ -34,7 +37,9 @@ export default class BluetoothManager extends React.Component {
         this.state = {
             scanning: false,
             peripherals: new Map(),
-            appState: ''
+            appState: '',
+            device: undefined,
+            isConnected: false
         }
 
         this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
@@ -42,6 +47,7 @@ export default class BluetoothManager extends React.Component {
         this.handleUpdateValueForCharacteristic = this.handleUpdateValueForCharacteristic.bind(this);
         this.handleDisconnectedPeripheral = this.handleDisconnectedPeripheral.bind(this);
         this.handleAppStateChange = this.handleAppStateChange.bind(this);
+        this.sendData = this.sendData.bind(this);
     }
 
     componentWillUnmount() {
@@ -164,38 +170,9 @@ export default class BluetoothManager extends React.Component {
                     if (p) {
                         p.connected = true;
                         peripherals.set(id, p);
-                        this.setState({ peripherals: peripherals });
+                        this.setState({ peripherals: peripherals, device: id, isConnected: true });
                     }
-                    //TODO debugging message
-                    console.log('Connected to ' + id);
-                    alert('Connected to ' + id + ' (' + name + ')');
 
-                    setTimeout(() => {
-
-                        BleManager.retrieveServices(id)
-                            .then((peripheralInfo) => {
-                                let service_uuid = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
-                                let characteristic_uuid = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
-
-                                // set timeout to start notification for given service
-                                setTimeout(() => {
-                                    BleManager.startNotification(id, service_uuid, characteristic_uuid)
-                                        .then(() => {
-                                            //TODO
-                                            alert(peripheralInfo);
-                                            console.log(peripheralInfo);
-                                        })
-                                        .catch((error) => {
-                                            console.log('Notification error', error);
-                                        })
-                                }, BLE_NOTIFICATION_TIMEOUT);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                                alert('Error in BleManager.retrieveServices()'); //TODO
-                            })
-
-                    }, BLE_RETRIEVE_SERVICE_TIMEOUT);
                 })
                 .catch((error) => {
                     console.log('Connection error', error);
@@ -203,15 +180,30 @@ export default class BluetoothManager extends React.Component {
         }
     }
 
+    sendData = (device, wifi, pw) => {
+        const wifi_data = stringToBytes(wifi);
+        BleManager.write(device, WIFI_NAME_SERVICE_UUID, WIFI_NAME_CHARACTERISTIC_UUID, wifi_data, wifi_data.length + 1)
+            .then(() => {
+                const pw_data = stringToBytes(pw);
+
+                BleManager.write(device, WIFI_PW_SERVICE_UUID, WIFI_PW_CHARACTERISTIC_UUID, pw_data, pw_data.length + 1)
+                    .catch((err) => { alert('error::write pw = ' + pw) });
+            })
+            .catch((err) => { alert('error::write wifi') });
+    }
+
     render() {
-        let list = Array.from(this.state.peripherals.values());
+        let { scanning, peripherals, device, isConnected } = this.state;
+        let list = Array.from(peripherals.values());
         let dataSource = ds.cloneWithRows(list);
 
+        if (isConnected)
+            return (<WiFiSetting sendData={this.sendData} device={device} />)
 
         return (
             <View style={styles.container}>
                 <TouchableHighlight style={{ marginTop: 40, margin: 20, padding: 20, backgroundColor: '#ccc' }} onPress={() => this.startScan()}>
-                    <Text>Scan Bluetooth ({this.state.scanning ? 'on' : 'off'})</Text>
+                    <Text>Scan Bluetooth ({scanning ? 'on' : 'off'})</Text>
                 </TouchableHighlight>
                 <TouchableHighlight style={{ marginTop: 0, margin: 20, padding: 20, backgroundColor: '#ccc' }} onPress={() => this.retrieveConnected()}>
                     <Text>Retrieve connected peripherals</Text>
@@ -240,8 +232,6 @@ export default class BluetoothManager extends React.Component {
                 </ScrollView>
             </View>
         );
-
-        //TODO return (<BluetoothScanner />);
     }
 }
 
