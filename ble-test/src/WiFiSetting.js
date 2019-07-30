@@ -49,7 +49,7 @@ export default class WiFiSetting extends React.Component {
         return (
             <KeyboardAvoidingView
                 keyboardVerticalOffset={Platform.select({ ios: 0, android: width / 3 })}
-                style={{ flex: 1 }}
+                style={styles.keyboardAvoidingContainer}
                 behavior={"padding"}
                 enabled>
                 <SafeAreaView style={styles.container}>
@@ -85,6 +85,9 @@ export default class WiFiSetting extends React.Component {
 
 
 const styles = StyleSheet.create({
+    keyboardAvoidingContainer: {
+        flex: 1
+    },
     container: {
         backgroundColor: '#1a3f95',
         flexGrow: 1,
