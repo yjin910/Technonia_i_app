@@ -10,7 +10,8 @@ import {
     PermissionsAndroid,
     ListView,
     ScrollView,
-    AppState
+    AppState,
+    AsyncStorage
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import { stringToBytes } from 'convert-string';
@@ -24,10 +25,6 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
 const TARGET_BLE_DEVICE_NAME = 'ESP32';
-const WIFI_NAME_SERVICE_UUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
-const WIFI_PW_SERVICE_UUID = '4fafc202-1fb5-459e-8fcc-c5c9c331914b';
-const WIFI_NAME_CHARACTERISTIC_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
-const WIFI_PW_CHARACTERISTIC_UUID = 'bed5483e-36e1-4688-b7f5-ea07361b26a8';
 
 
 export default class BluetoothManager extends React.Component {
@@ -39,7 +36,6 @@ export default class BluetoothManager extends React.Component {
             peripherals: new Map(),
             appState: '',
             device: undefined,
-            isConnected: false
         }
 
         this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
@@ -47,7 +43,6 @@ export default class BluetoothManager extends React.Component {
         this.handleUpdateValueForCharacteristic = this.handleUpdateValueForCharacteristic.bind(this);
         this.handleDisconnectedPeripheral = this.handleDisconnectedPeripheral.bind(this);
         this.handleAppStateChange = this.handleAppStateChange.bind(this);
-        this.sendData = this.sendData.bind(this);
     }
 
     componentWillUnmount() {
@@ -134,22 +129,6 @@ export default class BluetoothManager extends React.Component {
         }
     }
 
-    retrieveConnected() {
-        BleManager.getConnectedPeripherals([]).then((results) => {
-            if (results.length == 0) {
-                console.log('No connected peripherals')
-            }
-            console.log(results);
-            var peripherals = this.state.peripherals;
-            for (var i = 0; i < results.length; i++) {
-                var peripheral = results[i];
-                peripheral.connected = true;
-                peripherals.set(peripheral.id, peripheral);
-                this.setState({ peripherals });
-            }
-        });
-    }
-
     connectToPeripheral = (peripheral) => {
         if (!peripheral) {
             return;
@@ -163,50 +142,23 @@ export default class BluetoothManager extends React.Component {
 
             if (!name.startsWith(TARGET_BLE_DEVICE_NAME)) return;
 
-            BleManager.connect(id)
-                .then(() => {
-                    let peripherals = this.state.peripherals;
-                    let p = peripherals.get(id);
-                    if (p) {
-                        p.connected = true;
-                        peripherals.set(id, p);
-                        this.setState({ peripherals: peripherals, device: id, isConnected: true });
-                    }
+            await AsyncStorage.setItem('TEMS@device_uuid', id);
 
-                })
-                .catch((error) => {
-                    console.log('Connection error', error);
-                });
+            this.setState({device: id});
+
+            this.props.navigation.navigate('BLEMenu');
         }
     }
 
-    sendData = (device, wifi, pw) => {
-        const wifi_data = stringToBytes(wifi);
-        BleManager.write(device, WIFI_NAME_SERVICE_UUID, WIFI_NAME_CHARACTERISTIC_UUID, wifi_data, wifi_data.length + 1)
-            .then(() => {
-                const pw_data = stringToBytes(pw);
-
-                BleManager.write(device, WIFI_PW_SERVICE_UUID, WIFI_PW_CHARACTERISTIC_UUID, pw_data, pw_data.length + 1)
-                    .catch((err) => { alert('error::write pw = ' + pw) });
-            })
-            .catch((err) => { alert('error::write wifi') });
-    }
-
     render() {
-        let { scanning, peripherals, device, isConnected } = this.state;
+        let { scanning, peripherals, device } = this.state;
         let list = Array.from(peripherals.values());
         let dataSource = ds.cloneWithRows(list);
-
-        if (isConnected)
-            return (<WiFiSetting sendData={this.sendData} device={device} />)
 
         return (
             <View style={styles.container}>
                 <TouchableHighlight style={{ marginTop: 40, margin: 20, padding: 20, backgroundColor: '#ccc' }} onPress={() => this.startScan()}>
                     <Text>Scan Bluetooth ({scanning ? 'on' : 'off'})</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={{ marginTop: 0, margin: 20, padding: 20, backgroundColor: '#ccc' }} onPress={() => this.retrieveConnected()}>
-                    <Text>Retrieve connected peripherals</Text>
                 </TouchableHighlight>
                 <ScrollView style={styles.scroll}>
                     {(list.length == 0) &&

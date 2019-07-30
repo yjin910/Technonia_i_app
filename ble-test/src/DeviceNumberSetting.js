@@ -11,38 +11,40 @@ import {
     SafeAreaView,
     Keyboard,
     Platform,
-    ScrollView,
-    Image
+    ScrollView
 } from 'react-native';
+import PropTypes from "prop-types";
 
+let utils = require('./BLEUtil');
 
 const { width, height } = Dimensions.get('window');
 
-let util = require('./BLEUtil');
-
-export default class WiFiSetting extends React.Component {
+export default class DeviceNumberSetting extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            wifi: '',
-            pw: '',
-            uuid
+            deviceNum: '',
+            uuid: ''
         }
     }
 
-    sendWiFiSettings = async () => {
-        let { wifi, pw, uuid } = this.state;
+    static propTypes = {
+        device: PropTypes.string.isRequired,
+        sendData: PropTypes.func.isRequired
+    };
 
+    sendDeviceNumber = () => {
+        const { deviceNum, uuid } = this.state;
         if (uuid == '') {
             uuid = await AsyncStorage.getItem('TEMS@device_uuid');
         }
-        util.sendData_wifi(uuid, wifi, pw);
+        utils.sendData_deviceNum(uuid, deviceNum);
     }
 
     componentDidMount = () => {
         const uuid = this.props.navigation.getParam('uuid', '');
-        this.setState({ uuid: uuid });
+        this.setState({uuid: uuid});
     }
 
     render() {
@@ -56,22 +58,15 @@ export default class WiFiSetting extends React.Component {
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <ScrollView>
                             <View style={styles.container}>
-                                <Image style={styles.logoImage} source={require('../assets/icon.png')} />
                                 <TextInput style={styles.inputBox}
-                                    placeholder="Wi-Fi"
+                                    placeholder="Device Number"
                                     placeholderTextColor="#1a3f95"
                                     selectionColor="#fff"
-                                    keyboardType="email-address"
-                                    onChangeText={(wifi) => this.setState({ wifi: wifi })}
-                                    value={this.state.wifi}
+                                    keyboardType="number-pad"
+                                    onChangeText={(deviceNum) => this.setState({ deviceNum: deviceNum })}
+                                    value={this.state.deviceNum}
                                 />
-                                <TextInput style={styles.inputBox}
-                                    placeholder="Password"
-                                    placeholderTextColor="#1a3f95"
-                                    onChangeText={(pw) => this.setState({ pw: pw })}
-                                    value={this.state.pw}
-                                />
-                                <TouchableOpacity style={styles.buttonBox} onPress={() => this.sendWiFiSettings()}>
+                                <TouchableOpacity style={styles.buttonBox} onPress={() => this.sendDeviceNumber()}>
                                     <Text style={styles.buttonText}>OK</Text>
                                 </TouchableOpacity>
                             </View>
@@ -89,12 +84,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#1a3f95',
         flexGrow: 1,
         alignItems: 'center',
-    },
-    logoImage: {
-        width: height / 6,
-        height: height / 6,
-        marginBottom: height / 10,
-        marginTop: height / 20
     },
     inputBox: {
         width: width * 4 / 5,
