@@ -26,15 +26,15 @@ let sendData_wifi = (device_uuid, wifi, pw) => {
         .catch((err) => { alert('error::write wifi') });
 }
 
-let sendData_deviceNum = (device_uuid, deviceNum) => {
+let sendData_deviceName = (device_uuid, deviceName) => {
     if (device_uuid == '') {
         alert('device not connected');
         return;
     }
 
-    const deviceNum_data = stringToBytes(deviceNum);
+    const deviceName_data = stringToBytes(deviceName);
 
-    BleManager.write(device_uuid, WIFI_NAME_SERVICE_UUID, WIFI_NAME_CHARACTERISTIC_UUID, deviceNum_data, deviceNum_data.length + 1)
+    BleManager.write(device_uuid, WIFI_NAME_SERVICE_UUID, WIFI_NAME_CHARACTERISTIC_UUID, deviceName_data, deviceName_data.length + 1)
         .then(() => {
             console.log('success');
         })

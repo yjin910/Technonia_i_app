@@ -4,13 +4,13 @@ import { createStackNavigator, createAppContainer } from 'react-navigation'
 import BluetoothManager from './src/BLEManager';
 import BLEMenu from './src/BLEMenu';
 import WiFiSetting from './src/WiFiSetting'
-import DeviceNumberSetting from './src/DeviceNumberSetting'
+import GeigerNameSetting from './src/GeigerNameSetting'
 
 const AppStackNavigator = createStackNavigator({
   Manager: { screen: BluetoothManager },
   BLEMenu: { screen: BLEMenu },
   WiFiSetting: { screen: WiFiSetting },
-  DeviceNumberSetting: { screen: DeviceNumberSetting }
+  GeigerNameSetting: { screen: GeigerNameSetting }
 });
 
 export default class App extends React.Component {

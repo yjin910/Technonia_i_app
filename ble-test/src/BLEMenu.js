@@ -91,7 +91,7 @@ export default class BLEMenu extends React.Component {
                     <TouchableOpacity onPress={() => this.navigateScreen('WiFiSetting')} style={styles.button}>
                         <Text style={styles.buttonText}>WiFi Setting</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.navigateScreen('DeviceNumberSetting')} style={styles.button}>
+                    <TouchableOpacity onPress={() => this.navigateScreen('GeigerNameSetting')} style={styles.button}>
                         <Text style={styles.buttonText}>Device Setting</Text>
                     </TouchableOpacity>
                 </View>
