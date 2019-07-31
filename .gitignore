@@ -3,4 +3,4 @@
 node_modules
 .expo
 .gradle
-android/.gradle
+ble-test/android/app/release/

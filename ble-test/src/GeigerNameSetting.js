@@ -7,7 +7,6 @@ import {
     TextInput,
     Dimensions,
 } from 'react-native';
-import PropTypes from "prop-types";
 
 let utils = require('./BLEUtil');
 
@@ -21,14 +20,11 @@ export default class GeigerNameSetting extends React.Component {
             deviceName: '',
             uuid: ''
         }
+
+        this.sendDeviceName = this.sendDeviceName.bind(this);
     }
 
-    static propTypes = {
-        device: PropTypes.string.isRequired,
-        sendData: PropTypes.func.isRequired
-    };
-
-    sendDeviceName = () => {
+    sendDeviceName = async () => {
         const { deviceName, uuid } = this.state;
         if (uuid == '') {
             uuid = await AsyncStorage.getItem('TEMS@device_uuid');

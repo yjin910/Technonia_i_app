@@ -24,21 +24,27 @@ export default class BLEMenu extends React.Component {
             uuid: '',
             isConnected: false
         }
+
+        this.navigateToGeigerScreen = this.navigateToGeigerScreen.bind(this);
+        this.navigateToWiFiScreen = this.navigateToWiFiScreen.bind(this);
+        this.setConnectedDevice = this.setConnectedDevice.bind(this);
+        this.handleConnectionError = this.handleConnectionError.bind(this);
     }
 
     componentDidMount = () => {
         AppState.addEventListener('change', this.handleAppStateChange);
 
-        BleManager.start({ showAlert: false });
-
-        this.sendData = this.sendData.bind(this);
-        this.getDeviceNumber();
         this.connectDevice();
     }
 
     getDeviceNumber = async () => {
-        const uuid = await AsyncStorage.getItem('TEMS@device_uuid');
-        this.setState({uuid: uuid});
+        await AsyncStorage.getItem('TEMS@device_uuid', (err, res) => {
+            if (err) {
+                console.log(err);
+            } else {
+                this.setState({ uuid: res });
+            }
+        });
     }
 
     handleConnectionError = (err) => {
@@ -57,8 +63,7 @@ export default class BLEMenu extends React.Component {
             uuid = this.state.uuid;
         }
 
-        this.navigateScreen = this.navigateScreen.bind(this);
-        util.connectDevice(uuid, this.setConnectedDevice, this.handleConnectionError);
+        util.connectBLEDevice(uuid, this.setConnectedDevice, this.handleConnectionError);
     }
 
     disconnectDevice = () => {
@@ -76,9 +81,14 @@ export default class BLEMenu extends React.Component {
             })
     }
 
-    navigateScreen = (screen) => {
+    navigateToWiFiScreen = () => {
         const { uuid } = this.state;
-        this.props.navgation.navigate(screen, { uuid: uuid });
+        this.props.navigation.navigate('WiFiSetting', { uuid: uuid });
+    }
+
+    navigateToGeigerScreen() {
+        const { uuid } = this.state;
+        this.props.navigation.navigate('GeigerNameSetting', { uuid: uuid });
     }
 
     render() {
@@ -88,17 +98,15 @@ export default class BLEMenu extends React.Component {
             return (
                 <View style={styles.container}>
                     <Image style={styles.logoImage} source={require('../assets/icon.png')} />
-                    <TouchableOpacity onPress={() => this.navigateScreen('WiFiSetting')} style={styles.button}>
+                    <TouchableOpacity onPress={() => this.navigateToWiFiScreen()} style={styles.button}>
                         <Text style={styles.buttonText}>WiFi Setting</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.navigateScreen('GeigerNameSetting')} style={styles.button}>
+                    <TouchableOpacity onPress={() => this.navigateToGeigerScreen()} style={styles.button}>
                         <Text style={styles.buttonText}>Device Setting</Text>
                     </TouchableOpacity>
                 </View>
             );
         }
-
-        this.connectDevice();
 
         return(
             <View style={styles.container}>
@@ -122,7 +130,8 @@ const styles = StyleSheet.create({
         height: height / 15,
         backgroundColor: '#a8a9ad',
         borderRadius: 25,
-        paddingVertical: 5,
+        paddingVertical: width / 20,
+        marginVertical: width / 20,
         justifyContent: 'center'
     },
     buttonText: {
@@ -135,6 +144,7 @@ const styles = StyleSheet.create({
         fontSize: width / 25,
         fontWeight: '500',
         color: "#ffffff",
-        textAlign: 'center'
+        textAlign: 'center',
+        paddingVertical: width / 10
     }
 });

@@ -27,8 +27,10 @@ export default class WiFiSetting extends React.Component {
         this.state = {
             wifi: '',
             pw: '',
-            uuid
+            uuid: ''
         }
+
+        this.sendWiFiSettings = this.sendWiFiSettings.bind(this);
     }
 
     sendWiFiSettings = async () => {

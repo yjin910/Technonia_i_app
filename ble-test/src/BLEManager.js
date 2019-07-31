@@ -14,9 +14,6 @@ import {
     AsyncStorage
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-import { stringToBytes } from 'convert-string';
-
-import WiFiSetting from './WiFiSetting';
 
 
 const BleManagerModule = NativeModules.BleManager;
@@ -35,7 +32,6 @@ export default class BluetoothManager extends React.Component {
             scanning: false,
             peripherals: new Map(),
             appState: '',
-            device: undefined,
         }
 
         this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
@@ -129,7 +125,7 @@ export default class BluetoothManager extends React.Component {
         }
     }
 
-    connectToPeripheral = (peripheral) => {
+    connectToPeripheral = async (peripheral) => {
         if (!peripheral) {
             return;
         }
@@ -144,14 +140,12 @@ export default class BluetoothManager extends React.Component {
 
             await AsyncStorage.setItem('TEMS@device_uuid', id);
 
-            this.setState({device: id});
-
             this.props.navigation.navigate('BLEMenu');
         }
     }
 
     render() {
-        let { scanning, peripherals, device } = this.state;
+        let { scanning, peripherals } = this.state;
         let list = Array.from(peripherals.values());
         let dataSource = ds.cloneWithRows(list);
 

@@ -1,6 +1,7 @@
 import BleManager from 'react-native-ble-manager';
 import { stringToBytes } from 'convert-string';
 
+BleManager.start({ showAlert: false });
 
 const WIFI_NAME_SERVICE_UUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
 const WIFI_PW_SERVICE_UUID = '4fafc202-1fb5-459e-8fcc-c5c9c331914b';
@@ -46,10 +47,12 @@ let sendData_deviceName = (device_uuid, deviceName) => {
 let connectBLEDevice = (uuid, next, handleError) => {
     BleManager.connect(uuid)
         .then(() => {
+            alert('Success::connectBLEDevice');
             next(uuid);
         })
         .catch((error) => {
             console.log('Connection error', error);
+            alert('Err::connectBLEDevice');
             handleError(error);
         });
 }
