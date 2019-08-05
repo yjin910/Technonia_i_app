@@ -57,6 +57,20 @@ let connectBLEDevice = (uuid, next, handleError) => {
         });
 }
 
+let startScan = () => {
+    BleManager.scan([], 3, true).then((results) => {
+        console.log('Scanning...');
+    });
+}
+
+let getConnectedItems = () => {
+    BleManager.getConnectedPeripherals([]).then((peripheralsArray) => {
+        console.log('Connected peripherals: ' + peripheralsArray.length);
+    });
+}
+
 module.exports.connectBLEDevice = connectBLEDevice;
 module.exports.sendData_wifi = sendData_wifi;
 module.exports.sendData_deviceName = sendData_deviceName;
+module.exports.startScan = startScan;
+module.exports.getConnectedItems = getConnectedItems;
