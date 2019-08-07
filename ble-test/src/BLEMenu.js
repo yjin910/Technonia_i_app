@@ -125,6 +125,12 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         alignItems: 'center',
     },
+    logoImage: {
+        width: height / 6,
+        height: height / 6,
+        marginBottom: height / 10,
+        marginTop: height / 20
+    },
     button: {
         width: width / 5 * 4,
         height: height / 15,

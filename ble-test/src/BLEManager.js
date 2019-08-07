@@ -164,10 +164,9 @@ export default class BluetoothManager extends React.Component {
                         enableEmptySections={true}
                         dataSource={dataSource}
                         renderRow={(item) => {
-                            const color = item.connected ? 'green' : '#fff';
                             return (
                                 <TouchableHighlight onPress={() => this.connectToPeripheral(item)}>
-                                    <View style={[styles.row, { backgroundColor: color }]}>
+                                    <View style={styles.row}>
                                         <Text style={{ fontSize: 12, textAlign: 'center', color: '#333333', padding: 10 }}>{item.name}</Text>
                                         <Text style={{ fontSize: 8, textAlign: 'center', color: '#333333', padding: 10 }}>{item.id}</Text>
                                     </View>
@@ -195,6 +194,9 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     row: {
-        margin: 10
+        margin: 10,
+        backgroundColor: 'lightgrey', 
+        borderBottomColor: "#bbbbbb",
+        borderBottomWidth: 0.4,
     },
 });
