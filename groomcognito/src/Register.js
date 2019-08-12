@@ -49,7 +49,8 @@ export default class SignInScreen extends SignIn {
                 email,
                 password,
                 attributes: {
-                    //
+                    email: email,
+                    name: name
                 }
             }).then((data) => {
                 console.log(data);

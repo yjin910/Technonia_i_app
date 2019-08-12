@@ -48,10 +48,14 @@ export default class LoginScreen extends React.Component {
     _signIn = async () => {
         const { email, pw } = this.state;
 
+        if (pw.length < 8) alert('Minimum password length is 8!');
+
         if (email && pw) {
             Auth.signIn(email, pw).then(user => {
                 this.setState({ user: user });
                 this.storeAsync(email, pw);
+
+                //TODO Are we supposed to store user object in the AsyncStorage??
             }).catch(err => {
                 console.log(err);
             })
