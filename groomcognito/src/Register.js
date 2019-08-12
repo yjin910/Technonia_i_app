@@ -54,11 +54,11 @@ export default class SignUpScreen extends React.Component {
                     name: name
                 }
             }).then((data) => {
-                console.log('Success!')
                 console.log(data);
+                this.props.navigation.navigate('Login');
             }).catch(err => {
-                console.log('Error!!')
-                console.log(err)
+                console.log(err);
+                alert('Error');
             });
         } else {
             console.log('All attributes should be filled in');

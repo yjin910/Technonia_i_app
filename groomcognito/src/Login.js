@@ -53,9 +53,10 @@ export default class LoginScreen extends React.Component {
         if (email && pw) {
             Auth.signIn(email, pw).then(user => {
                 this.setState({ user: user });
-                this.storeAsync(email, pw);
+                await this.storeAsync(email, pw);
 
                 //TODO Are we supposed to store user object in the AsyncStorage??
+                // this.props.navigation.navigate('nextScreen')
             }).catch(err => {
                 console.log(err);
             })
