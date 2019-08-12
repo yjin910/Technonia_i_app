@@ -64,7 +64,7 @@ export default class LoginScreen extends React.Component {
 
 
     render() {
-        let navigate = this.props.navigateTo;
+        let navigate = this.props.navigation.navigate;
 
         return (
             <KeyboardAvoidingView
@@ -76,7 +76,7 @@ export default class LoginScreen extends React.Component {
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <ScrollView>
                             <View style={styles.container}>
-                                <Image style={styles.logoImage} source={require('../assets/logo.jpg')} />
+                                <Image style={styles.logoImage} source={require('../assets/logo.png')} />
                                 <TextInput style={styles.inputBox}
                                     placeholder="Email address"
                                     placeholderTextColor="#1a3f95"

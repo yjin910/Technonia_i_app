@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     Text,
     View,
@@ -11,14 +12,14 @@ import {
     SafeAreaView,
     Keyboard,
     Platform,
-    ScrollView
+    ScrollView,
+    StatusBar
 } from 'react-native';
 import { Auth } from 'aws-amplify';
-import { SignIn } from 'aws-amplify-react-native';
 
 const { width, height } = Dimensions.get('window');
 
-export default class SignInScreen extends SignIn {
+export default class SignUpScreen extends React.Component {
     constructor(props) {
         super(props);
 
@@ -46,21 +47,27 @@ export default class SignInScreen extends SignIn {
 
         if (email && password && name) {
             Auth.signUp({
-                email,
-                password,
+                username: email,
+                password: password,
                 attributes: {
                     email: email,
                     name: name
                 }
             }).then((data) => {
+                console.log('Success!')
                 console.log(data);
-            }).catch(err => console.log(err));
+            }).catch(err => {
+                console.log('Error!!')
+                console.log(err)
+            });
         } else {
             console.log('All attributes should be filled in');
         }
     }
 
     render() {
+        let navigate = this.props.navigation.navigate;
+
         return (
             <KeyboardAvoidingView
                 keyboardVerticalOffset={Platform.select({ ios: 0, android: width / 3 })}
@@ -76,7 +83,7 @@ export default class SignInScreen extends SignIn {
                                     barStyle="light-content"
                                 />
                                 <Image style={styles.logoImage}
-                                    source={require('../../assets/logo.png')} />
+                                    source={require('../assets/logo.png')} />
                                 <TextInput style={styles.inputBox}
                                     placeholder="Email address"
                                     placeholderTextColor="#1a3f95"
@@ -103,7 +110,7 @@ export default class SignInScreen extends SignIn {
                                     <Text style={styles.buttonText}>Signup</Text>
                                 </TouchableOpacity>
                                 <View style={styles.textContainer}>
-                                    <TouchableOpacity onPress={() => navigateTo('Login')}>
+                                    <TouchableOpacity onPress={() => navigate('Login')}>
                                         <Text style={styles.toLoginPageButton}>Sign In</Text>
                                     </TouchableOpacity>
                                 </View>
