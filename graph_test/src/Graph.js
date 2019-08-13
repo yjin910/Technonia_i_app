@@ -8,6 +8,7 @@ import {
 import { LineChart, XAxis, Grid } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
 import moment from "moment";
+import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
 
 
 const { width, height } = Dimensions.get('window');
@@ -84,6 +85,24 @@ export default class GraphScreen extends React.Component {
         this.setState({ data_t: data_t, data_h: data_h, times: times, minGrid: min, maxGrid: max + 2 });
     }
 
+    /**
+     * Log out an example event after zooming
+     *
+     * @param event
+     * @param gestureState
+     * @param zoomableViewEventObject
+     */
+    logOutZoomState = (event, gestureState, zoomableViewEventObject) => {
+        console.log('');
+        console.log('');
+        console.log('-------------');
+        console.log('Event: ', event);
+        console.log('GestureState: ', gestureState);
+        console.log('ZoomableEventObject: ', zoomableViewEventObject);
+        console.log('');
+        console.log(`Zoomed from ${zoomableViewEventObject.lastZoomLevel} to  ${zoomableViewEventObject.zoomLevel}`);
+    };
+
     render() {
         let { data_t, data_h, times, minGrid, maxGrid } = this.state;
 
@@ -108,34 +127,44 @@ export default class GraphScreen extends React.Component {
             return (
                 <SafeAreaView style={styles.root}>
                     <View style={styles.container}>
-                        <LineChart
-                            style={{ height: height / 3 * 2, width: width }}
-                            yAccessor={({item}) => item.y}
-                            xAccessor={({item}) => item.x}
-                            data={data}
-                            gridMin={minGrid}
-                            gridMax={maxGrid}
-                            //svg={{ stroke: 'rgb(134, 65, 244)' }}
+                        <ReactNativeZoomableView
+                            zoomEnabled={true}
+                            maxZoom={1.5}
+                            minZoom={0.5}
+                            zoomStep={0.25}
+                            initialZoom={1.0}
+                            bindToBorders={true}
+                            onZoomAfter={this.logOutZoomState}
+                            style={styles.zoomableView}
                         >
-                            <Grid />
-                        </LineChart>
-                        <XAxis
-                            data={times}
-                            svg={{
-                                fill: 'black',
-                                fontSize: 8,
-                                fontWeight: 'bold',
-                                rotation: 20,
-                                originY: 30,
-                                y: 5,
-                            }}
-                            xAccessor={({ item }) => item}
-                            scale={scale.scaleTime}
-                            numberOfTicks={6}
-                            style={{ marginHorizontal: -15, height: 20 }}
-                            contentInset={{ left: 10, right: 25 }}
-                            formatLabel={(value) => moment(value).format('HH:mm:ss')}
-                        />
+                            <LineChart
+                                style={{ height: height / 3 * 2, width: width }}
+                                yAccessor={({item}) => item.y}
+                                xAccessor={({item}) => item.x}
+                                data={data}
+                                gridMin={minGrid}
+                                gridMax={maxGrid}
+                            >
+                                <Grid />
+                            </LineChart>
+                            <XAxis
+                                data={times}
+                                svg={{
+                                    fill: 'black',
+                                    fontSize: 8,
+                                    fontWeight: 'bold',
+                                    rotation: 20,
+                                    originY: 30,
+                                    y: 5,
+                                }}
+                                xAccessor={({ item }) => item}
+                                scale={scale.scaleTime}
+                                numberOfTicks={6}
+                                style={{ marginHorizontal: -15, height: 20 }}
+                                contentInset={{ left: 10, right: 25 }}
+                                formatLabel={(value) => moment(value).format('HH:mm:ss')}
+                            />
+                        </ReactNativeZoomableView>
                     </View>
                 </SafeAreaView>
             )
@@ -148,7 +177,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     container: {
-        height,
-        width,
-    }
+        flex: 1
+    },
+    zoomableView: {
+        padding: 10
+    },
 });
