@@ -2,4 +2,5 @@
 .DS_Store
 node_modules
 .expo
-.watchmanconfig
+.gradle
+ble-test/android/app/release/
