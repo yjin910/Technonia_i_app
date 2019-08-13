@@ -13,13 +13,22 @@ import {
     Keyboard,
     Platform,
     ScrollView,
-    StatusBar
+    StatusBar,
+    Alert
 } from 'react-native';
 import { Auth } from 'aws-amplify';
 
 const { width, height } = Dimensions.get('window');
 
 export default class SignUpScreen extends React.Component {
+    static navigationOptions = {
+        title: 'groom',
+        headerStyle: {
+            backgroundColor: '#1a3f95',
+        },
+        headerTintColor: '#fff',
+    };
+
     constructor(props) {
         super(props);
 
@@ -42,6 +51,28 @@ export default class SignUpScreen extends React.Component {
         this.setState({ name: text });
     }
 
+    alertSuccess = async () => {
+        Alert.alert(
+            'Sign up success',
+            'Please check your email to confirm the sign up',
+            [
+                { text: 'OK', onPress: () => {
+                    this.props.navigation.navigate('Login')
+                } , style: 'default' }
+            ],
+            { cancelable: false },
+        );
+    }
+
+    alertError = (err) => {
+        Alert.alert(
+            'Sign up failed',
+            'Please try again later',
+            [{ text: 'OK', onPress: () => console.log(err), style: 'default' }],
+            { cancelable: false },
+        );
+    }
+
     _signUp = async () => {
         const { email, password, name } = this.state;
 
@@ -55,10 +86,9 @@ export default class SignUpScreen extends React.Component {
                 }
             }).then((data) => {
                 console.log(data);
-                this.props.navigation.navigate('Login');
+                await this.alertSuccess();
             }).catch(err => {
-                console.log(err);
-                alert('Error');
+                this.alertError(err);
             });
         } else {
             console.log('All attributes should be filled in');
