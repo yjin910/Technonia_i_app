@@ -3,7 +3,8 @@ import {
     View,
     StyleSheet,
     SafeAreaView,
-    Dimensions
+    Dimensions,
+    Text
 } from 'react-native'
 import { LineChart, XAxis, Grid } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
@@ -110,7 +111,9 @@ export default class GraphScreen extends React.Component {
             this.setData();
 
             return (
-                <View></View>
+                <View style={styles.loadingContainer}>
+                    <Text>Please wait until the app receives the data</Text>
+                </View>
             )
         } else {
             let data = [
@@ -182,4 +185,8 @@ const styles = StyleSheet.create({
     zoomableView: {
         padding: 10
     },
+    loadingContainer: {
+        flex: 1,
+        alignItems: 'center'
+    }
 });
