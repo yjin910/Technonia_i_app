@@ -37,7 +37,7 @@ export default class GraphScreen extends React.Component {
     }
 
     fetchData_Async = async (deviceNum) => {
-        const url = 'http://t.damoa.io:8092/site/' + id + '/' + pw;
+        const url = 'http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8080/getdata?';
 
         fetch(url)
             .then(res => res.json())
