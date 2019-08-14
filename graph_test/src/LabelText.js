@@ -20,24 +20,73 @@ export default class LabelText extends React.Component {
     };
 
     render() {
-        return (
-            <View style={styles.container}>
-                <View style={styles.labelContainer}>
-                    <Text style={styles.text}>{'온도'}</Text>
-                    <Svg height={width / 30} width={width / 5}>
-                        <Line x1={0} y1={width / 60} x2={width / 5} y2={width / 60} stroke='red'>
-                        </Line>
-                    </Svg>
-                </View>
-                <View style={styles.labelContainer}>
-                    <Text style={styles.text}>{`습도`}</Text>
-                    <Svg height={width / 30} width={width / 5}>
-                        <Line x1={0} y1={width / 60} x2={width / 5} y2={width / 60} stroke='blue'>
-                        </Line>
-                    </Svg>
-                </View>
-            </View>
-        )
+        let {types} = this.props;
+
+        switch (types) {
+            case 'th' :
+                return (
+                    <View style={styles.container}>
+                        <View style={styles.labelContainer}>
+                            <Text style={styles.text}>{'온도'}</Text>
+                            <Svg height={width / 30} width={width / 5}>
+                                <Line x1={0} y1={width / 60} x2={width / 5} y2={width / 60} stroke='red'>
+                                </Line>
+                            </Svg>
+                        </View>
+                        <View style={styles.labelContainer}>
+                            <Text style={styles.text}>{`습도`}</Text>
+                            <Svg height={width / 30} width={width / 5}>
+                                <Line x1={0} y1={width / 60} x2={width / 5} y2={width / 60} stroke='blue'>
+                                </Line>
+                            </Svg>
+                        </View>
+                    </View>
+                );
+            case 'g' :
+                return (
+                    <View style={styles.container}>
+                        <View style={styles.labelContainer}>
+                            <Text style={styles.text}>{'방사선'}</Text>
+                            <Svg height={width / 30} width={width / 5}>
+                                <Line x1={0} y1={width / 60} x2={width / 5} y2={width / 60} stroke='green'>
+                                </Line>
+                            </Svg>
+                        </View>
+                    </View>
+                );
+            case 'gth' :
+                return (
+                    <View style={styles.container}>
+                        <View style={styles.labelContainer}>
+                            <Text style={styles.text}>{'온도'}</Text>
+                            <Svg height={width / 30} width={width / 5}>
+                                <Line x1={0} y1={width / 60} x2={width / 5} y2={width / 60} stroke='red'>
+                                </Line>
+                            </Svg>
+                        </View>
+                        <View style={styles.labelContainer}>
+                            <Text style={styles.text}>{`습도`}</Text>
+                            <Svg height={width / 30} width={width / 5}>
+                                <Line x1={0} y1={width / 60} x2={width / 5} y2={width / 60} stroke='blue'>
+                                </Line>
+                            </Svg>
+                        </View>
+                        <View style={styles.labelContainer}>
+                            <Text style={styles.text}>{`방사선`}</Text>
+                            <Svg height={width / 30} width={width / 5}>
+                                <Line x1={0} y1={width / 60} x2={width / 5} y2={width / 60} stroke='green'>
+                                </Line>
+                            </Svg>
+                        </View>
+                    </View>
+                );
+            default : 
+                return (
+                    <View>
+                        <Text>Invalid type!</Text>
+                    </View>
+                );
+        }
     }
 }
 
