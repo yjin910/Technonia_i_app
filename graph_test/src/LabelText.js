@@ -1,4 +1,4 @@
-import Svg, { G, Line } from 'react-native-svg'
+import Svg, { Line } from 'react-native-svg'
 import React from 'react';
 import {
     View,

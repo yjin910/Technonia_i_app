@@ -36,6 +36,21 @@ export default class GraphScreen extends React.Component {
         this.setData();
     }
 
+    fetchData_Async = async (deviceNum) => {
+        const url = 'http://t.damoa.io:8092/site/' + id + '/' + pw;
+
+        fetch(url)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    //TODO this.setData()
+                }
+            )
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     setData = () => {
         let raw_data = [
             { "s": "60", "time_val": "2019-08-09T23:05:39+09:00", "t": "24.71" },
