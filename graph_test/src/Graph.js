@@ -3,14 +3,17 @@ import {
     View,
     StyleSheet,
     SafeAreaView,
-    Dimensions,
-    Text
+    Dimensions
 } from 'react-native'
-import { LineChart, XAxis, Grid } from 'react-native-svg-charts'
+import { LineChart, XAxis, YAxis, Grid } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
+import { Circle, G, Line, Rect, Text } from 'react-native-svg'
 import moment from "moment";
 import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
 
+import DataText from './DataText'
+import LoadingGraph from './LoadingGraph'
+import LabelText from './LabelText'
 
 const { width, height } = Dimensions.get('window');
 
@@ -23,6 +26,7 @@ export default class GraphScreen extends React.Component {
             data_t: [],
             data_h: [],
             times: [],
+            yAxisData: [],
             minGrid: 0,
             maxGrid: 0
         }
@@ -55,6 +59,7 @@ export default class GraphScreen extends React.Component {
         let data_t = [];
         let data_h = [];
         let times = [];
+        let yAxisData = [];
 
         let min = 0;
         let max = 0;
@@ -71,6 +76,8 @@ export default class GraphScreen extends React.Component {
                 if (temp > max) max = temp;
                 if (temp < min) min = temp;
                 data_t.push({ x: timeData, y: temp });
+
+                yAxisData.push(temp);
             }
 
             if (h) {
@@ -78,12 +85,14 @@ export default class GraphScreen extends React.Component {
                 if (humi > max) max = humi;
                 if (humi < min) min = humi;
                 data_h.push({ x: timeData, y: humi });
+
+                yAxisData.push(humi);
             }
 
             if (!times.includes(timeData)) times.push(timeData);
         }
 
-        this.setState({ data_t: data_t, data_h: data_h, times: times, minGrid: min, maxGrid: max + 2 });
+        this.setState({ data_t: data_t, data_h: data_h, yAxisData: yAxisData, times: times, minGrid: min, maxGrid: max + 2 });
     }
 
     /**
@@ -105,15 +114,13 @@ export default class GraphScreen extends React.Component {
     };
 
     render() {
-        let { data_t, data_h, times, minGrid, maxGrid } = this.state;
+        let { data_t, data_h, times, yAxisData, minGrid, maxGrid } = this.state;
 
-        if (data_t == []) {
+        if (data_t.length == 0 || data_h.length == 0) {
             this.setData();
 
             return (
-                <View style={styles.loadingContainer}>
-                    <Text>Please wait until the app receives the data</Text>
-                </View>
+                <LoadingGraph />
             )
         } else {
             let data = [
@@ -126,6 +133,51 @@ export default class GraphScreen extends React.Component {
                     svg: { stroke: 'blue' },
                 },
             ]
+
+            const Tooltip = ({ x, y }) => (
+                <G
+                    x={x(5) - (75 / 2)}
+                    key={'tooltip'}
+                    onPress={() => console.log('tooltip clicked')}
+                >
+                    <G y={50}>
+                        <Rect
+                            height={40}
+                            width={75}
+                            stroke={'grey'}
+                            fill={'white'}
+                            ry={10}
+                            rx={10}
+                        />
+                        <Text
+                            x={75 / 2}
+                            dy={20}
+                            alignmentBaseline={'middle'}
+                            textAnchor={'middle'}
+                            stroke={'rgb(134, 65, 244)'}
+                        >
+                            {`${data[5]}ºC`}
+                        </Text>
+                    </G>
+                    <G x={75 / 2}>
+                        <Line
+                            y1={50 + 40}
+                            y2={y(data[5])}
+                            stroke={'grey'}
+                            strokeWidth={2}
+                        />
+                        <Circle
+                            cy={y(data[5])}
+                            r={6}
+                            stroke={'rgb(134, 65, 244)'}
+                            strokeWidth={2}
+                            fill={'white'}
+                        />
+                    </G>
+                </G>
+            )
+
+            const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 
             return (
                 <SafeAreaView style={styles.root}>
@@ -140,33 +192,55 @@ export default class GraphScreen extends React.Component {
                             onZoomAfter={this.logOutZoomState}
                             style={styles.zoomableView}
                         >
-                            <LineChart
-                                style={{ height: height / 3 * 2, width: width }}
-                                yAccessor={({item}) => item.y}
-                                xAccessor={({item}) => item.x}
-                                data={data}
-                                gridMin={minGrid}
-                                gridMax={maxGrid}
-                            >
-                                <Grid />
-                            </LineChart>
-                            <XAxis
-                                data={times}
-                                svg={{
-                                    fill: 'black',
-                                    fontSize: 8,
-                                    fontWeight: 'bold',
-                                    rotation: 20,
-                                    originY: 30,
-                                    y: 5,
-                                }}
-                                xAccessor={({ item }) => item}
-                                scale={scale.scaleTime}
-                                numberOfTicks={6}
-                                style={{ marginHorizontal: -15, height: 20 }}
-                                contentInset={{ left: 10, right: 25 }}
-                                formatLabel={(value) => moment(value).format('HH:mm:ss')}
-                            />
+                            <LabelText types='th' />
+                            <View style={{ marginLeft: 10, flexDirection: 'row' }}>
+                                <YAxis
+                                    data={yAxisData}
+                                    style={ {width: width / 6} }
+                                    contentInset={contentInset}
+                                    svg={{
+                                        fill: 'grey',
+                                        fontSize: 10,
+                                    }}
+                                    min={minGrid - 5}
+                                    max={maxGrid + 5}
+                                    scale={scale.scale}
+                                    //numberOfTicks={10}
+                                    formatLabel={(value) => value}
+                                />
+                                <View style={styles.containerForGraphAndXAxis}>
+                                    <LineChart
+                                        contentInset={contentInset}
+                                        style={{ height: height / 5 * 2, width: width / 3 * 2 }}
+                                        yAccessor={({item}) => item.y}
+                                        xAccessor={({item}) => item.x}
+                                        data={data}
+                                        gridMin={minGrid}
+                                        gridMax={maxGrid}
+                                    >
+                                        <Grid />
+                                        {/* <Tooltip /> */}
+                                    </LineChart>
+                                    <XAxis
+                                        data={times}
+                                        svg={{
+                                            fill: 'black',
+                                            fontSize: 10,
+                                            fontWeight: 'bold',
+                                            rotation: 20,
+                                            originY: 30,
+                                            y: 5,
+                                        }}
+                                        xAccessor={({ item }) => item}
+                                        scale={scale.scaleTime}
+                                        numberOfTicks={6}
+                                        style={{ marginHorizontal: -15, height: 20, width: width / 3 * 2 }}
+                                        contentInset={contentInset}
+                                        formatLabel={(value) => moment(value).format('HH:mm:ss')}
+                                    />
+                                </View>
+                            </View>
+                            <DataText currentHumi={data_h[data_h.length - 1]['y']} currentTemp={data_t[data_t.length - 1]['y']} />
                         </ReactNativeZoomableView>
                     </View>
                 </SafeAreaView>
@@ -180,13 +254,16 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     container: {
-        flex: 1
+        width: width,
+        height: height
     },
     zoomableView: {
-        padding: 10
-    },
-    loadingContainer: {
+        //padding: 10
         flex: 1,
-        alignItems: 'center'
+        marginBottom: height / 5
+    },
+    containerForGraphAndXAxis: { 
+        flex: 1, 
+        marginLeft: 10 
     }
 });
