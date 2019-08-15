@@ -15,18 +15,32 @@ export default class DataText extends React.Component {
     }
 
     static propTypes = {
+        types: PropTypes.string.isRequired,
         currentTemp: PropTypes.number,
-        currentHumi: PropTypes.number
+        currentHumi: PropTypes.number,
     };
 
     render() {
-        let { currentTemp, currentHumi } = this.props;
-        return (
-            <View style={styles.textContainer}>
-                <Text style={styles.text}>{`현재 온도: ${currentTemp} ºC`}</Text>
-                <Text style={styles.text}>{`현재 습도: ${currentHumi} %`}</Text>
-            </View>
-        )
+        let { currentTemp, currentHumi, types } = this.props;
+        
+        switch (types) {
+            case 't' :
+                return (
+                    <View style={styles.textContainer}>
+                        <Text style={styles.text}>{`현재 온도: ${currentTemp} ºC`}</Text>
+                    </View>
+                )
+            case 'h' :
+                return (
+                    <View style={styles.textContainer}>
+                        <Text style={styles.text}>{`현재 습도: ${currentHumi} %`}</Text>
+                    </View>
+                )
+            default:
+                return (
+                    <View style={styles.textContainer}></View>
+                );
+        }
     }
 }
 
