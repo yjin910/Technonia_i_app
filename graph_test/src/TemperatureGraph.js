@@ -15,6 +15,7 @@ import DataText from './DataText'
 import LoadingGraph from './LoadingGraph'
 import LabelText from './LabelText'
 import NoData from './NoData'
+import ListViewButton from './ListViewButton'
 
 
 const { width, height } = Dimensions.get('window');
@@ -35,7 +36,7 @@ export default class TemperatureGraph extends React.Component {
     }
 
     static propTypes = {
-        temperatureData: PropTypes.number.isRequired //TODO need to use this data, not the  hard-coded data
+        temperatureData: PropTypes.array.isRequired //TODO need to use this data, not the  hard-coded data
     };
 
     componentDidMount = () => {
@@ -78,7 +79,7 @@ export default class TemperatureGraph extends React.Component {
             }
         }
 
-        this.setState({ data_t: data_t, yAxisData: yAxisData, times: times, minGrid: min - 0.5, maxGrid: max + 0.5, isLoaded: true });
+        this.setState({ data_t: data_t, yAxisData: yAxisData, times: times, minGrid: min, maxGrid: max, isLoaded: true });
     }
 
     /**
@@ -100,8 +101,8 @@ export default class TemperatureGraph extends React.Component {
     render() {
         let { data_t, times, yAxisData, minGrid, maxGrid, isLoaded } = this.state;
 
-        if (isLoaded) {
-            this.setData();
+        if (!isLoaded) {
+            //this.setData();
 
             return (
                 <LoadingGraph />
@@ -120,6 +121,9 @@ export default class TemperatureGraph extends React.Component {
                 }
             ]
 
+            let minVal = parseFloat(minGrid);
+            let maxVal = parseFloat(maxGrid);
+
             return (
                 <SafeAreaView style={styles.root}>
                     <View style={styles.container}>
@@ -133,6 +137,9 @@ export default class TemperatureGraph extends React.Component {
                             onZoomAfter={this.logOutZoomState}
                             style={styles.zoomableView}
                         >
+                            <View style={styles.listViewButtonContainer}>
+                                <ListViewButton />
+                            </View>
                             <LabelText types='t' />
                             <View style={{ marginLeft: 10, flexDirection: 'row' }}>
                                 <YAxis
@@ -143,8 +150,8 @@ export default class TemperatureGraph extends React.Component {
                                         fill: 'grey',
                                         fontSize: 10,
                                     }}
-                                    min={minGrid - 5}
-                                    max={maxGrid + 5}
+                                    min={minVal}
+                                    max={maxVal}
                                     scale={scale.scale}
                                     //numberOfTicks={10}
                                     formatLabel={(value) => value}
@@ -155,41 +162,11 @@ export default class TemperatureGraph extends React.Component {
                                     yAccessor={({ item }) => item.y}
                                     xAccessor={({ item }) => item.x}
                                     data={data}
-                                    gridMin={minGrid}
-                                    gridMax={maxGrid}
+                                    gridMin={minVal}
+                                    gridMax={maxVal}
                                 >
                                     <Grid />
                                 </LineChart>
-                                {/* <View style={styles.containerForGraphAndXAxis}>
-                                    <LineChart
-                                        contentInset={contentInset}
-                                        style={{ height: height / 5 * 2, width: width / 3 * 2 }}
-                                        yAccessor={({ item }) => item.y}
-                                        xAccessor={({ item }) => item.x}
-                                        data={data}
-                                        gridMin={minGrid}
-                                        gridMax={maxGrid}
-                                    >
-                                        <Grid />
-                                    </LineChart>
-                                    <XAxis
-                                        data={times}
-                                        svg={{
-                                            fill: 'black',
-                                            fontSize: 10,
-                                            fontWeight: 'bold',
-                                            rotation: 20,
-                                            originY: 30,
-                                            y: 5,
-                                        }}
-                                        xAccessor={({ item }) => item}
-                                        scale={scale.scaleTime}
-                                        numberOfTicks={6}
-                                        style={{ marginHorizontal: -15, height: 20, width: width / 3 * 2 }}
-                                        contentInset={contentInset}
-                                        formatLabel={(value) => moment(value).format('HH:mm:ss')}
-                                    />
-                                </View> */}
                             </View>
                             <DataText currentTemp={data_t[data_t.length - 1]['y']} types={'t'} />
                         </ReactNativeZoomableView>
@@ -209,12 +186,14 @@ const styles = StyleSheet.create({
         height: height
     },
     zoomableView: {
-        //padding: 10
         flex: 1,
         marginBottom: height / 5
     },
     containerForGraphAndXAxis: {
         flex: 1,
         marginLeft: 10
+    },
+    listViewButtonContainer: {
+        flex: 1 / 2
     }
 });
