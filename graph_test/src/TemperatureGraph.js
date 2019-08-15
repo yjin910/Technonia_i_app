@@ -14,9 +14,11 @@ import PropTypes from "prop-types";
 import DataText from './DataText'
 import LoadingGraph from './LoadingGraph'
 import LabelText from './LabelText'
+import NoData from './NoData'
 
 
 const { width, height } = Dimensions.get('window');
+const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 
 export default class TemperatureGraph extends React.Component {
     constructor(props) {
@@ -27,7 +29,8 @@ export default class TemperatureGraph extends React.Component {
             times: [],
             yAxisData: [],
             minGrid: 0,
-            maxGrid: 0
+            maxGrid: 0,
+            isLoaded: false
         }
     }
 
@@ -75,7 +78,7 @@ export default class TemperatureGraph extends React.Component {
             }
         }
 
-        this.setState({ data_t: data_t, yAxisData: yAxisData, times: times, minGrid: min - 0.5, maxGrid: max + 0.5 });
+        this.setState({ data_t: data_t, yAxisData: yAxisData, times: times, minGrid: min - 0.5, maxGrid: max + 0.5, isLoaded: true });
     }
 
     /**
@@ -95,13 +98,19 @@ export default class TemperatureGraph extends React.Component {
     };
 
     render() {
-        let { data_t, times, yAxisData, minGrid, maxGrid } = this.state;
+        let { data_t, times, yAxisData, minGrid, maxGrid, isLoaded } = this.state;
 
-        if (data_t.length == 0) {
+        if (isLoaded) {
             this.setData();
 
             return (
                 <LoadingGraph />
+            )
+        }
+
+        if (data_t.length == 0) {
+            return (
+                <NoData />
             )
         } else {
             let data = [
@@ -110,8 +119,6 @@ export default class TemperatureGraph extends React.Component {
                     svg: { stroke: 'red' },
                 }
             ]
-
-            const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 
             return (
                 <SafeAreaView style={styles.root}>
@@ -153,7 +160,6 @@ export default class TemperatureGraph extends React.Component {
                                 >
                                     <Grid />
                                 </LineChart>
-                                {//TODO}
                                 {/* <View style={styles.containerForGraphAndXAxis}>
                                     <LineChart
                                         contentInset={contentInset}

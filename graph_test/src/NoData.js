@@ -15,19 +15,20 @@ export default class LoadingGraph extends React.Component {
 
     render() {
         return (
-            <View style={styles.loadingContainer}>
-                <Text>Please wait until the app receives the data</Text>
+            <View style={styles.warningContainer}>
+                <Text style={styles.warningText}>Data not enough to draw the graph</Text>
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    loadingContainer: {
+    warningContainer: {
         flex: 1,
         alignItems: 'center'
     },
-    loadingText: {
+    warningText: {
         fontSize: width / 15,
+        color: 'red'
     }
-})
+});

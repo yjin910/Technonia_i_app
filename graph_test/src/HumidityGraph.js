@@ -17,6 +17,7 @@ import LabelText from './LabelText'
 
 
 const { width, height } = Dimensions.get('window');
+const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 
 export default class HumidityGraph extends React.Component {
     constructor(props) {
@@ -27,7 +28,8 @@ export default class HumidityGraph extends React.Component {
             times: [],
             yAxisData: [],
             minGrid: 0,
-            maxGrid: 0
+            maxGrid: 0,
+            isLoaded: false
         }
     }
 
@@ -75,7 +77,7 @@ export default class HumidityGraph extends React.Component {
             }
         }
 
-        this.setState({ data_h: data_h, yAxisData: yAxisData, times: times, minGrid: min - 5, maxGrid: max + 5 });
+        this.setState({ data_h: data_h, yAxisData: yAxisData, times: times, minGrid: min - 5, maxGrid: max + 5, isLoaded: true });
     }
 
     /**
@@ -95,13 +97,19 @@ export default class HumidityGraph extends React.Component {
     };
 
     render() {
-        let { data_h, times, yAxisData, minGrid, maxGrid } = this.state;
+        let { data_h, times, yAxisData, minGrid, maxGrid, isLoaded } = this.state;
 
-        if (data_h.length == 0) {
+        if (isLoaded) {
             this.setData();
 
             return (
                 <LoadingGraph />
+            )
+        }
+
+        if (data_t.length == 0) {
+            return (
+                <NoData />
             )
         } else {
             let data = [
@@ -110,8 +118,6 @@ export default class HumidityGraph extends React.Component {
                     svg: { stroke: 'blue' },
                 }
             ]
-
-            const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 
             return (
                 <SafeAreaView style={styles.root}>
@@ -142,7 +148,18 @@ export default class HumidityGraph extends React.Component {
                                     //numberOfTicks={10}
                                     formatLabel={(value) => value}
                                 />
-                                <View style={styles.containerForGraphAndXAxis}>
+                                <LineChart
+                                    contentInset={contentInset}
+                                    style={{ height: height / 5 * 2, width: width / 3 * 2 }}
+                                    yAccessor={({ item }) => item.y}
+                                    xAccessor={({ item }) => item.x}
+                                    data={data}
+                                    gridMin={minGrid}
+                                    gridMax={maxGrid}
+                                >
+                                    <Grid />
+                                </LineChart>
+                                {/* <View style={styles.containerForGraphAndXAxis}>
                                     <LineChart
                                         contentInset={contentInset}
                                         style={{ height: height / 5 * 2, width: width / 3 * 2 }}
@@ -171,7 +188,7 @@ export default class HumidityGraph extends React.Component {
                                         contentInset={contentInset}
                                         formatLabel={(value) => moment(value).format('HH:mm:ss')}
                                     />
-                                </View>
+                                </View> */}
                             </View>
                             <DataText currentHumi={data_h[data_h.length - 1]['y']} types={'h'} />
                         </ReactNativeZoomableView>
