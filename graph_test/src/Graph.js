@@ -10,6 +10,8 @@ import TemperatureGraph from './TemperatureGraph'
 import HumidityGraph from './HumidityGraph'
 
 
+const INTERVAL_TIME = 600000;
+
 export default class GraphScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -23,6 +25,25 @@ export default class GraphScreen extends React.Component {
 
     componentDidMount = () => {
         this._isLoaded();
+
+        this.setInterval();
+    }
+
+    setInterval = () => {
+        this._timer = setInterval(() => {
+            //TODO
+            console.log('Hello')
+        }, INTERVAL_TIME);
+
+        //TODO this._timer = this._timer.bind(this);
+    }
+
+    removeInterval = () => {
+        clearInterval(this._timer);
+    }
+
+    componentWillUnmount = () => {
+        this.clearInterval();
     }
 
     fetchData_Async = async (deviceNum) => {

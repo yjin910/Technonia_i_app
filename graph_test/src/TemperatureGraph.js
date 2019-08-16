@@ -83,7 +83,7 @@ export default class TemperatureGraph extends React.Component {
     }
 
     /**
-     * Log out an example event after zooming
+     * Log out an event after zooming
      *
      * @param event
      * @param gestureState
