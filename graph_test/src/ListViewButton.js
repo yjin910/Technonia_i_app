@@ -6,6 +6,8 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native'
+import PropTypes from "prop-types";
+
 
 const { width } = Dimensions.get('window');
 
@@ -14,11 +16,17 @@ export default class ListViewButton extends React.Component {
         super(props);
     }
 
+    static propTypes = {
+        changeListView: PropTypes.func.isRequired
+    };
+
     render() {
+        let {changeListView} = this.props;
+
         return (
             <View style={styles.container}>
                 <TouchableOpacity 
-                    onPress={() => console.log('Button pressed')}
+                    onPress={() => changeListView()}
                     style={styles.button}
                 >
                     <Text style={styles.buttonText}>List View</Text>
@@ -32,7 +40,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'flex-end',
-        marginBottom: width / 10
+        marginBottom: width / 15,
+        marginTop: width / 25
     },
     buttonText: {
         fontSize: width / 25

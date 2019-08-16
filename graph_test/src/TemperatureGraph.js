@@ -3,19 +3,22 @@ import {
     View,
     StyleSheet,
     SafeAreaView,
-    Dimensions
+    Dimensions,
+    ScrollView
 } from 'react-native'
 import { LineChart, XAxis, YAxis, Grid } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
 import moment from "moment";
 import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
 import PropTypes from "prop-types";
+import uuidv1 from 'uuid/v1';
 
 import DataText from './DataText'
 import LoadingGraph from './LoadingGraph'
 import LabelText from './LabelText'
 import NoData from './NoData'
 import ListViewButton from './ListViewButton'
+import ListViewScreen from './ListViewScreen'
 
 
 const { width, height } = Dimensions.get('window');
@@ -31,8 +34,11 @@ export default class TemperatureGraph extends React.Component {
             yAxisData: [],
             minGrid: 0,
             maxGrid: 0,
-            isLoaded: false
+            isLoaded: false,
+            isListViewMode: false
         }
+
+        this.changeListViewMode = this.changeListViewMode.bind(this);
     }
 
     static propTypes = {
@@ -82,6 +88,11 @@ export default class TemperatureGraph extends React.Component {
         this.setState({ data_t: data_t, yAxisData: yAxisData, times: times, minGrid: min, maxGrid: max, isLoaded: true });
     }
 
+    changeListViewMode = () => {
+        let {isListViewMode} = this.state;
+        this.setState({ isListViewMode: !isListViewMode});
+    }
+
     /**
      * Log out an event after zooming
      *
@@ -99,7 +110,7 @@ export default class TemperatureGraph extends React.Component {
     };
 
     render() {
-        let { data_t, times, yAxisData, minGrid, maxGrid, isLoaded } = this.state;
+        let { data_t, times, yAxisData, minGrid, maxGrid, isLoaded, isListViewMode } = this.state;
 
         if (!isLoaded) {
             //this.setData();
@@ -137,38 +148,51 @@ export default class TemperatureGraph extends React.Component {
                             onZoomAfter={this.logOutZoomState}
                             style={styles.zoomableView}
                         >
-                            <View style={styles.listViewButtonContainer}>
-                                <ListViewButton />
-                            </View>
-                            <LabelText types='t' />
-                            <View style={{ marginLeft: 10, flexDirection: 'row' }}>
-                                <YAxis
-                                    data={yAxisData}
-                                    style={{ width: width / 6 }}
-                                    contentInset={contentInset}
-                                    svg={{
-                                        fill: 'grey',
-                                        fontSize: 10,
-                                    }}
-                                    min={minVal}
-                                    max={maxVal}
-                                    scale={scale.scale}
-                                    //numberOfTicks={10}
-                                    formatLabel={(value) => value}
-                                />
-                                <LineChart
-                                    contentInset={contentInset}
-                                    style={{ height: height / 5 * 2, width: width / 3 * 2 }}
-                                    yAccessor={({ item }) => item.y}
-                                    xAccessor={({ item }) => item.x}
-                                    data={data}
-                                    gridMin={minVal}
-                                    gridMax={maxVal}
-                                >
-                                    <Grid />
-                                </LineChart>
-                            </View>
-                            <DataText currentTemp={data_t[data_t.length - 1]['y']} types={'t'} />
+                            <ScrollView
+                                scrollEnabled={true}
+                                indicatorStyle={'white'}
+                                maximumZoomScale={1.5}
+                                minimumZoomScale={0.5}
+                                bouncesZoom={true}
+                            >
+                                <View style={styles.listViewButtonContainer}>
+                                    <ListViewButton changeListView={this.changeListViewMode} />
+                                </View>
+                                <LabelText types='t' />
+                                <View style={{ marginLeft: 10, flexDirection: 'row' }}>
+                                    <YAxis
+                                        data={yAxisData}
+                                        style={{ width: width / 6 }}
+                                        contentInset={contentInset}
+                                        svg={{
+                                            fill: 'grey',
+                                            fontSize: 10,
+                                        }}
+                                        min={minVal}
+                                        max={maxVal}
+                                        scale={scale.scale}
+                                        //numberOfTicks={10}
+                                        formatLabel={(value) => value}
+                                    />
+                                    <LineChart
+                                        contentInset={contentInset}
+                                        style={{ height: height / 5 * 2, width: width / 3 * 2 }}
+                                        yAccessor={({ item }) => item.y}
+                                        xAccessor={({ item }) => item.x}
+                                        data={data}
+                                        gridMin={minVal}
+                                        gridMax={maxVal}
+                                    >
+                                        <Grid />
+                                    </LineChart>
+                                </View>
+                                <DataText currentTemp={data_t[data_t.length - 1]['y']} types={'t'} />
+                                {isListViewMode && data_t.map(d => {
+                                    let valueStr = d['y'] + ' °C'
+                                    let timeStr = moment(d['x']).format('HH:mm:ss');
+                                    return (<ListViewScreen valueStr={valueStr} timeStr={timeStr} key={uuidv1()} />)
+                                })}
+                            </ScrollView>
                         </ReactNativeZoomableView>
                     </View>
                 </SafeAreaView>
