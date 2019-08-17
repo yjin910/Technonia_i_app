@@ -12,6 +12,7 @@ import moment from "moment";
 import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
 import PropTypes from "prop-types";
 import uuidv1 from 'uuid/v1';
+import { Circle, Text, G } from 'react-native-svg'
 
 import DataText from './DataText'
 import LoadingGraph from './LoadingGraph'
@@ -135,6 +136,53 @@ export default class HumidityGraph extends React.Component {
             let minVal = parseFloat(minGrid);
             let maxVal = parseFloat(maxGrid);
 
+            const Decorator = ({ x, y, data }) => {
+                return data[0]['data'].map((value, index) => {
+                    //stroke = index === (data.length - 1) ? 'rgb(255, 68, 68)' : 'rgb(26, 188, 156)';
+                    if (value.y == minGrid) {
+                        return (
+                            <G>
+                                <Circle
+                                    key={uuidv1()}
+                                    cx={x(value.x)}
+                                    cy={y(value.y)}
+                                    r={2}
+                                    stroke={'red'}
+                                    fill={'white'}
+                                />
+                                <Text
+                                    key={uuidv1()}
+                                    x={x(value.x)}
+                                    y={y(value.y) + 15}
+                                    style={{ width: 20 }}>
+                                    {value.y}
+                                </Text>
+                            </G>
+                        )
+                    } else if (value.y == maxGrid) {
+                        return (
+                            <G>
+                                <Circle
+                                    key={uuidv1()}
+                                    cx={x(value.x)}
+                                    cy={y(value.y)}
+                                    r={2}
+                                    stroke={'red'}
+                                    fill={'white'}
+                                />
+                                <Text
+                                    key={uuidv1()}
+                                    x={x(value.x)}
+                                    y={y(value.y) - 5}
+                                    style={{ width: 20 }}>
+                                    {value.y}
+                                </Text>
+                            </G>
+                        )
+                    }
+                })
+            }
+
             return (
                 <SafeAreaView style={styles.root}>
                     <View style={styles.container}>
@@ -184,6 +232,7 @@ export default class HumidityGraph extends React.Component {
                                         gridMax={maxVal}
                                     >
                                         <Grid />
+                                        <Decorator />
                                     </LineChart>
                                 </View>
                                 <DataText currentHumi={data_h[data_h.length - 1]['y']} types={'h'} />
