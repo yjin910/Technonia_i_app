@@ -10,7 +10,7 @@ import TemperatureGraph from './TemperatureGraph'
 import HumidityGraph from './HumidityGraph'
 
 
-const INTERVAL_TIME = 600000;
+const INTERVAL_TIME = 60000;
 
 export default class GraphScreen extends React.Component {
     constructor(props) {
