@@ -30,11 +30,6 @@ export default class TemperatureGraph extends React.Component {
         super(props);
 
         this.state = {
-            data_t: [],
-            times: [],
-            yAxisData: [],
-            minGrid: 0,
-            maxGrid: 0,
             isLoaded: false,
             isListViewMode: false
         }
@@ -43,55 +38,23 @@ export default class TemperatureGraph extends React.Component {
     }
 
     static propTypes = {
-        temperatureData: PropTypes.array.isRequired //TODO need to use this data, not the  hard-coded data
+        temperatureData: PropTypes.array.isRequired,
+        t: PropTypes.array.isRequired,
+        min: PropTypes.string.isRequired,
+        max: PropTypes.string.isRequired
     };
 
     componentDidMount = () => {
-        this.setData();
-    }
-
-    setData = () => {
-        let raw_data = [
-            { "s": "60", "time_val": "2019-08-09T23:05:39+09:00", "t": "24.71" },
-            { "s": "61", "time_val": "2019-08-09T23:10:39+09:00", "t": "25.71" },
-            { "s": "62", "time_val": "2019-08-09T23:15:39+09:00", "t": "24.73" },
-            { "s": "63", "time_val": "2019-08-09T23:20:39+09:00", "t": "25.75" },
-            { "s": "64", "time_val": "2019-08-09T23:25:39+09:00", "t": "26.77" },
-            { "s": "65", "time_val": "2019-08-09T23:30:39+09:00", "t": "27.31" },
-            { "s": "66", "time_val": "2019-08-09T23:35:39+09:00", "t": "28.19" },
-            { "s": "67", "time_val": "2019-08-09T23:40:39+09:00", "t": "27.86" }
-        ]
-
-        let data_t = [];
-        let times = [];
-        let yAxisData = [];
-
-        let min = raw_data[0]['t'];
-        let max = raw_data[0]['t'];
-
-        for (let i = 0; i < raw_data.length; i++) {
-            let d = raw_data[i];
-            let t = d['t'];
-            let timeData = new Date(d['time_val']);
-
-            if (t) {
-                let temp = parseFloat(t)
-                if (temp > max) max = temp;
-                if (temp < min) min = temp;
-                data_t.push({ x: timeData, y: temp });
-
-                yAxisData.push(temp);
-
-                if (!times.includes(timeData)) times.push(timeData);
-            }
-        }
-
-        this.setState({ data_t: data_t, yAxisData: yAxisData, times: times, minGrid: min, maxGrid: max, isLoaded: true });
+        this._isLoaded();
     }
 
     changeListViewMode = () => {
         let {isListViewMode} = this.state;
         this.setState({ isListViewMode: !isListViewMode});
+    }
+
+    _isLoaded = () => {
+        this.setState({ isLoaded: true });
     }
 
     /**
@@ -111,7 +74,8 @@ export default class TemperatureGraph extends React.Component {
     };
 
     render() {
-        let { data_t, times, yAxisData, minGrid, maxGrid, isLoaded, isListViewMode } = this.state;
+        let { isLoaded, isListViewMode } = this.state;
+        let { temperatureData, t, min, max } = this.props;
 
         if (!isLoaded) {
             //this.setData();
@@ -121,25 +85,25 @@ export default class TemperatureGraph extends React.Component {
             )
         }
 
-        if (data_t.length == 0) {
+        if (temperatureData.length == 0) {
             return (
                 <NoData />
             )
         } else {
             let data = [
                 {
-                    data: data_t,
+                    data: temperatureData,
                     svg: { stroke: 'red' },
                 }
             ]
 
-            let minVal = parseFloat(minGrid);
-            let maxVal = parseFloat(maxGrid);
+            let minVal = parseFloat(min);
+            let maxVal = parseFloat(max);
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
                     //stroke = index === (data.length - 1) ? 'rgb(255, 68, 68)' : 'rgb(26, 188, 156)';
-                    if (value.y == minGrid) {
+                    if (value.y == min) {
                         return (
                             <G>
                                 <Circle
@@ -159,7 +123,7 @@ export default class TemperatureGraph extends React.Component {
                                 </Text>
                             </G>
                         )
-                    } else if (value.y == maxGrid) {
+                    } else if (value.y == max) {
                         return (
                             <G>
                                 <Circle
@@ -209,7 +173,7 @@ export default class TemperatureGraph extends React.Component {
                                 <LabelText types='t' />
                                 <View style={{ marginLeft: 10, flexDirection: 'row' }}>
                                     <YAxis
-                                        data={yAxisData}
+                                        data={t}
                                         style={{ width: width / 6 }}
                                         contentInset={contentInset}
                                         svg={{
@@ -235,8 +199,8 @@ export default class TemperatureGraph extends React.Component {
                                         <Decorator />
                                     </LineChart>
                                 </View>
-                                <DataText currentTemp={data_t[data_t.length - 1]['y']} types={'t'} />
-                                {isListViewMode && data_t.map(d => {
+                                <DataText currentTemp={temperatureData[temperatureData.length - 1]['y']} types={'t'} />
+                                {isListViewMode && temperatureData.map(d => {
                                     let valueStr = d['y'] + ' °C'
                                     let timeStr = moment(d['x']).format('HH:mm:ss');
                                     return (<ListViewScreen valueStr={valueStr} timeStr={timeStr} key={uuidv1()} />)

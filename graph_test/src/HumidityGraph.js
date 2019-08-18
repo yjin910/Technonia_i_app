@@ -30,11 +30,6 @@ export default class HumidityGraph extends React.Component {
         super(props);
 
         this.state = {
-            data_h: [],
-            times: [],
-            yAxisData: [],
-            minGrid: 0,
-            maxGrid: 0,
             isLoaded: false,
             isListViewMode: false
         }
@@ -43,55 +38,24 @@ export default class HumidityGraph extends React.Component {
     }
 
     static propTypes = {
-        humidityData: PropTypes.array.isRequired //TODO need to use this data, not hard-coded data
+        humidityData: PropTypes.array.isRequired,
+        h: PropTypes.array.isRequired,
+        min: PropTypes.number.isRequired,
+        max: PropTypes.number.isRequired
     };
 
-    componentDidMount = () => {
-        this.setData();
-    }
 
     changeListViewMode = () => {
         let { isListViewMode } = this.state;
         this.setState({ isListViewMode: !isListViewMode });
     }
 
-    setData = () => {
-        let raw_data = [
-            { "s": "60", "time_val": "2019-08-09T23:05:39+09:00", "h": "55" },
-            { "s": "61", "time_val": "2019-08-09T23:10:39+09:00", "h": "60" },
-            { "s": "62", "time_val": "2019-08-09T23:15:39+09:00", "h": "58" },
-            { "s": "63", "time_val": "2019-08-09T23:20:39+09:00", "h": "57" },
-            { "s": "64", "time_val": "2019-08-09T23:25:39+09:00", "h": "53" },
-            { "s": "65", "time_val": "2019-08-09T23:30:39+09:00", "h": "55" },
-            { "s": "66", "time_val": "2019-08-09T23:35:39+09:00", "h": "60" },
-            { "s": "67", "time_val": "2019-08-09T23:40:39+09:00", "h": "63" }
-        ]
+    componentDidMount = () => {
+        this._isLoaded();
+    }
 
-        let data_h = [];
-        let times = [];
-        let yAxisData = [];
-
-        let min = raw_data[0]['h'];
-        let max = raw_data[0]['h'];
-
-        for (let i = 0; i < raw_data.length; i++) {
-            let d = raw_data[i];
-            let h = d['h'];
-            let timeData = new Date(d['time_val']);
-
-            if (h) {
-                let humi = parseFloat(h)
-                if (humi > max) max = humi;
-                if (humi < min) min = humi;
-                data_h.push({ x: timeData, y: humi });
-
-                yAxisData.push(humi);
-
-                if (!times.includes(timeData)) times.push(timeData);
-            }
-        }
-
-        this.setState({ data_h: data_h, yAxisData: yAxisData, times: times, minGrid: min, maxGrid: max, isLoaded: true });
+    _isLoaded = () => {
+        this.setState({ isLoaded: true });
     }
 
     /**
@@ -111,35 +75,30 @@ export default class HumidityGraph extends React.Component {
     };
 
     render() {
-        let { data_h, times, yAxisData, minGrid, maxGrid, isLoaded, isListViewMode } = this.state;
+        let { isLoaded, isListViewMode } = this.state;
+        let { humidityData, h, min, max } = this.props;
 
         if (!isLoaded) {
-            //this.setData();
-
-            return (
-                <LoadingGraph />
-            )
+            return (<LoadingGraph />);
         }
 
-        if (data_h.length == 0) {
-            return (
-                <NoData />
-            )
+        if (humidityData.length == 0) {
+            return (<NoData />);
         } else {
             let data = [
                 {
-                    data: data_h,
+                    data: humidityData,
                     svg: { stroke: 'blue' },
                 }
             ]
 
-            let minVal = parseFloat(minGrid);
-            let maxVal = parseFloat(maxGrid);
+            let minVal = parseFloat(min);
+            let maxVal = parseFloat(max);
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
                     //stroke = index === (data.length - 1) ? 'rgb(255, 68, 68)' : 'rgb(26, 188, 156)';
-                    if (value.y == minGrid) {
+                    if (value.y == min) {
                         return (
                             <G>
                                 <Circle
@@ -159,7 +118,7 @@ export default class HumidityGraph extends React.Component {
                                 </Text>
                             </G>
                         )
-                    } else if (value.y == maxGrid) {
+                    } else if (value.y == max) {
                         return (
                             <G>
                                 <Circle
@@ -209,7 +168,7 @@ export default class HumidityGraph extends React.Component {
                                 <LabelText types='h' />
                                 <View style={{ marginLeft: 10, flexDirection: 'row' }}>
                                     <YAxis
-                                        data={yAxisData}
+                                        data={h}
                                         style={{ width: width / 6 }}
                                         contentInset={contentInset}
                                         svg={{
@@ -235,8 +194,8 @@ export default class HumidityGraph extends React.Component {
                                         <Decorator />
                                     </LineChart>
                                 </View>
-                                <DataText currentHumi={data_h[data_h.length - 1]['y']} types={'h'} />
-                                {isListViewMode && data_h.map(d => {
+                                <DataText currentHumi={humidityData[humidityData.length - 1]['y']} types={'h'} />
+                                {isListViewMode && humidityData.map(d => {
                                     let valueStr = d['y'] + ' %'
                                     let timeStr = moment(d['x']).format('HH:mm:ss');
                                     return (<ListViewScreen valueStr={valueStr} timeStr={timeStr} key={uuidv1()} />)
