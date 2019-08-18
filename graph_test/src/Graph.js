@@ -88,12 +88,12 @@ export default class GraphScreen extends React.Component {
         if (isLoaded) {
             const Temperature = (props) => (<TemperatureGraph temperatureData={props.screenProps.temperatureData} />);
             const Humidity = (props) => (<HumidityGraph humidityData={props.screenProps.humidityData} />);
-            const PlotScreen = (prps) => (<PlotScreen />);
+            const Plot = () => (<PlotScreen />);
 
             const AppNavigator = createMaterialTopTabNavigator({
                 Temperature,
                 Humidity,
-                PlotScreen
+                Plot
             });
 
             const GraphApp = createAppContainer(AppNavigator);
