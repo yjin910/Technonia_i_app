@@ -8,9 +8,10 @@ import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigat
 
 import TemperatureGraph from './TemperatureGraph'
 import HumidityGraph from './HumidityGraph'
+import PlotScreen from './Plot'
 
 
-const INTERVAL_TIME = 60000;
+const INTERVAL_TIME = 300000;
 
 export default class GraphScreen extends React.Component {
     constructor(props) {
@@ -85,14 +86,14 @@ export default class GraphScreen extends React.Component {
         let { data_t, data_h, isLoaded } = this.state;
 
         if (isLoaded) {
-            //TODO use this.setState to start loading
-
             const Temperature = (props) => (<TemperatureGraph temperatureData={props.screenProps.temperatureData} />);
             const Humidity = (props) => (<HumidityGraph humidityData={props.screenProps.humidityData} />);
+            const PlotScreen = (prps) => (<PlotScreen />);
 
             const AppNavigator = createMaterialTopTabNavigator({
                 Temperature,
-                Humidity
+                Humidity,
+                PlotScreen
             });
 
             const GraphApp = createAppContainer(AppNavigator);

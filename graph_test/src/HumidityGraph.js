@@ -147,7 +147,7 @@ export default class HumidityGraph extends React.Component {
                                     cx={x(value.x)}
                                     cy={y(value.y)}
                                     r={2}
-                                    stroke={'red'}
+                                    stroke={'blue'}
                                     fill={'white'}
                                 />
                                 <Text
@@ -167,7 +167,7 @@ export default class HumidityGraph extends React.Component {
                                     cx={x(value.x)}
                                     cy={y(value.y)}
                                     r={2}
-                                    stroke={'red'}
+                                    stroke={'blue'}
                                     fill={'white'}
                                 />
                                 <Text
