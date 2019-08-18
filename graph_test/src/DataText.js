@@ -18,10 +18,11 @@ export default class DataText extends React.Component {
         types: PropTypes.string.isRequired,
         currentTemp: PropTypes.number,
         currentHumi: PropTypes.number,
+        currentGeiger: PropTypes.number
     };
 
     render() {
-        let { currentTemp, currentHumi, types } = this.props;
+        let { currentTemp, currentHumi, currentGeiger, types } = this.props;
         
         switch (types) {
             case 't' :
@@ -34,6 +35,12 @@ export default class DataText extends React.Component {
                 return (
                     <View style={styles.textContainer}>
                         <Text style={styles.text}>{`현재 습도: ${currentHumi} %`}</Text>
+                    </View>
+                )
+            case 'g' :
+                return (
+                    <View style={styles.textContainer}>
+                        <Text style={styles.text}>{`현재 방사능 값: ${currentGeiger} mSv`}</Text>
                     </View>
                 )
             default:

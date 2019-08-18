@@ -25,7 +25,7 @@ import ListViewScreen from './ListViewScreen'
 const { width, height } = Dimensions.get('window');
 const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 
-export default class HumidityGraph extends React.Component {
+export default class GeigerGraph extends React.Component {
     constructor(props) {
         super(props);
 
@@ -38,8 +38,8 @@ export default class HumidityGraph extends React.Component {
     }
 
     static propTypes = {
-        humidityData: PropTypes.array.isRequired,
-        h: PropTypes.array.isRequired,
+        geigerData: PropTypes.array.isRequired,
+        g: PropTypes.array.isRequired,
         min: PropTypes.number.isRequired,
         max: PropTypes.number.isRequired
     };
@@ -76,19 +76,19 @@ export default class HumidityGraph extends React.Component {
 
     render() {
         let { isLoaded, isListViewMode } = this.state;
-        let { humidityData, h, min, max } = this.props;
+        let { geigerData, g, min, max } = this.props;
 
         if (!isLoaded) {
             return (<LoadingGraph />);
         }
 
-        if (humidityData.length == 0) {
+        if (geigerData.length == 0) {
             return (<NoData />);
         } else {
             let data = [
                 {
-                    data: humidityData,
-                    svg: { stroke: 'blue' },
+                    data: geigerData,
+                    svg: { stroke: 'green' },
                 }
             ]
 
@@ -106,7 +106,7 @@ export default class HumidityGraph extends React.Component {
                                     cx={x(value.x)}
                                     cy={y(value.y)}
                                     r={2}
-                                    stroke={'blue'}
+                                    stroke={'green'}
                                     fill={'white'}
                                 />
                                 <Text
@@ -126,7 +126,7 @@ export default class HumidityGraph extends React.Component {
                                     cx={x(value.x)}
                                     cy={y(value.y)}
                                     r={2}
-                                    stroke={'blue'}
+                                    stroke={'green'}
                                     fill={'white'}
                                 />
                                 <Text
@@ -165,10 +165,10 @@ export default class HumidityGraph extends React.Component {
                                 <View style={styles.listViewButtonContainer}>
                                     <ListViewButton changeListView={this.changeListViewMode} />
                                 </View>
-                                <LabelText types='h' />
+                                <LabelText types='g' />
                                 <View style={{ marginLeft: 10, flexDirection: 'row' }}>
                                     <YAxis
-                                        data={h}
+                                        data={g}
                                         style={{ width: width / 6 }}
                                         contentInset={contentInset}
                                         svg={{
@@ -195,8 +195,8 @@ export default class HumidityGraph extends React.Component {
                                         <Decorator />
                                     </LineChart>
                                 </View>
-                                <DataText currentHumi={humidityData[humidityData.length - 1]['y']} types={'h'} />
-                                {isListViewMode && humidityData.map(d => {
+                                <DataText currentGeiger={geigerData[geigerData.length - 1]['y']} types={'g'} />
+                                {isListViewMode && geigerData.map(d => {
                                     let valueStr = d['y'] + ' %'
                                     let timeStr = moment(d['x']).format('HH:mm:ss');
                                     return (<ListViewScreen valueStr={valueStr} timeStr={timeStr} key={uuidv1()} />)

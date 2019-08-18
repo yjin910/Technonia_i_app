@@ -8,6 +8,7 @@ import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigat
 
 import TemperatureGraph from './TemperatureGraph'
 import HumidityGraph from './HumidityGraph'
+import GeigerGraph from './GeigerGraph'
 
 
 const INTERVAL_TIME = 300000;
@@ -189,10 +190,17 @@ export default class GraphScreen extends React.Component {
                 min={props.screenProps.min_h}
                 max={props.screenProps.max_h}
             />);
+            const Geiger = (props) => (<GeigerGraph
+                geigerData={props.screenProps.geigerData}
+                g={props.screenProps.gs}
+                min={props.screenProps.min_g}
+                max={props.screenProps.max_g}
+            />);
 
             const AppNavigator = createMaterialTopTabNavigator({
+                Geiger,
                 Temperature,
-                Humidity
+                Humidity,
             });
 
             const GraphApp = createAppContainer(AppNavigator);
@@ -202,12 +210,16 @@ export default class GraphScreen extends React.Component {
                     <GraphApp screenProps={{ 
                         temperatureData: data_t,
                         humidityData: data_h,
+                        geigerData: data_g,
                         ts: ts,
                         hs: hs,
+                        gs: gs,
                         min_t: min_t,
                         min_h: min_h,
+                        min_g: min_g,
                         max_t: max_t,
-                        max_h: max_h
+                        max_h: max_h,
+                        max_g: max_g
                     }} />
                 </SafeAreaView>
             )

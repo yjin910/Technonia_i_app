@@ -194,6 +194,7 @@ export default class TemperatureGraph extends React.Component {
                                         data={data}
                                         gridMin={minVal}
                                         gridMax={maxVal}
+                                        animate={true}
                                     >
                                         <Grid />
                                         <Decorator />
