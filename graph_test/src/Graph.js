@@ -10,7 +10,7 @@ import TemperatureGraph from './TemperatureGraph'
 import HumidityGraph from './HumidityGraph'
 
 
-const INTERVAL_TIME = 300000;
+const INTERVAL_TIME = 60000;
 
 export default class GraphScreen extends React.Component {
     constructor(props) {
@@ -30,12 +30,14 @@ export default class GraphScreen extends React.Component {
     }
 
     setInterval = () => {
+        let deviceNum = 'u18';
+
         this._timer = setInterval(() => {
-            //TODO
-            console.log('Hello')
+            console.log('fetch data start');
+            this.fetchData_Async(deviceNum);
         }, INTERVAL_TIME);
 
-        //TODO this._timer = this._timer.bind(this);
+        this._timer = this._timer.bind(this);
     }
 
     removeInterval = () => {
@@ -47,7 +49,8 @@ export default class GraphScreen extends React.Component {
     }
 
     fetchData_Async = async (deviceNum) => {
-        const url = 'http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8080/getdata?';
+        const url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8080/getdata?u=${deviceNum}`;
+        console.log(url);
 
         fetch(url)
             .then(res => res.json())

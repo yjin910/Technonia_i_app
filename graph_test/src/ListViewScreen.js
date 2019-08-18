@@ -3,8 +3,7 @@ import {
     View,
     StyleSheet,
     Dimensions,
-    Text,
-    ScrollView
+    Text
 } from 'react-native'
 import PropTypes from "prop-types";
 
