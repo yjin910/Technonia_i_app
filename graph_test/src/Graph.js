@@ -57,6 +57,7 @@ export default class GraphScreen extends React.Component {
             .then(
                 (result) => {
                     //TODO
+                    console.log(result);
                 }
             )
             .catch((error) => {
