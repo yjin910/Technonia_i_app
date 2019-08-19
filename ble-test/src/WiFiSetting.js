@@ -27,7 +27,7 @@ export default class WiFiSetting extends React.Component {
         this.state = {
             wifi: '',
             pw: '',
-            uuid: ''
+            uuid: undefined
         }
 
         this.sendWiFiSettings = this.sendWiFiSettings.bind(this);
@@ -42,12 +42,21 @@ export default class WiFiSetting extends React.Component {
         util.sendData_wifi(uuid, wifi, pw);
     }
 
-    componentDidMount = () => {
+    getAndSetUUID = () => {
         const uuid = this.props.navigation.getParam('uuid', '');
         this.setState({ uuid: uuid });
     }
 
+    componentDidMount = () => {
+        this.getAndSetUUID();
+    }
+
     render() {
+        let {uuid} = this.state;
+        if (!uuid) {
+            this.getAndSetUUID();
+        }
+
         return (
             <KeyboardAvoidingView
                 keyboardVerticalOffset={Platform.select({ ios: 0, android: width / 3 })}

@@ -11,10 +11,18 @@ const DEVICE_NAME_SERVICE_UUID = "4fafc203-1fb5-459e-8fcc-c5c9c331914b";
 const DEVICE_NAME_CHARACTERISTIC_UUID = "bec5483e-36e1-4688-b7f5-ea07361b26a8";
 
 
+let isConnected = false;
+let target_uuid = '';
+
+
 let sendData_wifi = (device_uuid, wifi, pw) => {
     if (device_uuid == '') {
         alert('device not connected');
         return;
+    }
+
+    if (!isConnected) {
+        connectBLEDevice(target_uuid, null, null);
     }
 
     const wifi_data = stringToBytes(wifi);
@@ -24,7 +32,13 @@ let sendData_wifi = (device_uuid, wifi, pw) => {
             const pw_data = stringToBytes(pw);
 
             BleManager.write(device_uuid, WIFI_PW_SERVICE_UUID, WIFI_PW_CHARACTERISTIC_UUID, pw_data, pw_data.length + 1)
-                .catch((err) => { alert('error::write pw = ' + pw) });
+                .then(() => {
+                    BleManager.disconnect(target_uuid); //TODO need to test
+                })
+                .catch((err) => {
+                    BleManager.disconnect(target_uuid); //TODO need to test
+                    alert('error::write pw = ' + pw)
+                });
         })
         .catch((err) => { alert('error::write wifi') });
 }
@@ -35,25 +49,35 @@ let sendData_deviceName = (device_uuid, deviceName) => {
         return;
     }
 
+    if (!isConnected) {
+        connectBLEDevice(target_uuid, null, null);
+    }
+
     const deviceName_data = stringToBytes(deviceName);
 
     BleManager.write(device_uuid, DEVICE_NAME_SERVICE_UUID, DEVICE_NAME_CHARACTERISTIC_UUID, deviceName_data, deviceName_data.length + 1)
         .then(() => {
             console.log('success');
+            BleManager.disconnect(target_uuid);
         })
-        .catch((err) => { alert('error::write deviceName') });
+        .catch((err) => { 
+            alert('error::write deviceName')
+            BleManager.disconnect(target_uuid);
+        });
 }
 
 let connectBLEDevice = (uuid, next, handleError) => {
     BleManager.connect(uuid)
         .then(() => {
+            isConnected = true;
+            target_uuid = uuid;
             alert('Success::connectBLEDevice');
-            next(uuid);
+            if (next) next(uuid);
         })
         .catch((error) => {
             console.log('Connection error', error);
             alert('Err::connectBLEDevice');
-            handleError(error);
+            if (handleError) handleError(error);
         });
 }
 

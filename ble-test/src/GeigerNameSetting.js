@@ -40,7 +40,6 @@ export default class GeigerNameSetting extends React.Component {
     }
 
     sendDeviceName = async (deviceName, uuid) => {
-        //const { deviceName, uuid } = this.state;
         if (uuid == '') {
             uuid = await AsyncStorage.getItem('TEMS@device_uuid');
         }
@@ -62,22 +61,6 @@ export default class GeigerNameSetting extends React.Component {
         this.handlerStop = bleManagerEmitter.addListener('BleManagerStopScan', this.handleStopScan);
         this.handlerDisconnect = bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', this.handleDisconnectedPeripheral);
         this.handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleUpdateValueForCharacteristic);
-
-        if (Platform.OS === 'android' && Platform.Version >= 23) {
-            PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
-                if (result) {
-                    console.log("Permission is OK");
-                } else {
-                    PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
-                        if (result) {
-                            console.log("User accept");
-                        } else {
-                            console.log("User refuse");
-                        }
-                    });
-                }
-            });
-        }
     }
 
     handleDisconnectedPeripheral(data) {
@@ -119,11 +102,11 @@ export default class GeigerNameSetting extends React.Component {
         if (!peripheral) {
             return;
         }
+        let {uuid} = this.state;
 
-        const id = peripheral.id;
         const name = peripheral.name;
 
-        this.sendDeviceName(name, id);
+        await this.sendDeviceName(name, uuid);
     }
 
     render() {
@@ -152,7 +135,7 @@ export default class GeigerNameSetting extends React.Component {
                         renderRow={(item) => {
                             const color = item.connected ? 'green' : '#fff';
                             return (
-                                <TouchableHighlight onPress={() => this.connectToPeripheral(item)}>
+                                <TouchableHighlight onPress={() => this.selectPeripheral(item)}>
                                     <View style={[styles.row, { backgroundColor: color }]}>
                                         <Text style={{ fontSize: 12, textAlign: 'center', color: '#333333', padding: 10 }}>{item.name}</Text>
                                         <Text style={{ fontSize: 8, textAlign: 'center', color: '#333333', padding: 10 }}>{item.id}</Text>
