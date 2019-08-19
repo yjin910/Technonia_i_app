@@ -33,10 +33,10 @@ let sendData_wifi = (device_uuid, wifi, pw) => {
 
             BleManager.write(device_uuid, WIFI_PW_SERVICE_UUID, WIFI_PW_CHARACTERISTIC_UUID, pw_data, pw_data.length + 1)
                 .then(() => {
-                    BleManager.disconnect(target_uuid); //TODO need to test
+                    BleManager.disconnect(device_uuid);
                 })
                 .catch((err) => {
-                    BleManager.disconnect(target_uuid); //TODO need to test
+                    BleManager.disconnect(device_uuid);
                     alert('error::write pw = ' + pw)
                 });
         })
@@ -58,11 +58,11 @@ let sendData_deviceName = (device_uuid, deviceName) => {
     BleManager.write(device_uuid, DEVICE_NAME_SERVICE_UUID, DEVICE_NAME_CHARACTERISTIC_UUID, deviceName_data, deviceName_data.length + 1)
         .then(() => {
             console.log('success');
-            BleManager.disconnect(target_uuid);
+            BleManager.disconnect(device_uuid);
         })
         .catch((err) => { 
             alert('error::write deviceName')
-            BleManager.disconnect(target_uuid);
+            BleManager.disconnect(device_uuid);
         });
 }
 
