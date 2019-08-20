@@ -40,8 +40,8 @@ export default class TemperatureGraph extends React.Component {
     static propTypes = {
         temperatureData: PropTypes.array.isRequired,
         t: PropTypes.array.isRequired,
-        min: PropTypes.string.isRequired,
-        max: PropTypes.string.isRequired
+        min: PropTypes.number.isRequired,
+        max: PropTypes.number.isRequired
     };
 
     componentDidMount = () => {
@@ -97,15 +97,15 @@ export default class TemperatureGraph extends React.Component {
                 }
             ]
 
-            let minVal = parseFloat(min);
-            let maxVal = parseFloat(max);
+            let startDate = moment(temperatureData[0]['x']).format('MM/DD HH:mm');
+            let endDate = moment(temperatureData[temperatureData.length - 1]['x']).format('MM/DD HH:mm');
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
                     //stroke = index === (data.length - 1) ? 'rgb(255, 68, 68)' : 'rgb(26, 188, 156)';
-                    if (value.y == min) {
+                    if (value.y == min || value.y == max) {
                         return (
-                            <G>
+                            <G key={uuidv1()}>
                                 <Circle
                                     key={uuidv1()}
                                     cx={x(value.x)}
@@ -114,33 +114,6 @@ export default class TemperatureGraph extends React.Component {
                                     stroke={'red'}
                                     fill={'white'}
                                 />
-                                <Text
-                                    key={uuidv1()}
-                                    x={x(value.x)}
-                                    y={y(value.y) + 15}
-                                    style={{ width: 20 }}>
-                                    {value.y}
-                                </Text>
-                            </G>
-                        )
-                    } else if (value.y == max) {
-                        return (
-                            <G>
-                                <Circle
-                                    key={uuidv1()}
-                                    cx={x(value.x)}
-                                    cy={y(value.y)}
-                                    r={2}
-                                    stroke={'red'}
-                                    fill={'white'}
-                                />
-                                <Text
-                                    key={uuidv1()}
-                                    x={x(value.x)}
-                                    y={y(value.y) - 5}
-                                    style={{ width: 20 }}>
-                                    {value.y}
-                                </Text>
                             </G>
                         )
                     }
@@ -180,8 +153,8 @@ export default class TemperatureGraph extends React.Component {
                                             fill: 'grey',
                                             fontSize: 10,
                                         }}
-                                        min={minVal}
-                                        max={maxVal}
+                                        min={min}
+                                        max={max}
                                         scale={scale.scale}
                                         //numberOfTicks={10}
                                         formatLabel={(value) => value}
@@ -192,15 +165,22 @@ export default class TemperatureGraph extends React.Component {
                                         yAccessor={({ item }) => item.y}
                                         xAccessor={({ item }) => item.x}
                                         data={data}
-                                        gridMin={minVal}
-                                        gridMax={maxVal}
+                                        gridMin={min}
+                                        gridMax={max}
                                         animate={true}
                                     >
                                         <Grid />
                                         <Decorator />
                                     </LineChart>
                                 </View>
-                                <DataText currentTemp={temperatureData[temperatureData.length - 1]['y']} types={'t'} />
+                                <DataText 
+                                    currentTemp={temperatureData[temperatureData.length - 1]['y']}
+                                    types={'t'}
+                                    minTemp={min}
+                                    maxTemp={max}
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                />
                                 {isListViewMode && temperatureData.map(d => {
                                     let valueStr = d['y'] + ' °C'
                                     let timeStr = moment(d['x']).format('HH:mm:ss');

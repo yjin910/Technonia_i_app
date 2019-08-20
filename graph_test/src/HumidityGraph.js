@@ -92,15 +92,15 @@ export default class HumidityGraph extends React.Component {
                 }
             ]
 
-            let minVal = parseFloat(min);
-            let maxVal = parseFloat(max);
+            let startDate = moment(humidityData[0]['x']).format('MM/DD HH:mm');
+            let endDate = moment(humidityData[humidityData.length - 1]['x']).format('MM/DD HH:mm');
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
                     //stroke = index === (data.length - 1) ? 'rgb(255, 68, 68)' : 'rgb(26, 188, 156)';
-                    if (value.y == min) {
+                    if (value.y == min || value.y == max) {
                         return (
-                            <G>
+                            <G key={uuidv1()}>
                                 <Circle
                                     key={uuidv1()}
                                     cx={x(value.x)}
@@ -109,33 +109,6 @@ export default class HumidityGraph extends React.Component {
                                     stroke={'blue'}
                                     fill={'white'}
                                 />
-                                <Text
-                                    key={uuidv1()}
-                                    x={x(value.x)}
-                                    y={y(value.y) + 15}
-                                    style={{ width: 20 }}>
-                                    {value.y}
-                                </Text>
-                            </G>
-                        )
-                    } else if (value.y == max) {
-                        return (
-                            <G>
-                                <Circle
-                                    key={uuidv1()}
-                                    cx={x(value.x)}
-                                    cy={y(value.y)}
-                                    r={2}
-                                    stroke={'blue'}
-                                    fill={'white'}
-                                />
-                                <Text
-                                    key={uuidv1()}
-                                    x={x(value.x)}
-                                    y={y(value.y) - 5}
-                                    style={{ width: 20 }}>
-                                    {value.y}
-                                </Text>
                             </G>
                         )
                     }
@@ -175,8 +148,8 @@ export default class HumidityGraph extends React.Component {
                                             fill: 'grey',
                                             fontSize: 10,
                                         }}
-                                        min={minVal}
-                                        max={maxVal}
+                                        min={min}
+                                        max={max}
                                         scale={scale.scale}
                                         //numberOfTicks={10}
                                         formatLabel={(value) => value}
@@ -187,15 +160,22 @@ export default class HumidityGraph extends React.Component {
                                         yAccessor={({ item }) => item.y}
                                         xAccessor={({ item }) => item.x}
                                         data={data}
-                                        gridMin={minVal}
-                                        gridMax={maxVal}
+                                        gridMin={min}
+                                        gridMax={max}
                                         animate={true}
                                     >
                                         <Grid />
                                         <Decorator />
                                     </LineChart>
                                 </View>
-                                <DataText currentHumi={humidityData[humidityData.length - 1]['y']} types={'h'} />
+                                <DataText 
+                                    currentHumi={humidityData[humidityData.length - 1]['y']}
+                                    types={'h'}
+                                    minHumi={min}
+                                    maxHumi={max}
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                />
                                 {isListViewMode && humidityData.map(d => {
                                     let valueStr = d['y'] + ' %'
                                     let timeStr = moment(d['x']).format('HH:mm:ss');

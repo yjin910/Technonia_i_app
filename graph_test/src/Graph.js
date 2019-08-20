@@ -85,6 +85,10 @@ export default class GraphScreen extends React.Component {
 
                     let min_t, min_h, min_g, max_t, max_h, max_g;
 
+                    let isNotFirst_t = false;
+                    let isNotFirst_h = false;
+                    let isNotFirst_g = false;
+
                     let raw_data = result['data'];
 
                     for (let i = start; i < num; i++) {
@@ -96,36 +100,45 @@ export default class GraphScreen extends React.Component {
 
                         if (t) {
                             t = parseFloat(t);
-                            if (min_t) {
+                            if (isNotFirst_t) {
                                 min_t = (min_t < t) ? min_t : t;
                             } else min_t = t;
                             if (max_t) {
                                 max_t = (max_t > t) ? max_t : t;
-                            } else max_t = t;
+                            } else {
+                                max_t = t;
+                                isNotFirst_t = true;
+                            }
 
                             data_t.push({x: time_val, y: t});
                             ts.push(t);
                         }
                         if (h) {
                             h = parseFloat(h);
-                            if (min_h) {
+                            if (isNotFirst_h) {
                                 min_h = (min_h < h) ? min_h : h;
                             } else min_h = h;
-                            if (max_h) {
+                            if (isNotFirst_h) {
                                 max_h = (max_h > h) ? max_h : h;
-                            } else max_h = h;
+                            } else {
+                                max_h = h;
+                                isNotFirst_h = true;
+                            }
 
                             data_h.push({x: time_val, y: h});
                             hs.push(h);
                         }
                         if (g) {
                             g = parseFloat(g);
-                            if (min_g) {
+                            if (isNotFirst_g) {
                                 min_g = (min_g < g) ? min_g : g;
                             } else min_g = g;
-                            if (max_g) {
+                            if (isNotFirst_g) {
                                 max_g = (max_g > g) ? max_g : g;
-                            } else max_g = g;
+                            } else {
+                                max_g = g;
+                                isNotFirst_g = true;
+                            }
 
                             data_g.push({x: time_val, y: g});
                             gs.push(g);

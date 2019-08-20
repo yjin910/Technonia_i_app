@@ -95,12 +95,15 @@ export default class GeigerGraph extends React.Component {
             let minVal = parseFloat(min);
             let maxVal = parseFloat(max);
 
+            let startDate = moment(geigerData[0]['x']).format('MM/DD HH:mm');
+            let endDate = moment(geigerData[geigerData.length - 1]['x']).format('MM/DD HH:mm');
+
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
                     //stroke = index === (data.length - 1) ? 'rgb(255, 68, 68)' : 'rgb(26, 188, 156)';
-                    if (value.y == min) {
+                    if (value.y == min || value.y == max) {
                         return (
-                            <G>
+                            <G key={uuidv1()}>
                                 <Circle
                                     key={uuidv1()}
                                     cx={x(value.x)}
@@ -109,33 +112,6 @@ export default class GeigerGraph extends React.Component {
                                     stroke={'green'}
                                     fill={'white'}
                                 />
-                                <Text
-                                    key={uuidv1()}
-                                    x={x(value.x)}
-                                    y={y(value.y) + 15}
-                                    style={{ width: 20 }}>
-                                    {value.y}
-                                </Text>
-                            </G>
-                        )
-                    } else if (value.y == max) {
-                        return (
-                            <G>
-                                <Circle
-                                    key={uuidv1()}
-                                    cx={x(value.x)}
-                                    cy={y(value.y)}
-                                    r={2}
-                                    stroke={'green'}
-                                    fill={'white'}
-                                />
-                                <Text
-                                    key={uuidv1()}
-                                    x={x(value.x)}
-                                    y={y(value.y) - 5}
-                                    style={{ width: 20 }}>
-                                    {value.y}
-                                </Text>
                             </G>
                         )
                     }
@@ -195,7 +171,14 @@ export default class GeigerGraph extends React.Component {
                                         <Decorator />
                                     </LineChart>
                                 </View>
-                                <DataText currentGeiger={geigerData[geigerData.length - 1]['y']} types={'g'} />
+                                <DataText 
+                                    currentGeiger={geigerData[geigerData.length - 1]['y']}
+                                    types={'g'}
+                                    minGeiger={minVal}
+                                    maxGeiger={maxVal}
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                />
                                 {isListViewMode && geigerData.map(d => {
                                     let valueStr = d['y'] + ' %'
                                     let timeStr = moment(d['x']).format('HH:mm:ss');
