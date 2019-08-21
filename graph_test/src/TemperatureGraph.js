@@ -97,12 +97,11 @@ export default class TemperatureGraph extends React.Component {
                 }
             ]
 
-            let startDate = moment(temperatureData[0]['x']).format('MM/DD HH:mm');
-            let endDate = moment(temperatureData[temperatureData.length - 1]['x']).format('MM/DD HH:mm');
+            let startDate = moment(temperatureData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let endDate = moment(temperatureData[temperatureData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
-                    //stroke = index === (data.length - 1) ? 'rgb(255, 68, 68)' : 'rgb(26, 188, 156)';
                     if (value.y == min || value.y == max) {
                         return (
                             <G key={uuidv1()}>
@@ -113,6 +112,19 @@ export default class TemperatureGraph extends React.Component {
                                     r={2}
                                     stroke={'red'}
                                     fill={'white'}
+                                />
+                            </G>
+                        )
+                    } else {
+                        return (
+                            <G key={uuidv1()}>
+                                <Circle
+                                    key={uuidv1()}
+                                    cx={x(value.x)}
+                                    cy={y(value.y)}
+                                    r={1}
+                                    stroke={'red'}
+                                    fill={'red'}
                                 />
                             </G>
                         )

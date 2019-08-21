@@ -35,14 +35,14 @@ export default class GraphScreen extends React.Component {
     }
 
     componentDidMount = () => {
-        let deviceNum = 'u18';
+        let deviceNum = '18';
         this.fetchData_Async(deviceNum)
 
         this.setInterval();
     }
 
     setInterval = () => {
-        let deviceNum = 'u18';
+        let deviceNum = '18';
 
         this._timer = setInterval(() => {
             console.log('fetch data start');
@@ -59,22 +59,14 @@ export default class GraphScreen extends React.Component {
     }
 
     fetchData_Async = async (deviceNum) => {
-        const url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8080/getdata?u=${deviceNum}`;
+        const url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/getdata?u=${deviceNum}`;
         console.log(url);
 
         fetch(url)
             .then(res => res.json())
             .then(
                 (result) => {
-                    let num = result['num']
-
-                    let start;
-                    if (num > 400) {
-                        start = num - 300;
-                    } else {
-                        start = num;
-                    }
-
+                    let num = result.length;
                     let data_t = [];
                     let data_h = [];
                     let data_g = [];
@@ -89,59 +81,62 @@ export default class GraphScreen extends React.Component {
                     let isNotFirst_h = false;
                     let isNotFirst_g = false;
 
-                    let raw_data = result['data'];
+                    for (let i = 0; i < num; i++) {
+                        let d = result[i];
+                        let type = d['type'];
+                        let time_val = new Date(d['time']);
 
-                    for (let i = start; i < num; i++) {
-                        let d = raw_data[i];
-                        let t = d['t'];
-                        let h = d['h'];
-                        let g = d['g'];
-                        let time_val = new Date(d['time_val']);
+                        switch(type) {
+                            case 't' :
+                                let t = parseFloat(d['val']);
+                                if (isNotFirst_t) {
+                                    min_t = (min_t < t) ? min_t : t;
+                                } else min_t = t;
+                                if (max_t) {
+                                    max_t = (max_t > t) ? max_t : t;
+                                } else {
+                                    max_t = t;
+                                    isNotFirst_t = true;
+                                }
 
-                        if (t) {
-                            t = parseFloat(t);
-                            if (isNotFirst_t) {
-                                min_t = (min_t < t) ? min_t : t;
-                            } else min_t = t;
-                            if (max_t) {
-                                max_t = (max_t > t) ? max_t : t;
-                            } else {
-                                max_t = t;
-                                isNotFirst_t = true;
-                            }
+                                data_t.push({ x: time_val, y: t });
+                                ts.push(t);
 
-                            data_t.push({x: time_val, y: t});
-                            ts.push(t);
-                        }
-                        if (h) {
-                            h = parseFloat(h);
-                            if (isNotFirst_h) {
-                                min_h = (min_h < h) ? min_h : h;
-                            } else min_h = h;
-                            if (isNotFirst_h) {
-                                max_h = (max_h > h) ? max_h : h;
-                            } else {
-                                max_h = h;
-                                isNotFirst_h = true;
-                            }
+                                break;
+                            case 'h' :
+                                let h = parseFloat(d['val']);
 
-                            data_h.push({x: time_val, y: h});
-                            hs.push(h);
-                        }
-                        if (g) {
-                            g = parseFloat(g);
-                            if (isNotFirst_g) {
-                                min_g = (min_g < g) ? min_g : g;
-                            } else min_g = g;
-                            if (isNotFirst_g) {
-                                max_g = (max_g > g) ? max_g : g;
-                            } else {
-                                max_g = g;
-                                isNotFirst_g = true;
-                            }
+                                if (isNotFirst_h) {
+                                    min_h = (min_h < h) ? min_h : h;
+                                } else min_h = h;
+                                if (isNotFirst_h) {
+                                    max_h = (max_h > h) ? max_h : h;
+                                } else {
+                                    max_h = h;
+                                    isNotFirst_h = true;
+                                }
 
-                            data_g.push({x: time_val, y: g});
-                            gs.push(g);
+                                data_h.push({ x: time_val, y: h });
+                                hs.push(h);
+
+                                break;
+                            case 'g' :
+                                let g = parseFloat(d['val']);
+
+                                if (isNotFirst_g) {
+                                    min_g = (min_g < g) ? min_g : g;
+                                } else min_g = g;
+                                if (isNotFirst_g) {
+                                    max_g = (max_g > g) ? max_g : g;
+                                } else {
+                                    max_g = g;
+                                    isNotFirst_g = true;
+                                }
+
+                                data_g.push({ x: time_val, y: g });
+                                gs.push(g);
+
+                                break;
                         }
                     }
 

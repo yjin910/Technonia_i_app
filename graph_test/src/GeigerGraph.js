@@ -92,15 +92,11 @@ export default class GeigerGraph extends React.Component {
                 }
             ]
 
-            let minVal = parseFloat(min);
-            let maxVal = parseFloat(max);
-
-            let startDate = moment(geigerData[0]['x']).format('MM/DD HH:mm');
-            let endDate = moment(geigerData[geigerData.length - 1]['x']).format('MM/DD HH:mm');
+            let startDate = moment(geigerData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let endDate = moment(geigerData[geigerData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
-                    //stroke = index === (data.length - 1) ? 'rgb(255, 68, 68)' : 'rgb(26, 188, 156)';
                     if (value.y == min || value.y == max) {
                         return (
                             <G key={uuidv1()}>
@@ -111,6 +107,19 @@ export default class GeigerGraph extends React.Component {
                                     r={2}
                                     stroke={'green'}
                                     fill={'white'}
+                                />
+                            </G>
+                        )
+                    } else {
+                        return (
+                            <G key={uuidv1()}>
+                                <Circle
+                                    key={uuidv1()}
+                                    cx={x(value.x)}
+                                    cy={y(value.y)}
+                                    r={1}
+                                    stroke={'green'}
+                                    fill={'green'}
                                 />
                             </G>
                         )
@@ -151,8 +160,8 @@ export default class GeigerGraph extends React.Component {
                                             fill: 'grey',
                                             fontSize: 10,
                                         }}
-                                        min={minVal}
-                                        max={maxVal}
+                                        min={min}
+                                        max={max}
                                         scale={scale.scale}
                                         //numberOfTicks={10}
                                         formatLabel={(value) => value}
@@ -163,8 +172,8 @@ export default class GeigerGraph extends React.Component {
                                         yAccessor={({ item }) => item.y}
                                         xAccessor={({ item }) => item.x}
                                         data={data}
-                                        gridMin={minVal}
-                                        gridMax={maxVal}
+                                        gridMin={min}
+                                        gridMax={max}
                                         animate={true}
                                     >
                                         <Grid />
@@ -174,13 +183,13 @@ export default class GeigerGraph extends React.Component {
                                 <DataText 
                                     currentGeiger={geigerData[geigerData.length - 1]['y']}
                                     types={'g'}
-                                    minGeiger={minVal}
-                                    maxGeiger={maxVal}
+                                    minGeiger={min}
+                                    maxGeiger={max}
                                     startDate={startDate}
                                     endDate={endDate}
                                 />
                                 {isListViewMode && geigerData.map(d => {
-                                    let valueStr = d['y'] + ' %'
+                                    let valueStr = d['y'] + ' mSv'
                                     let timeStr = moment(d['x']).format('HH:mm:ss');
                                     return (<ListViewScreen valueStr={valueStr} timeStr={timeStr} key={uuidv1()} />)
                                 })}

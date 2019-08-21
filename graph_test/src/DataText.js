@@ -37,10 +37,8 @@ export default class DataText extends React.Component {
                 let { currentTemp, maxTemp, minTemp } = this.props;
                 return (
                     <View style={styles.container}>
-                        <View style={styles.textContainer}>
+                        <View style={styles.dateTextContainer}>
                             <Text style={styles.text}>{`시작: ${startDate}`}</Text>
-                        </View>
-                        <View style={styles.textContainer}>
                             <Text style={styles.text}>{`종료: ${endDate}`}</Text>
                         </View>
                         <View style={styles.textContainer}>
@@ -58,10 +56,8 @@ export default class DataText extends React.Component {
                 let { currentHumi, maxHumi, minHumi } = this.props;
                 return (
                     <View style={styles.container}>
-                        <View style={styles.textContainer}>
+                        <View style={styles.dateTextContainer}>
                             <Text style={styles.text}>{`시작: ${startDate}`}</Text>
-                        </View>
-                        <View style={styles.textContainer}>
                             <Text style={styles.text}>{`종료: ${endDate}`}</Text>
                         </View>
                         <View style={styles.textContainer}>
@@ -79,10 +75,8 @@ export default class DataText extends React.Component {
                 let { currentGeiger, minGeiger, maxGeiger } = this.props;
                 return (
                     <View style={styles.container}>
-                        <View style={styles.textContainer}>
+                        <View style={styles.dateTextContainer}>
                             <Text style={styles.text}>{`시작: ${startDate}`}</Text>
-                        </View>
-                        <View style={styles.textContainer}>
                             <Text style={styles.text}>{`종료: ${endDate}`}</Text>
                         </View>
                         <View style={styles.textContainer}>
@@ -115,8 +109,13 @@ const styles = StyleSheet.create({
         //marginTop: width / 6,
         //marginBottom: width / 20
     },
+    dateTextContainer: {
+        width: width,
+        alignItems: 'flex-start',
+        marginBottom: width / 30
+    },
     text: {
-        fontSize: width / 28,
+        fontSize: width / 25,
         marginHorizontal: width / 5
     }
 })
