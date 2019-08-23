@@ -227,7 +227,7 @@ export default class GraphScreen extends React.Component {
                         min_g: min_g,
                         max_t: max_t,
                         max_h: max_h,
-                        max_g: max_g
+                        max_g: max_g,
                     }} />
                 </SafeAreaView>
             )

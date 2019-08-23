@@ -80,13 +80,13 @@ export default class DataText extends React.Component {
                             <Text style={styles.text}>{`종료: ${endDate}`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`현재 방사능 값: ${currentGeiger} mSv`}</Text>
+                            <Text style={styles.text}>{`현재 방사능 값: ${currentGeiger} μSv`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`방사능 최고값: ${maxGeiger} mSv`}</Text>
+                            <Text style={styles.text}>{`방사능 최고값: ${maxGeiger} μSv`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`방사능 최저값: ${minGeiger} mSv`}</Text>
+                            <Text style={styles.text}>{`방사능 최저값: ${minGeiger} μSv`}</Text>
                         </View>
                     </View>
                 )

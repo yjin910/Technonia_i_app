@@ -12,7 +12,7 @@ import moment from "moment";
 import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
 import PropTypes from "prop-types";
 import uuidv1 from 'uuid/v1';
-import { Circle, Text, G } from 'react-native-svg'
+import { Circle, G } from 'react-native-svg'
 
 import DataText from './DataText'
 import LoadingGraph from './LoadingGraph'
@@ -78,8 +78,6 @@ export default class TemperatureGraph extends React.Component {
         let { temperatureData, t, min, max } = this.props;
 
         if (!isLoaded) {
-            //this.setData();
-
             return (
                 <LoadingGraph />
             )
@@ -102,16 +100,29 @@ export default class TemperatureGraph extends React.Component {
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
+                    let x1 = x(value.x);
+                    let y1 = y(value.y);
+
                     if (value.y == min || value.y == max) {
                         return (
                             <G key={uuidv1()}>
                                 <Circle
                                     key={uuidv1()}
-                                    cx={x(value.x)}
-                                    cy={y(value.y)}
+                                    cx={x1}
+                                    cy={y1}
                                     r={2}
                                     stroke={'red'}
                                     fill={'white'}
+                                    onPress={(event) => {
+                                        const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
+
+                                        console.log(pageX);
+                                        console.log(pageY);
+                                        console.log(locationX);
+                                        console.log(locationY);
+                                        console.log(`Point (${x1}, ${y1}) is pressed`);
+                                        this.changeTooltipIndex(index);
+                                    }}
                                 />
                             </G>
                         )
@@ -120,16 +131,88 @@ export default class TemperatureGraph extends React.Component {
                             <G key={uuidv1()}>
                                 <Circle
                                     key={uuidv1()}
-                                    cx={x(value.x)}
-                                    cy={y(value.y)}
+                                    cx={x1}
+                                    cy={y1}
                                     r={1}
                                     stroke={'red'}
                                     fill={'red'}
+                                    onPress={(event) => {
+                                        const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
+
+                                        console.log(pageX);
+                                        console.log(pageY);
+                                        console.log(locationX);
+                                        console.log(locationY);
+
+                                        console.log(`Point (${x1}, ${y1}) is pressed`);
+                                        this.changeTooltipIndex(index);
+                                    }}
                                 />
                             </G>
                         )
                     }
                 })
+            }
+
+            const Tooltip = ({ x, y, data }) => {
+                console.log(tooltipIndex);
+                if (tooltipIndex != 'init') {
+
+                    return data[0]['data'].map((value, index) => {
+                        let x1 = x(value.x);
+                        let y1 = y(value.y);
+                        let x2 = x1;
+                        let y2 = y1;
+                        let rect_x, rect_y;
+                        let rect_width = width / 8;
+                        let rect_height = width / 18;
+
+                        let avgY = (y(min) + y(max)) / 2
+
+                        if (y1 > avgY) {
+                            y2 -= 10;
+                            rect_y = y2 - rect_height;
+                        } else {
+                            y2 += 10;
+                            rect_y = y2;
+                        }
+
+                        if (index > minIndex) {
+                            x2 -= 10;
+                            rect_x = x2 - rect_width;
+                        } else {
+                            x2 += 10;
+                            rect_x = x2;
+                        }
+
+                        if (tooltipIndex == index) {
+                            console.log('here');
+                            return (
+                                <G key={uuidv1()}>
+                                    <Line
+                                        key={uuidv1()}
+                                        x1={`${x1}`}
+                                        x2={`${x2}`}
+                                        y1={`${y1}`}
+                                        y2={`${y2}`}
+                                        stroke='black'
+                                        strokeWidth='1'
+                                    />
+                                    <Rect key={uuidv1()} width={rect_width} height={rect_height} x={rect_x} y={rect_y} stroke='grey' fill='white' strokeWidth='1' />
+                                    <Text key={uuidv1()}
+                                        x={`${x2}`}
+                                        y={`${y2}`}
+                                        fontsize='20'
+                                    >
+                                        {`${value.y} °C`}
+                                    </Text>
+                                </G>
+                            );
+                        }
+                    });
+                } else {
+                    return null;
+                }
             }
 
             return (
@@ -183,6 +266,7 @@ export default class TemperatureGraph extends React.Component {
                                     >
                                         <Grid />
                                         <Decorator />
+                                        <Tooltip />
                                     </LineChart>
                                 </View>
                                 <DataText 
