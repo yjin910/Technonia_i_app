@@ -174,29 +174,38 @@ export default class GeigerGraph extends React.Component {
                         let x2 = x1;
                         let y2 = y1;
                         let rect_x, rect_y;
-                        let rect_width = width / 8;
-                        let rect_height = width / 18;
+                        let rect_width = width / 5;
+                        let rect_height = width / 15;
+
+                        let textX, textY;
 
                         let avgY = (y(min) + y(max)) / 2
 
                         if (y1 > avgY) {
                             y2 -= 10;
                             rect_y = y2 - rect_height;
+
+                            textY = (rect_y + y2) / 2 + 3;
                         } else {
                             y2 += 10;
                             rect_y = y2;
+
+                            textY = (rect_y * 2 + rect_height) / 2 + 3;
                         }
 
                         if (index > minIndex) {
                             x2 -= 10;
                             rect_x = x2 - rect_width;
+
+                            textX = (x2 + rect_x) / 2;
                         } else {
                             x2 += 10;
                             rect_x = x2;
+
+                            textX = (rect_x * 2 + rect_width) / 2;
                         }
 
                         if (tooltipIndex == index) {
-                            console.log('here');
                             return (
                                 <G key={uuidv1()}>
                                     <Line
@@ -206,13 +215,15 @@ export default class GeigerGraph extends React.Component {
                                         y1={`${y1}`}
                                         y2={`${y2}`}
                                         stroke='black'
-                                        strokeWidth='1'
+                                        strokeWidth='2'
                                     />
-                                    <Rect key={uuidv1()} width={rect_width} height={rect_height} x={rect_x} y={rect_y} stroke='grey' fill='white' strokeWidth='1' />
+                                    <Rect key={uuidv1()} width={rect_width} height={rect_height} x={rect_x} y={rect_y} stroke='black' fill='white' strokeWidth='2' />
                                     <Text key={uuidv1()}
-                                        x={`${x2}`}
-                                        y={`${y2}`}
-                                        fontsize='20'
+                                        x={textX}
+                                        y={textY}
+                                        fontSize='15'
+                                        textAnchor="middle"
+                                        fill='black'
                                     >
                                         {`${value.y} μSv`}
                                     </Text>
