@@ -32,11 +32,11 @@ export default class HumidityGraph extends React.Component {
         this.state = {
             isLoaded: false,
             isListViewMode: false,
-            tooltipIndex: 'init'
+            infoIndex: 'init'
         }
 
         this.changeListViewMode = this.changeListViewMode.bind(this);
-        this.changeTooltipIndex = this.changeTooltipIndex.bind(this);
+        this.changeInfoIndex = this.changeInfoIndex.bind(this);
     }
 
     static propTypes = {
@@ -76,12 +76,12 @@ export default class HumidityGraph extends React.Component {
         console.log(`Zoomed from ${zoomableViewEventObject.lastZoomLevel} to  ${zoomableViewEventObject.zoomLevel}\n`);
     };
 
-    changeTooltipIndex = (index) => {
-        this.setState({ tooltipIndex: index });
+    changeInfoIndex = (index) => {
+        this.setState({ infoIndex: index });
     }
 
     render() {
-        let { isLoaded, isListViewMode, tooltipIndex } = this.state;
+        let { isLoaded, isListViewMode, infoIndex } = this.state;
         let { humidityData, h, min, max } = this.props;
 
         if (!isLoaded) {
@@ -126,7 +126,7 @@ export default class HumidityGraph extends React.Component {
                                         console.log(locationX);
                                         console.log(locationY);
                                         console.log(`Point (${x1}, ${y1}) is pressed`);
-                                        this.changeTooltipIndex(index);
+                                        this.changeInfoIndex(index);
                                     }}
                                 />
                             </G>
@@ -148,7 +148,7 @@ export default class HumidityGraph extends React.Component {
                                         console.log(locationX);
                                         console.log(locationY);
                                         console.log(`Point (${x1}, ${y1}) is pressed`);
-                                        this.changeTooltipIndex(index);
+                                        this.changeInfoIndex(index);
                                     }}
                                 />
                             </G>
@@ -157,9 +157,9 @@ export default class HumidityGraph extends React.Component {
                 })
             }
 
-            const Tooltip = ({ x, y, data }) => {
-                console.log(tooltipIndex);
-                if (tooltipIndex != 'init') {
+            const Info = ({ x, y, data }) => {
+                console.log(infoIndex);
+                if (infoIndex != 'init') {
 
                     return data[0]['data'].map((value, index) => {
                         let x1 = x(value.x);
@@ -198,7 +198,7 @@ export default class HumidityGraph extends React.Component {
                             textX = (rect_x * 2 + rect_width) / 2;
                         }
 
-                        if (tooltipIndex == index) {
+                        if (infoIndex == index) {
                             return (
                                 <G key={uuidv1()}>
                                     <Line
@@ -281,7 +281,7 @@ export default class HumidityGraph extends React.Component {
                                     >
                                         <Grid />
                                         <Decorator />
-                                        <Tooltip />
+                                        <Info />
                                     </LineChart>
                                 </View>
                                 <DataText 
