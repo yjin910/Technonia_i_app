@@ -53,7 +53,7 @@ export default class LoginScreen extends React.Component {
         if (email && pw) {
             Auth.signIn(email, pw).then(user => {
                 this.setState({ user: user });
-                await this.storeAsync(email, pw);
+                this.storeAsync(email, pw);
 
                 //TODO Are we supposed to store user object in the AsyncStorage??
                 // this.props.navigation.navigate('nextScreen')
@@ -119,9 +119,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     logoImage: {
-        width: height / 6,
-        height: height / 6,
-        marginBottom: height / 10,
+        width: height / 3,
+        height: height / 10,
+        marginBottom: height / 7,
         marginTop: height / 20
     },
     inputBox: {

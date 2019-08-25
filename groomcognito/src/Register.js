@@ -86,7 +86,7 @@ export default class SignUpScreen extends React.Component {
                 }
             }).then((data) => {
                 console.log(data);
-                await this.alertSuccess();
+                this.alertSuccess();
             }).catch(err => {
                 this.alertError(err);
             });
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     },
     toLoginPageButton: {
         color: "#ffffff",
-        fontSize: 16,
+        fontSize: width / 20,
         fontWeight: '500'
     },
     inputBox: {
@@ -198,9 +198,9 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     logoImage: {
-        width: height / 6,
-        height: height / 6,
-        marginBottom: height / 10,
+        width: height / 3,
+        height: height / 10,
+        marginBottom: height / 7,
         marginTop: height / 20
     }
 });
