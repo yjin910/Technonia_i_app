@@ -101,7 +101,7 @@ export default class HumidityGraph extends React.Component {
             let startDate = moment(humidityData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
             let endDate = moment(humidityData[humidityData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
 
-            let minIndex = humidityData.length / 2;
+            let middleIndex = humidityData.length / 2;
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
@@ -186,7 +186,7 @@ export default class HumidityGraph extends React.Component {
                             textY = (rect_y * 2 + rect_height) / 2 + 3;
                         }
 
-                        if (index > minIndex) {
+                        if (index > middleIndex) {
                             x2 -= 10;
                             rect_x = x2 - rect_width;
 
