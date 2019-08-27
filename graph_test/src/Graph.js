@@ -35,14 +35,14 @@ export default class GraphScreen extends React.Component {
     }
 
     componentDidMount = () => {
-        let deviceNum = '18';
+        let deviceNum = 'u518';
         this.fetchData_Async(deviceNum)
 
         this.setInterval();
     }
 
     setInterval = () => {
-        let deviceNum = '18';
+        let deviceNum = 'u518';
 
         this._timer = setInterval(() => {
             console.log('fetch data start');

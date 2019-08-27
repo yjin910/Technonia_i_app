@@ -22,6 +22,7 @@ import LabelText from './LabelText'
 import NoData from './NoData'
 import ListViewButton from './ListViewButton'
 import ListViewScreen from './ListViewScreen'
+import TooltipButton from './TooltipButton';
 
 
 const { width, height } = Dimensions.get('window');
@@ -37,19 +38,20 @@ export default class GeigerGraph extends React.Component {
         this.state = {
             isLoaded: false,
             isListViewMode: false,
+            isTooltipMode: false,
             infoIndex: 0,
-            lineX: 120,
         }
 
         this.changeListViewMode = this.changeListViewMode.bind(this);
         this.changeInfoIndex = this.changeInfoIndex.bind(this);
+        this.changeTooltipMode = this.changeTooltipMode.bind(this);
     }
 
     static propTypes = {
         geigerData: PropTypes.array.isRequired,
         g: PropTypes.array.isRequired,
-        min: PropTypes.number.isRequired,
-        max: PropTypes.number.isRequired
+        min: PropTypes.number,
+        max: PropTypes.number
     };
 
 
@@ -106,7 +108,6 @@ export default class GeigerGraph extends React.Component {
                     }
                 }
 
-                //this.setState({ lineX: ev.nativeEvent.locationX });
             },
             onPanResponderTerminate: (evt, gestureState) => {
                 //TODO teminate moving
@@ -120,6 +121,11 @@ export default class GeigerGraph extends React.Component {
 
     _isLoaded = () => {
         this.setState({ isLoaded: true });
+    }
+
+    changeTooltipMode = () => {
+        let { isTooltipMode } = this.state;
+        this.setState({isTooltipMode: !isTooltipMode});
     }
 
     /**
@@ -143,7 +149,7 @@ export default class GeigerGraph extends React.Component {
     }
 
     render() {
-        let { isLoaded, isListViewMode, infoIndex } = this.state;
+        let { isLoaded, isListViewMode, infoIndex, isTooltipMode } = this.state;
         let { geigerData, g, min, max } = this.props;
 
         if (!isLoaded) {
@@ -311,6 +317,7 @@ export default class GeigerGraph extends React.Component {
                         >
                             <View style={styles.listViewButtonContainer}>
                                 <ListViewButton changeListView={this.changeListViewMode} />
+                                <TooltipButton changeTooltipMode={this.changeTooltipMode} />
                             </View>
                             <LabelText types='g' />
                             <Animated.View style={{ marginLeft: 10, flexDirection: 'row' }}>
@@ -341,8 +348,7 @@ export default class GeigerGraph extends React.Component {
                                 >
                                     <Grid />
                                     <Decorator />
-                                    {/* <AnimatedBar /> */}
-                                    <BubbleTooltip />
+                                    {isTooltipMode && <BubbleTooltip />}
                                 </LineChart>
                             </Animated.View>
                             <DataText 

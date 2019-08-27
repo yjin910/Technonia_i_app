@@ -14,25 +14,34 @@ const { width } = Dimensions.get('window');
 export default class ListViewButton extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            isTooltipMode: false
+        }
+    }
+
+    changeMode = () => {
+        this.props.changeTooltipMode();
+        this.setState({isTooltipMode: !this.state.isTooltipMode});
     }
 
     static propTypes = {
-        changeListView: PropTypes.func.isRequired
+        changeTooltipMode: PropTypes.func.isRequired
     };
 
     render() {
-        let {changeListView} = this.props;
-
+        let {isTooltipMode} = this.state;
+        let text = isTooltipMode ? 'Normal' : 'Tooltip';
         return (
             <View style={styles.container}>
-                <TouchableOpacity 
-                    onPress={() => changeListView()}
+                <TouchableOpacity
+                    onPress={() => this.changeMode()}
                     style={styles.button}
                 >
-                    <Text style={styles.buttonText}>List View</Text>
+                    <Text style={styles.buttonText}>{text}</Text>
                 </TouchableOpacity>
             </View>
-        )
+        );
     }
 }
 
@@ -40,6 +49,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'flex-end',
+        marginBottom: width / 15,
         marginTop: width / 25
     },
     buttonText: {
