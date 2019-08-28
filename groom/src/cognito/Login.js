@@ -19,7 +19,7 @@ import { Auth } from 'aws-amplify';
 
 
 const { width, height } = Dimensions.get('window');
-const LOGO_IMAGE = require('../../assets/logo.png');
+const LOGO_IMAGE = require('../../assets/logo.png')
 
 export default class LoginScreen extends React.Component {
 
@@ -39,8 +39,8 @@ export default class LoginScreen extends React.Component {
 
     storeAsync = async (email, pw) => {
         try {
-            await AsyncStorage.setItem('Groom@email', email);
-            await AsyncStorage.setItem('Groom@pw', pw);
+            await AsyncStorage.setItem('9room@email', email);
+            await AsyncStorage.setItem('9room@pw', pw);
         } catch {
             alert('failed to store id');
         }
@@ -57,7 +57,7 @@ export default class LoginScreen extends React.Component {
                 this.storeAsync(email, pw);
 
                 //TODO Are we supposed to store user object in the AsyncStorage??
-                // this.props.navigation.navigate('nextScreen')
+                this.props.navigation.navigate('Profile', {email: email});
             }).catch(err => {
                 console.log(err);
             })

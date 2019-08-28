@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 export default class DrawerButton extends React.Component {
     static propTypes = {
         onPress: PropTypes.func.isRequired,
-        title: PropTypes.func.isRequired,
+        title: PropTypes.string.isRequired,
     };
 
     render() {

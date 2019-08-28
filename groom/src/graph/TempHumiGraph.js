@@ -7,11 +7,14 @@ import {
     ScrollView,
     PanResponder,
     Animated,
+    TouchableOpacity,
+    Image
 } from 'react-native'
 import { LineChart, YAxis, Grid } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
 import moment from "moment";
 import uuidv1 from 'uuid/v1';
+import Drawer from 'react-native-drawer'
 import { Circle, Text, G, Rect, Line } from 'react-native-svg'
 
 import DataText from './components/DataText'
@@ -20,6 +23,7 @@ import LabelText from './components/LabelText'
 import NoData from './components/NoData'
 import ListViewScreen from './components/ListViewScreen'
 import DrawerButton from './components/DrawerButton'
+import GraphHeader from './components/GraphHeader'
 
 
 const { width, height } = Dimensions.get('window');
@@ -27,8 +31,6 @@ const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 const MENU_IMAGE = require('../../assets/menu.png');
 const INTERVAL_TIME = 300000;
 
-const { width, height } = Dimensions.get('window');
-const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 
 const menu = [
     { title: 'ListView' },
@@ -583,7 +585,7 @@ export default class TempHumiGraph extends React.Component {
                                         <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={MENU_IMAGE} />
                                     </TouchableOpacity>
                                 </View>
-                                <Text style={styles.headerTitle}>Graph</Text>
+                                <GraphHeader />
                                 <View style={styles.menuButton} />
                             </View>
                             <ScrollView

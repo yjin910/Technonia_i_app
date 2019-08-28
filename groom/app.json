@@ -1,13 +1,12 @@
 {
   "expo": {
-    "name": "9room",
-    "slug": "9room",
+    "name": "GroomCognito",
+    "slug": "groomcognito",
     "privacy": "public",
-    "sdkVersion": "34.0.0",
+    "sdkVersion": "31.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,8 +22,19 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "packagerOpts": {
+      "assetExts": [
+        "ttf",
+        "mp4",
+        "otf",
+        "xml"
+      ]
+    },
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "technonia.groom.testing.cognito"
     }
   }
 }

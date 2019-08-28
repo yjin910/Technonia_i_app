@@ -8,8 +8,7 @@ import {
     Animated,
     PanResponder,
     TouchableOpacity,
-    Image,
-    Text
+    Image
 } from 'react-native'
 import { LineChart, YAxis, Grid } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
@@ -24,6 +23,7 @@ import LabelText from './components/LabelText'
 import NoData from './components/NoData'
 import ListViewScreen from './components/ListViewScreen'
 import DrawerButton from './components/DrawerButton'
+import GraphHeader from './components/GraphHeader'
 
 
 const MENU_IMAGE = require('../../assets/menu.png');
@@ -58,6 +58,10 @@ export default class GeigerGraph extends React.Component {
         this.changeListViewMode = this.changeListViewMode.bind(this);
         this.changeTooltipMode = this.changeTooltipMode.bind(this);
     }
+
+    static navigationOptions = {
+        header: null
+    };
 
     componentDidMount = () => {
         let deviceNum = 'u518'; //TODO
@@ -202,7 +206,7 @@ export default class GeigerGraph extends React.Component {
                 //console.log(ev.nativeEvent.locationX);
                 let { infoIndex } = this.state;
                 let range = width / 3 * 2;
-                let dataLength = this.props.geigerData.length;
+                let dataLength = this.state.geigerData.length;
                 let change = gestureState.dx;
 
                 if (change > 0) {
@@ -250,7 +254,7 @@ export default class GeigerGraph extends React.Component {
     render() {
         let { geigerData, g, min, max, isLoaded, infoIndex, isListViewMode, isTooltipMode } = this.state;
 
-        if (!isLoaded) {
+        if (!isLoaded || geigerData == undefined) {
             return (<LoadingGraph />);
         }
 
@@ -424,7 +428,7 @@ export default class GeigerGraph extends React.Component {
                                         <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={MENU_IMAGE} />
                                     </TouchableOpacity>
                                 </View>
-                                <Text style={styles.headerTitle}>Graph</Text>
+                                <GraphHeader/>
                                 <View style={styles.menuButton} />
                             </View>
                             <ScrollView
@@ -515,10 +519,6 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1.0,
         backgroundColor: 'white'
-    },
-    safeAreaStyle: {
-        flex: 1.0,
-        backgroundColor: '#3B5998',
     },
     headerContainer: {
         height: 44,

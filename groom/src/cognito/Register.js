@@ -18,9 +18,8 @@ import {
 } from 'react-native';
 import { Auth } from 'aws-amplify';
 
-
 const { width, height } = Dimensions.get('window');
-const LOGO_IMAGE = require('../../assets/logo.png');
+const LOGO_IMAGE = require('../../assets/logo.png')
 
 export default class SignUpScreen extends React.Component {
     static navigationOptions = {
@@ -42,7 +41,7 @@ export default class SignUpScreen extends React.Component {
     }
 
     _addEmail = (email) => {
-        this.setState({ email: email });
+        this.setState({email: email});
     }
 
     _addPassword = (text) => {
@@ -58,11 +57,9 @@ export default class SignUpScreen extends React.Component {
             'Sign up success',
             'Please check your email to confirm the sign up',
             [
-                {
-                    text: 'OK', onPress: () => {
-                        this.props.navigation.navigate('Login')
-                    }, style: 'default'
-                }
+                { text: 'OK', onPress: () => {
+                    this.props.navigation.navigate('Login')
+                } , style: 'default' }
             ],
             { cancelable: false },
         );
@@ -116,7 +113,8 @@ export default class SignUpScreen extends React.Component {
                                     BackgroundColor="1a3f95"
                                     barStyle="light-content"
                                 />
-                                <Image style={styles.logoImage} source={LOGO_IMAGE} />
+                                <Image style={styles.logoImage}
+                                    source={LOGO_IMAGE} />
                                 <TextInput style={styles.inputBox}
                                     placeholder="Email address"
                                     placeholderTextColor="#1a3f95"
