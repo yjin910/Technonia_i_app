@@ -119,7 +119,7 @@ export default class GraphScreen extends React.Component {
     }
 
     componentWillUnmount = () => {
-        this.clearInterval();
+        this.removeInterval();
     }
 
     changeListViewMode = () => {
@@ -241,22 +241,6 @@ export default class GraphScreen extends React.Component {
     _isLoaded = () => {
         this.setState({ isLoaded: true });
     }
-
-    /**
-     * Log out an example event after zooming
-     *
-     * @param event
-     * @param gestureState
-     * @param zoomableViewEventObject
-     */
-    logOutZoomState = (event, gestureState, zoomableViewEventObject) => {
-        console.log('\n\n-------------');
-        console.log('Event: ', event);
-        console.log('GestureState: ', gestureState);
-        console.log('ZoomableEventObject: ', zoomableViewEventObject);
-        console.log('');
-        console.log(`Zoomed from ${zoomableViewEventObject.lastZoomLevel} to  ${zoomableViewEventObject.zoomLevel}\n`);
-    };
 
     render() {
         let { data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded, isTooltipMode, isListViewMode } = this.state;
