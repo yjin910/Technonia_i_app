@@ -5,8 +5,8 @@ import {
     SafeAreaView,
     Dimensions,
     ScrollView,
+    PanResponder,
     Animated,
-    PanResponder
 } from 'react-native'
 import { LineChart, XAxis, YAxis, Grid } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
@@ -25,26 +25,34 @@ import ListViewScreen from './ListViewScreen'
 const { width, height } = Dimensions.get('window');
 const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 
-export default class GeigerGraph extends React.Component {
+export default class TempHumiGraph extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             isLoaded: false,
-            infoIndex: 0,
+            isTooltipMode: false,
+            infoIndex: 0
         }
 
         this.changeInfoIndex = this.changeInfoIndex.bind(this);
     }
 
     static propTypes = {
-        geigerData: PropTypes.array.isRequired,
-        g: PropTypes.array.isRequired,
-        min: PropTypes.number,
-        max: PropTypes.number,
-        isListViewMode: PropTypes.bool.isRequired,
-        isTooltipMode: PropTypes.bool.isRequired
+        temperatureData: PropTypes.array.isRequired,
+        humidityData: PropTypes.array.isRequired,
+        t: PropTypes.array.isRequired,
+        h: PropTypes.array.isRequired,
+        min_t: PropTypes.number,
+        max_t: PropTypes.number,
+        min_h: PropTypes.number,
+        max_h: PropTypes.number,
+        isListViewMode: PropTypes.bool.isRequired
     };
+
+    componentDidMount = () => {
+        this._isLoaded();
+    }
 
     componentWillMount = () => {
         this._panResponder = PanResponder.create({
@@ -62,14 +70,14 @@ export default class GeigerGraph extends React.Component {
             onPanResponderRelease: (ev, gestureState) => {
                 //TODO when the user release the touch
                 //console.log(ev.nativeEvent.locationX);
-                let {infoIndex} = this.state;
+                let { infoIndex } = this.state;
                 let range = width / 3 * 2;
-                let dataLength = this.props.geigerData.length;
+                let dataLength = this.props.temperatureData.length;
                 let change = gestureState.dx;
 
                 if (change > 0) {
                     let offset = range / dataLength;
-                    console.log('offset: ' +  offset);
+                    console.log('offset: ' + offset);
                     let movement = change / offset;
                     console.log('movement: ' + movement);
                     movement = parseInt(movement);
@@ -89,7 +97,7 @@ export default class GeigerGraph extends React.Component {
                     if (infoIndex != 0) {
                         let newIndex = infoIndex - movement;
 
-                        if (newIndex < 0) this.setState({infoIndex: 0})
+                        if (newIndex < 0) this.setState({ infoIndex: 0 })
                         else this.setState({ infoIndex: newIndex });
                     }
                 }
@@ -99,10 +107,6 @@ export default class GeigerGraph extends React.Component {
                 //TODO teminate moving
             }
         });
-    }
-
-    componentDidMount = () => {
-        this._isLoaded();
     }
 
     _isLoaded = () => {
@@ -126,39 +130,53 @@ export default class GeigerGraph extends React.Component {
     };
 
     changeInfoIndex = (index) => {
-        this.setState({infoIndex: index});
+        this.setState({ infoIndex: index });
     }
 
     render() {
         let { isLoaded, infoIndex } = this.state;
-        let { geigerData, g, min, max, isListViewMode, isTooltipMode } = this.props;
+        let { temperatureData, humidityData, t, h, min_h, max_h, min_t, max_t, isTooltipMode, isListViewMode } = this.props;
 
         if (!isLoaded) {
-            return (<LoadingGraph />);
+            return (
+                <LoadingGraph />
+            )
         }
 
-        if (geigerData.length == 0) {
-            return (<NoData />);
+        if (temperatureData.length == 0 && humidityData.length == 0) {
+            return (
+                <NoData />
+            )
         } else {
             let data = [
                 {
-                    data: geigerData,
-                    svg: { stroke: 'green' }
+                    data: temperatureData,
+                    svg: { stroke: 'red' },
+                },{
+                    data: humidityData,
+                    svg: { stroke: 'blue' },
                 }
             ]
 
-            let startDate = moment(geigerData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
-            let endDate = moment(geigerData[geigerData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let startDateT = moment(temperatureData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let endDateT = moment(temperatureData[temperatureData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
 
-            let middleIndex = geigerData.length / 2;
+            let startDateH = moment(humidityData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let endDateH = moment(humidityData[humidityData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
 
-            const Decorator = ({ x, y, data }) => {
+            let startDate = (temperatureData[0]['x'] > humidityData[0]['x']) ? startDateH : startDateT;
+            let endDate = (temperatureData[temperatureData.length - 1]['x'] > humidityData[humidityData.length - 1]['x']) ? endDateT : endDateH;
+
+            let middleIndexT = temperatureData.length / 2;
+            let middleIndexH = humidityData.length / 2;
+            let middleIndex = (middleIndexT > middleIndexH) ? middleIndexH : middleIndexT;
+
+            const TemperatureGraphDecorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
                     let x1 = x(value.x);
                     let y1 = y(value.y);
 
-                    if (value.y == min || value.y == max) {
-
+                    if (value.y == min_t || value.y == max_t) {
                         return (
                             <G key={uuidv1()}>
                                 <Circle
@@ -166,7 +184,7 @@ export default class GeigerGraph extends React.Component {
                                     cx={x1}
                                     cy={y1}
                                     r={2}
-                                    stroke={'green'}
+                                    stroke={'red'}
                                     fill={'white'}
                                     onPress={(event) => {
                                         const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
@@ -189,11 +207,66 @@ export default class GeigerGraph extends React.Component {
                                     cx={x1}
                                     cy={y1}
                                     r={1}
-                                    stroke={'green'}
-                                    fill={'green'}
+                                    stroke={'red'}
+                                    fill={'red'}
                                     onPress={(event) => {
                                         const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
 
+                                        console.log(pageX);
+                                        console.log(pageY);
+                                        console.log(locationX);
+                                        console.log(locationY);
+
+                                        console.log(`Point (${x1}, ${y1}) is pressed`);
+                                        this.changeInfoIndex(index);
+                                    }}
+                                />
+                            </G>
+                        )
+                    }
+                })
+            }
+
+            const HumidityGraphDecorator = ({ x, y, data }) => {
+                return data[1]['data'].map((value, index) => {
+                    let x1 = x(value.x);
+                    let y1 = y(value.y);
+
+                    if (value.y == min_h || value.y == max_h) {
+                        return (
+                            <G key={uuidv1()}>
+                                <Circle
+                                    key={uuidv1()}
+                                    cx={x1}
+                                    cy={y1}
+                                    r={2}
+                                    stroke={'blue'}
+                                    fill={'white'}
+                                    onPress={(event) => {
+                                        const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
+
+                                        console.log(pageX);
+                                        console.log(pageY);
+                                        console.log(locationX);
+                                        console.log(locationY);
+                                        console.log(`Point (${x1}, ${y1}) is pressed`);
+                                        this.changeInfoIndex(index);
+                                    }}
+                                />
+                            </G>
+                        )
+                    } else {
+                        return (
+                            <G key={uuidv1()}>
+                                <Circle
+                                    key={uuidv1()}
+                                    cx={x1}
+                                    cy={y1}
+                                    r={1}
+                                    stroke={'blue'}
+                                    fill={'blue'}
+                                    onPress={(event) => {
+                                        const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
                                         console.log(pageX);
                                         console.log(pageY);
                                         console.log(locationX);
@@ -208,47 +281,93 @@ export default class GeigerGraph extends React.Component {
                 })
             }
 
-            const BubbleTooltip = ({ x, y, data}) => {
-                let x1 = x(data[0]['data'][infoIndex].x);
-                let y1 = y(data[0]['data'][infoIndex].y);
+            const BubbleTooltip = ({ x, y, data }) => {
+                let targetDataT = data[0]['data'][infoIndex];
+                let targetDataH = data[1]['data'][infoIndex];
+
+                let x1 = x(targetDataT.x);
+                let y1 = y(targetDataT.y);
                 let x2 = x1;
                 let y2 = y1;
                 let rect_x, rect_y;
                 let rect_width = width / 5;
                 let rect_height = width / 15;
 
-                let lowestY = y(min) + 15;
+                let x1_h = x(targetDataH.x);
+                let y1_h = y(targetDataH.y);
+                let x2_h = x1_h;
+                let y2_h = y1_h;
+                let rect_x_h, rect_y_h;
+
+                let lowestY = (min_t < min_h) ? y(min_t) + 15 : y(min_h) + 15;
 
                 let textX, textY;
+                let textX_h, textY_h;
 
-                let avgY = (y(min) + y(max)) / 2
+                let avgY = (y(min_t) + y(max_t)) / 2
+                let avgY_h = (y(min_h) + y(max_h)) / 2
 
                 if (y1 > avgY) {
                     y2 -= 10;
                     rect_y = y2 - rect_height;
 
+                    y2_h -= 10;
+                    rect_y_h = y2_h - rect_height;
+
                     textY = (rect_y + y2) / 2 + 3;
+                    textY_h = (rect_y_h + y2_h) / 2 + 3;
                 } else {
                     y2 += 10;
                     rect_y = y2;
 
+                    y2_h += 10;
+                    rect_y_h = y2_h;
+
                     textY = (rect_y * 2 + rect_height) / 2 + 3;
+                    textY_h = (rect_y_h * 2 + rect_height) / 2 + 3;
                 }
 
                 if (infoIndex > middleIndex) {
                     x2 -= 10;
                     rect_x = x2 - rect_width;
 
+                    x2_h -= 10;
+                    rect_x_h = x2_h - rect_width;
+
                     textX = (x2 + rect_x) / 2;
+                    textX_h = (x2_h + rect_x_h) / 2;
                 } else {
                     x2 += 10;
                     rect_x = x2;
 
+                    x2_h += 10;
+                    rect_x_h = x2_h;
+
                     textX = (rect_x * 2 + rect_width) / 2;
+                    textX_h = (rect_x_h * 2 + rect_width) / 2;
                 }
 
                 return (
                     <G key={uuidv1()} {...this._panResponder.panHandlers} >
+                        <Line
+                            key={uuidv1()}
+                            x1={`${x1_h}`}
+                            x2={`${x2_h}`}
+                            y1={`${y1_h}`}
+                            y2={`${y2_h}`}
+                            stroke='black'
+                            strokeWidth='2'
+                        />
+                        <Rect key={uuidv1()} width={rect_width} height={rect_height} x={rect_x_h} y={rect_y_h} stroke='black' fill='white' strokeWidth='2' />
+                        <Text key={uuidv1()}
+                            x={textX_h}
+                            y={textY_h}
+                            fontSize='15'
+                            textAnchor="middle"
+                            fill='black'
+                        >
+                            {`${targetDataH.y} %`}
+                        </Text>
                         <Line
                             key={uuidv1()}
                             x1={`${x1}`}
@@ -266,23 +385,23 @@ export default class GeigerGraph extends React.Component {
                             textAnchor="middle"
                             fill='black'
                         >
-                            {`${data[0]['data'][infoIndex].y} μSv`}
+                            {`${targetDataT.y} °C`}
                         </Text>
                         <Line
                             key={uuidv1()}
                             x1={`${x1}`}
                             x2={`${x1}`}
-                            y1={`${y1}`}
+                            y1={`${y1_h}`}
                             y2={`${lowestY}`}
-                            stroke='red'
+                            stroke='black'
                             strokeWidth='2'
                         />
                         <Circle
                             cx={x1}
                             cy={lowestY}
                             r={4}
-                            stroke={'red'}
-                            fill={'red'}
+                            stroke={'black'}
+                            fill={'black'}
                         />
                     </G>
                 );
@@ -290,24 +409,23 @@ export default class GeigerGraph extends React.Component {
 
             return (
                 <SafeAreaView style={styles.root}>
-                    <View style={styles.container}>
+                    <Animated.View style={styles.container}>
                         <ScrollView
                             scrollEnabled={true}
                             indicatorStyle={'white'}
-                            bouncesZoom={true}
                         >
-                            <LabelText types='g' />
+                            <LabelText types='th' />
                             <Animated.View style={{ marginLeft: 10, flexDirection: 'row' }}>
                                 <YAxis
-                                    data={g}
+                                    data={t.concat(h)}
                                     style={{ width: width / 6 }}
                                     contentInset={contentInset}
                                     svg={{
                                         fill: 'grey',
                                         fontSize: 10,
                                     }}
-                                    min={min}
-                                    max={max}
+                                    min={(min_t < min_h ? min_t : min_h)}
+                                    max={(max_t < max_h ? max_h : max_t)}
                                     scale={scale.scale}
                                     //numberOfTicks={10}
                                     formatLabel={(value) => value}
@@ -318,36 +436,46 @@ export default class GeigerGraph extends React.Component {
                                     yAccessor={({ item }) => item.y}
                                     xAccessor={({ item }) => item.x}
                                     data={data}
-                                    gridMin={min}
-                                    gridMax={max}
+                                    gridMin={(min_t < min_h ? min_t : min_h)}
+                                    gridMax={(max_t < max_h ? max_h : max_t)}
                                     animate={true}
                                     key={uuidv1()}
                                 >
                                     <Grid />
-                                    <Decorator />
+                                    <TemperatureGraphDecorator />
+                                    <HumidityGraphDecorator />
                                     {isTooltipMode && <BubbleTooltip />}
                                 </LineChart>
                             </Animated.View>
-                            <DataText 
-                                currentGeiger={geigerData[geigerData.length - 1]['y']}
-                                types={'g'}
-                                minGeiger={min}
-                                maxGeiger={max}
+                            <DataText
+                                currentTemp={temperatureData[temperatureData.length - 1]['y']}
+                                currentHumi={humidityData[humidityData.length - 1]['y']}
+                                types={'th'}
+                                minTemp={min_t}
+                                maxTemp={max_t}
+                                minHumi={min_h}
+                                maxHumi={max_h}
                                 startDate={startDate}
                                 endDate={endDate}
                             />
-                            {isListViewMode && geigerData.map(d => {
-                                let valueStr = d['y'] + ' μSv'
+                            {isListViewMode && temperatureData.map(d => {
+                                let valueStr = d['y'] + ' °C'
+                                let timeStr = moment(d['x']).format('HH:mm:ss');
+                                return (<ListViewScreen valueStr={valueStr} timeStr={timeStr} key={uuidv1()} />)
+                            })}
+                            {isListViewMode && humidityData.map(d => {
+                                let valueStr = d['y'] + ' %'
                                 let timeStr = moment(d['x']).format('HH:mm:ss');
                                 return (<ListViewScreen valueStr={valueStr} timeStr={timeStr} key={uuidv1()} />)
                             })}
                         </ScrollView>
-                    </View>
+                    </Animated.View>
                 </SafeAreaView>
             )
         }
     }
 }
+
 
 const styles = StyleSheet.create({
     root: {

@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'flex-end',
-        marginTop: width / 25
+        marginTop: width / 40
     },
     buttonText: {
         fontSize: width / 25
