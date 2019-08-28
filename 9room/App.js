@@ -5,6 +5,7 @@ import Amplify from 'aws-amplify';
 import LoginScreen from './src/cognito/Login'
 import SignUpScreen from './src/cognito/Register'
 import GeigerGraph from './src/graph/GeigerGraph'
+import TempHumiGraph from './src/graph/TempHumiGraph'
 
 import awsConfig from './src/cognito/config';
 
@@ -14,6 +15,7 @@ const AppStackNavigator = createStackNavigator({
   Login: { screen: LoginScreen },
   Signup: { screen: SignUpScreen },
   GeigerGraph: { screen: GeigerGraph },
+  TempHumiGraph: { screen: TempHumiGraph }
 });
 
 let Container = createAppContainer(AppStackNavigator);
