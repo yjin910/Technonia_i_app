@@ -1,6 +1,11 @@
 .dist
 .DS_Store
+
 node_modules
+
 .expo
 .gradle
+
 ble-test/android/app/release/
+
+9room/.expo-shared
