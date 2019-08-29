@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
         height: 60,
         width: '100%',
         flexDirection: 'row',
-        borderColor: 'red',
-        borderWidth: 1
+        borderBottomColor: "#bbbbbb",
+        borderBottomWidth: 0.5,
     },
     menuTitle: {
         width: '100%',

@@ -8,6 +8,7 @@ import {
     PanResponder,
     Animated,
     TouchableOpacity,
+    StatusBar,
     Image
 } from 'react-native'
 import { LineChart, YAxis, Grid } from 'react-native-svg-charts'
@@ -569,6 +570,7 @@ export default class TempHumiGraph extends React.Component {
             return (
                 <SafeAreaView style={styles.root}>
                     <Animated.View style={styles.container}>
+                        <StatusBar barStyle="light-content" />
                         <Drawer
                             ref={(ref) => this.drawer = ref}
                             content={this.renderDrawer()}

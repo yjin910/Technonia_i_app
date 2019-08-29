@@ -6,6 +6,7 @@ import {
     Dimensions,
     ScrollView,
     Animated,
+    StatusBar,
     PanResponder,
     TouchableOpacity,
     Image
@@ -412,6 +413,7 @@ export default class GeigerGraph extends React.Component {
             return (
                 <SafeAreaView style={styles.root}>
                     <View style={styles.container}>
+                        <StatusBar barStyle="light-content" />
                         <Drawer
                             ref={(ref) => this.drawer = ref}
                             content={this.renderDrawer()}
