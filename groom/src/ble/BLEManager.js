@@ -21,7 +21,7 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
-const TARGET_BLE_DEVICE_NAME = '9roomer';
+const TARGET_BLE_DEVICE_NAME = '9roomer_';
 
 
 export default class BLEManagerScreen extends React.Component {
@@ -136,11 +136,22 @@ export default class BLEManagerScreen extends React.Component {
             const id = peripheral.id;
             const name = peripheral.name;
 
-            if (!name.startsWith(TARGET_BLE_DEVICE_NAME)) return;
+            const devices = this.props.navigation.getParam('devices', '');
 
-            await AsyncStorage.setItem('TEMS@device_uuid', id);
+            let foundTarget = false;
 
-            this.props.navigation.navigate('BLEMenu');
+            for (let i = 0; i < devices.length; i++) {
+                let deviceID = TARGET_BLE_DEVICE_NAME + devices[i];
+
+                if (name.startsWith(TARGET_BLE_DEVICE_NAME)) foundTarget = true;
+            }
+
+            if (foundTarget) {
+                await AsyncStorage.setItem('TEMS@device_uuid', id);
+                //TODO change state.
+            } else {
+                return;
+            }
         }
     }
 

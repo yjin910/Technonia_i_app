@@ -4,6 +4,7 @@ ADDED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidM
 INJECTED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml:2:1-350:12
 INJECTED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml:2:1-350:12
 INJECTED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml:2:1-350:12
+MERGED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:2:1-15:12
 MERGED from [host.exp.exponent:expoview:31.0.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/expoview-31.0.0.aar/1dd7806c34d63d87b6cab24077421b9a/AndroidManifest.xml:2:1-92:12
 MERGED from [com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta1] /Users/CY/.gradle/caches/transforms-1/files-1.1/leakcanary-android-no-op-1.4-beta1.aar/869fcd4259219fdf2ac350d83321f86d/AndroidManifest.xml:17:1-24:12
 MERGED from [com.android.support:multidex:1.0.3] /Users/CY/.gradle/caches/transforms-1/files-1.1/multidex-1.0.3.aar/58c98a1494df5261adf1f5be0ee0de0f/AndroidManifest.xml:17:1-22:12
@@ -45,11 +46,11 @@ MERGED from [io.nlopez.smartlocation:library:3.2.11] /Users/CY/.gradle/caches/tr
 MERGED from [host.exp.exponent:expo-face-detector:1.1.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/expo-face-detector-1.1.0.aar/3d9cc1f6ab511d82c662a95fbe08b080/AndroidManifest.xml:2:1-11:12
 MERGED from [host.exp.exponent:expo-media-library:1.1.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/expo-media-library-1.1.0.aar/317ed0e6433e2ff9db58a156f59c3742/AndroidManifest.xml:2:1-11:12
 MERGED from [com.android.support:exifinterface:27.1.1] /Users/CY/.gradle/caches/transforms-1/files-1.1/exifinterface-27.1.1.aar/133b734aca10c36c28ef78868f3ecff4/AndroidManifest.xml:17:1-22:12
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/imagepipeline-okhttp3-1.10.0.aar/c8bbf17572f677ec5d8c815ce1de1c37/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:fresco:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/fresco-1.10.0.aar/111bdde77e18918e951c4ed52d18f9a7/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:animated-gif:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/animated-gif-1.10.0.aar/aaad82821970b0c45ffc029b3c9d53e9/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:animated-webp:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/animated-webp-1.10.0.aar/b4d003334d92dd6db9967e59cf21104f/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:webpsupport:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/webpsupport-1.10.0.aar/15d2957af0533120aa7c5189b88e2a5e/AndroidManifest.xml:2:1-9:12
-MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/imagepipeline-okhttp3-1.10.0.aar/c8bbf17572f677ec5d8c815ce1de1c37/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:animated-base:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/animated-base-1.10.0.aar/c21d23139a6d11e8497efdc5bdfb714f/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:animated-drawable:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/animated-drawable-1.10.0.aar/0cda62628d076f06360748579ffe66da/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:drawee:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/drawee-1.10.0.aar/090f819cfee16e7abbafaa96114cd843/AndroidManifest.xml:2:1-9:12
@@ -319,6 +320,8 @@ MERGED from [host.exp.exponent:expoview:31.0.0] /Users/CY/.gradle/caches/transfo
 		ADDED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml:27:20-75
 uses-permission#android.permission.ACCESS_COARSE_LOCATION
 ADDED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml:30:3-79
+MERGED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:9:5-81
+MERGED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:9:5-81
 MERGED from [host.exp.exponent:expoview:31.0.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/expoview-31.0.0.aar/1dd7806c34d63d87b6cab24077421b9a/AndroidManifest.xml:40:5-81
 MERGED from [host.exp.exponent:expoview:31.0.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/expoview-31.0.0.aar/1dd7806c34d63d87b6cab24077421b9a/AndroidManifest.xml:40:5-81
 MERGED from [host.exp.exponent:expo-location:1.1.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/expo-location-1.1.0.aar/a9a7cab02fd5749475f5ca007e961592/AndroidManifest.xml:11:5-81
@@ -937,6 +940,8 @@ uses-sdk
 INJECTED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml
 INJECTED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml
+MERGED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:5:5-44
+MERGED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:5:5-44
 MERGED from [host.exp.exponent:expoview:31.0.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/expoview-31.0.0.aar/1dd7806c34d63d87b6cab24077421b9a/AndroidManifest.xml:7:5-9:41
 MERGED from [host.exp.exponent:expoview:31.0.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/expoview-31.0.0.aar/1dd7806c34d63d87b6cab24077421b9a/AndroidManifest.xml:7:5-9:41
 MERGED from [com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta1] /Users/CY/.gradle/caches/transforms-1/files-1.1/leakcanary-android-no-op-1.4-beta1.aar/869fcd4259219fdf2ac350d83321f86d/AndroidManifest.xml:20:5-22:41
@@ -1019,6 +1024,8 @@ MERGED from [host.exp.exponent:expo-media-library:1.1.0] /Users/CY/.gradle/cache
 MERGED from [host.exp.exponent:expo-media-library:1.1.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/expo-media-library-1.1.0.aar/317ed0e6433e2ff9db58a156f59c3742/AndroidManifest.xml:7:5-9:41
 MERGED from [com.android.support:exifinterface:27.1.1] /Users/CY/.gradle/caches/transforms-1/files-1.1/exifinterface-27.1.1.aar/133b734aca10c36c28ef78868f3ecff4/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:exifinterface:27.1.1] /Users/CY/.gradle/caches/transforms-1/files-1.1/exifinterface-27.1.1.aar/133b734aca10c36c28ef78868f3ecff4/AndroidManifest.xml:20:5-44
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/imagepipeline-okhttp3-1.10.0.aar/c8bbf17572f677ec5d8c815ce1de1c37/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/imagepipeline-okhttp3-1.10.0.aar/c8bbf17572f677ec5d8c815ce1de1c37/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:fresco:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/fresco-1.10.0.aar/111bdde77e18918e951c4ed52d18f9a7/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:fresco:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/fresco-1.10.0.aar/111bdde77e18918e951c4ed52d18f9a7/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:animated-gif:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/animated-gif-1.10.0.aar/aaad82821970b0c45ffc029b3c9d53e9/AndroidManifest.xml:5:5-7:41
@@ -1027,8 +1034,6 @@ MERGED from [com.facebook.fresco:animated-webp:1.10.0] /Users/CY/.gradle/caches/
 MERGED from [com.facebook.fresco:animated-webp:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/animated-webp-1.10.0.aar/b4d003334d92dd6db9967e59cf21104f/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:webpsupport:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/webpsupport-1.10.0.aar/15d2957af0533120aa7c5189b88e2a5e/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:webpsupport:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/webpsupport-1.10.0.aar/15d2957af0533120aa7c5189b88e2a5e/AndroidManifest.xml:5:5-7:41
-MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/imagepipeline-okhttp3-1.10.0.aar/c8bbf17572f677ec5d8c815ce1de1c37/AndroidManifest.xml:5:5-7:41
-MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/imagepipeline-okhttp3-1.10.0.aar/c8bbf17572f677ec5d8c815ce1de1c37/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:animated-base:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/animated-base-1.10.0.aar/c21d23139a6d11e8497efdc5bdfb714f/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:animated-base:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/animated-base-1.10.0.aar/c21d23139a6d11e8497efdc5bdfb714f/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:animated-drawable:1.10.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/animated-drawable-1.10.0.aar/0cda62628d076f06360748579ffe66da/AndroidManifest.xml:5:5-7:41
@@ -1229,6 +1234,20 @@ INJECTED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/Andro
 		INJECTED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml
 		ADDED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/CY/Desktop/Technonia_i_app/groom/android/app/src/main/AndroidManifest.xml
+uses-permission#android.permission.BLUETOOTH
+ADDED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:5-68
+	android:name
+		ADDED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:7:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:8:5-74
+	android:name
+		ADDED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:8:22-71
+uses-feature#android.hardware.bluetooth_le
+ADDED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:11:5-13:36
+	android:required
+		ADDED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:13:9-33
+	android:name
+		ADDED from [:react-native-ble-manager] /Users/CY/Desktop/Technonia_i_app/groom/node_modules/react-native-ble-manager/android/build/intermediates/manifests/full/debug/AndroidManifest.xml:12:9-53
 supports-screens
 ADDED from [host.exp.exponent:expoview:31.0.0] /Users/CY/.gradle/caches/transforms-1/files-1.1/expoview-31.0.0.aar/1dd7806c34d63d87b6cab24077421b9a/AndroidManifest.xml:12:5-18:24
 	android:largeScreens

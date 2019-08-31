@@ -120,6 +120,7 @@ export default class ProfileScreen extends React.Component {
             //TODO go to ble setting screen
             this.closeDrawer();
             console.log('navigate to ble setting screen');
+            this.props.navigation.navigate('BLEManaer', { devices: devices })
         } else {
             alert('No devices detected');
             this.closeDrawer();
