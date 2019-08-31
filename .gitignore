@@ -9,3 +9,4 @@ node_modules
 ble-test/android/app/release/
 
 9room/.expo-shared
+ble-test/android/.gradle
