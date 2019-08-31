@@ -42,6 +42,10 @@
 		78165EB84EF44DA7B7793492 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4186C9A0FFC4FE3A4D85BE5 /* libRNGestureHandler.a */; };
 		F19B23253C824BD391DA4A8A /* libRNGestureHandler-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 988A8BF4BA0B4DE29AD4A171 /* libRNGestureHandler-tvOS.a */; };
 		FC54628070DE46B3AFBDD147 /* libBleManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7A34A2A6E347F1ABD62D72 /* libBleManager.a */; };
+		7B191DD5C7A148638DFEA341 /* libRNBLE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0EA4C9860884BA2A1A5C6BD /* libRNBLE.a */; };
+		50F4391B460B4CE1BB51FC12 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F7BBB2B834B64670B017B560 /* libRNSVG.a */; };
+		F0592495490148EA97AE6D1E /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 427E9B3C794A4F4B83384654 /* libRNSVG-tvOS.a */; };
+		A5ED29512F644B64B3998D6F /* libRNAWSCognito.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6AEA4688E44AF08E84B0D5 /* libRNAWSCognito.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -354,6 +358,13 @@
 		988A8BF4BA0B4DE29AD4A171 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; name = "libRNGestureHandler-tvOS.a"; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		A10483F18A814EEEBF8E3987 /* BleManager.xcodeproj */ = {isa = PBXFileReference; name = "BleManager.xcodeproj"; path = "../node_modules/react-native-ble-manager/ios/BleManager.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		FA7A34A2A6E347F1ABD62D72 /* libBleManager.a */ = {isa = PBXFileReference; name = "libBleManager.a"; path = "libBleManager.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		8ED6B65A54F94C48985530EF /* RNBLE.xcodeproj */ = {isa = PBXFileReference; name = "RNBLE.xcodeproj"; path = "../node_modules/react-native-ble/RNBLE.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		C0EA4C9860884BA2A1A5C6BD /* libRNBLE.a */ = {isa = PBXFileReference; name = "libRNBLE.a"; path = "libRNBLE.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		F9AD29F3B7CD46DA81912C1D /* RNSVG.xcodeproj */ = {isa = PBXFileReference; name = "RNSVG.xcodeproj"; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		F7BBB2B834B64670B017B560 /* libRNSVG.a */ = {isa = PBXFileReference; name = "libRNSVG.a"; path = "libRNSVG.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		427E9B3C794A4F4B83384654 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; name = "libRNSVG-tvOS.a"; path = "libRNSVG-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		77343542E0804FDC82EC84AF /* RNAWSCognito.xcodeproj */ = {isa = PBXFileReference; name = "RNAWSCognito.xcodeproj"; path = "../node_modules/amazon-cognito-identity-js/ios/RNAWSCognito.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		5E6AEA4688E44AF08E84B0D5 /* libRNAWSCognito.a */ = {isa = PBXFileReference; name = "libRNAWSCognito.a"; path = "libRNAWSCognito.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -384,6 +395,9 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				78165EB84EF44DA7B7793492 /* libRNGestureHandler.a in Frameworks */,
 				FC54628070DE46B3AFBDD147 /* libBleManager.a in Frameworks */,
+				7B191DD5C7A148638DFEA341 /* libRNBLE.a in Frameworks */,
+				50F4391B460B4CE1BB51FC12 /* libRNSVG.a in Frameworks */,
+				A5ED29512F644B64B3998D6F /* libRNAWSCognito.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +415,7 @@
 				2D02E4C71E0B4AEC006451C7 /* libRCTText-tvOS.a in Frameworks */,
 				2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */,
 				F19B23253C824BD391DA4A8A /* libRNGestureHandler-tvOS.a in Frameworks */,
+				F0592495490148EA97AE6D1E /* libRNSVG-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -576,6 +591,9 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				38130B24F9DE43E7AAB54F59 /* RNGestureHandler.xcodeproj */,
 				A10483F18A814EEEBF8E3987 /* BleManager.xcodeproj */,
+				8ED6B65A54F94C48985530EF /* RNBLE.xcodeproj */,
+				F9AD29F3B7CD46DA81912C1D /* RNSVG.xcodeproj */,
+				77343542E0804FDC82EC84AF /* RNAWSCognito.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1206,11 +1224,18 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-ble-manager/ios",
+					"$(SRCROOT)/../node_modules/react-native-ble",
+					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/amazon-cognito-identity-js/ios/**",
 				);
 			};
 			name = Debug;
@@ -1235,11 +1260,18 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-ble-manager/ios",
+					"$(SRCROOT)/../node_modules/react-native-ble",
+					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/amazon-cognito-identity-js/ios/**",
 				);
 			};
 			name = Release;
@@ -1264,6 +1296,9 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-ble-manager/ios",
+					"$(SRCROOT)/../node_modules/react-native-ble",
+					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/amazon-cognito-identity-js/ios/**",
 				);
 			};
 			name = Debug;
@@ -1287,6 +1322,9 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-ble-manager/ios",
+					"$(SRCROOT)/../node_modules/react-native-ble",
+					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/amazon-cognito-identity-js/ios/**",
 				);
 			};
 			name = Release;
@@ -1319,11 +1357,18 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-ble-manager/ios",
+					"$(SRCROOT)/../node_modules/react-native-ble",
+					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/amazon-cognito-identity-js/ios/**",
 				);
 			};
 			name = Debug;
@@ -1356,11 +1401,18 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-ble-manager/ios",
+					"$(SRCROOT)/../node_modules/react-native-ble",
+					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/amazon-cognito-identity-js/ios/**",
 				);
 			};
 			name = Release;
@@ -1392,11 +1444,18 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-ble-manager/ios",
+					"$(SRCROOT)/../node_modules/react-native-ble",
+					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/amazon-cognito-identity-js/ios/**",
 				);
 			};
 			name = Debug;
@@ -1428,11 +1487,18 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-ble-manager/ios",
+					"$(SRCROOT)/../node_modules/react-native-ble",
+					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/amazon-cognito-identity-js/ios/**",
 				);
 			};
 			name = Release;

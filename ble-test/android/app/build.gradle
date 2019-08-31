@@ -138,6 +138,8 @@ android {
 }
 
 dependencies {
+    implementation project(':amazon-cognito-identity-js')
+    implementation project(':react-native-svg')
     implementation project(':react-native-ble-manager')
     implementation project(':react-native-gesture-handler')
     implementation fileTree(dir: "libs", include: ["*.jar"])

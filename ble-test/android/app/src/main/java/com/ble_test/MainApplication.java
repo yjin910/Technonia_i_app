@@ -3,6 +3,8 @@ package com.ble_test;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.amazonaws.RNAWSCognitoPackage;
+import com.horcrux.svg.SvgPackage;
 import it.innove.BleManagerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
@@ -25,6 +27,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNAWSCognitoPackage(),
+            new SvgPackage(),
             new BleManagerPackage(),
             new RNGestureHandlerPackage()
       );
