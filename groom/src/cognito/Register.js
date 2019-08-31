@@ -78,6 +78,15 @@ export default class SignUpScreen extends React.Component {
         const { email, password, name } = this.state;
 
         if (email && password && name) {
+            if (password.length < 8) {
+                Alert.alert(
+                    'Password too short',
+                    'The minimum length is 8',
+                    [{ text: 'OK', onPress: () => console.log('Password too short!'), style: 'default' }],
+                    { cancelable: false },
+                );
+            }
+
             Auth.signUp({
                 username: email,
                 password: password,
