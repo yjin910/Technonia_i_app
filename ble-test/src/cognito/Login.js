@@ -16,6 +16,7 @@ import {
     ScrollView
 } from 'react-native';
 import { Auth } from 'aws-amplify';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 
 const { width, height } = Dimensions.get('window');
@@ -40,7 +41,6 @@ export default class LoginScreen extends React.Component {
     storeAsync = async (email, pw) => {
         try {
             await AsyncStorage.setItem('9room@email', email);
-            await AsyncStorage.setItem('9room@pw', pw);
         } catch {
             alert('failed to store id');
         }
@@ -56,7 +56,15 @@ export default class LoginScreen extends React.Component {
                 this.setState({ user: user });
                 this.storeAsync(email, pw);
 
-                this.props.navigation.navigate('Profile', {email: email});
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({
+                        routeName: 'Profile',
+                        params: { email: email }
+                    })],
+                });
+
+                this.props.navigation.dispatch(resetAction);
             }).catch(err => {
                 console.log(err);
                 alert('Sign in failed');

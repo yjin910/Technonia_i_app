@@ -8,20 +8,23 @@ import {
     Dimensions,
     SafeAreaView,
     TouchableOpacity,
-    Image
+    Image,
+    AsyncStorage
 } from 'react-native';
 import uuidv1 from 'uuid/v1'
 import Drawer from 'react-native-drawer'
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import Device from './Device'
 import DrawerButton from './graph/components/DrawerButton'
 
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const MENU_IMAGE = require('../assets/menu.png');
 
 const menu = [
     { title: 'BLE Setting' },
+    { title: 'Log out'},
 ]
 
 export default class ProfileScreen extends React.Component {
@@ -39,10 +42,20 @@ export default class ProfileScreen extends React.Component {
 
         this.navigateToGraphScreen = this.navigateToGraphScreen.bind(this);
         this.navigateToBLESettings = this.navigateToBLESettings.bind(this);
+        this.logOut_async = this.logOut_async.bind(this);
     }
 
     componentDidMount() {
         const email = this.props.navigation.getParam('email', '');
+        if (email) {
+            this.fetchData(email);
+        } else {
+            this.getEmailFromAsyncStorage_async();
+        }
+    }
+
+    getEmailFromAsyncStorage_async = async () => {
+        const email = await AsyncStorage.getItem('9room@email');
         this.fetchData(email);
     }
 
@@ -63,6 +76,9 @@ export default class ProfileScreen extends React.Component {
                 case 'BLE Setting':
                     onPress = this.navigateToBLESettings;
                     break;
+                case 'Log out':
+                    onPress = this.logOut_async;
+                    break;
                 default:
                     console.log('Invalid title: ', title);
                     onPress = null;
@@ -77,6 +93,17 @@ export default class ProfileScreen extends React.Component {
                 </View>
             </SafeAreaView>
         );
+    }
+
+    logOut_async = async () => {
+        await AsyncStorage.removeItem('9room@email');
+
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })],
+        });
+
+        this.props.navigation.dispatch(resetAction);
     }
 
     fetchData = (email) => {
@@ -105,8 +132,7 @@ export default class ProfileScreen extends React.Component {
                 // Note: it's important to handle errors here
                 // instead of a catch() block so that we don't swallow
                 // exceptions from actual bugs in components.
-                //console.log(error);
-                console.log('error!!')
+                console.log(error);
                 this.setState({
                     isLoaded: false
                 });
@@ -140,7 +166,6 @@ export default class ProfileScreen extends React.Component {
 
     render() {
         let { isLoaded, devices } = this.state;
-        //TODO 1) drawer 2) device list
 
         if (isLoaded) {
             let Devices = devices.map(d => {
@@ -216,7 +241,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white"
     },
     headerContainer: {
-        height: 44,
+        height: height / 10,
         flexDirection: 'row',
         justifyContent: 'center',
         backgroundColor: '#3B5998',
@@ -225,11 +250,12 @@ const styles = StyleSheet.create({
         flex: 1.0,
         textAlign: 'center',
         alignSelf: 'center',
-        color: 'white'
+        color: 'white',
+        fontSize: width / 25
     },
     menuButton: {
-        marginLeft: 8,
-        marginRight: 8,
+        marginLeft: width / 40,
+        marginRight: width / 40,
         alignSelf: 'center',
         tintColor: 'lightgrey'
     },
@@ -239,7 +265,7 @@ const styles = StyleSheet.create({
     },
     drawerContainer: {
         flex: 1,
-        backgroundColor: 'dodgerblue',//"#1a3f95",  //midnightblue,skyblue, slateblue
+        backgroundColor: 'dodgerblue',
         justifyContent: 'flex-start'
     }
 });

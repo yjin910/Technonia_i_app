@@ -692,7 +692,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#3B5998',
     },
     headerContainer: {
-        height: 44,
+        height: height / 10,
         flexDirection: 'row',
         justifyContent: 'center',
         backgroundColor: '#3B5998',
@@ -701,11 +701,12 @@ const styles = StyleSheet.create({
         flex: 1.0,
         textAlign: 'center',
         alignSelf: 'center',
-        color: 'white'
+        color: 'white',
+        fontSize: width / 25
     },
     menuButton: {
-        marginLeft: 8,
-        marginRight: 8,
+        marginLeft: width / 40,
+        marginRight: width / 40,
         alignSelf: 'center',
         tintColor: 'white'
     },

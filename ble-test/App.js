@@ -1,5 +1,10 @@
 import React from 'react';
-import { AsyncStorage } from 'react-native';
+import {
+  AsyncStorage,
+  ActivityIndicator,
+  View,
+  StyleSheet
+} from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 
 import LoginScreen from './src/cognito/Login'
@@ -30,28 +35,31 @@ const AppStackNavigator = createStackNavigator({
 });
 
 const AppStackNavigator_signedIn = createStackNavigator({
-  Login: { screen: LoginScreen },
-  Signup: { screen: SignUpScreen },
+  Profile: { screen: ProfileScreen },
   Geiger: { screen: GeigerGraph },
   TempHumiGraph: { screen: TempHumiGraph },
-  Profile: { screen: ProfileScreen },
   BLEManaer: { screen: BLEManagerScreen },
   BLEMenu: { screen: BLEMenu },
   WiFiSetting: { screen: WiFiSetting },
-  GeigerNameSetting: { screen: GeigerNameSetting }
+  GeigerNameSetting: { screen: GeigerNameSetting },
+  Login: { screen: LoginScreen },
+  Signup: { screen: SignUpScreen },  
 });
 
 
 export default class App extends React.Component {
   state = {
     isLoggedIn: false,
+    isLoaded: false,
   }
 
   checkLoggedIn = async () => {
-    const id = await AsyncStorage.getItem('Hangil@id');
+    const id = await AsyncStorage.getItem('9room@email');
 
     if (id) {
-      this.setState({ isLoggedIn: true });
+      this.setState({ isLoggedIn: true, isLoaded: true });
+    } else {
+      this.setState({isLoaded: true});
     }
   }
 
@@ -60,16 +68,33 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { isLoggedIn } = this.state;
+    const { isLoggedIn, isLoaded } = this.state;
 
-    let Container;
+    if (isLoaded) {
+      let Container;
 
-    if (isLoggedIn) {
-      Container = createAppContainer(AppStackNavigator_signedIn);
+      if (isLoggedIn) {
+        Container = createAppContainer(AppStackNavigator_signedIn);
+      } else {
+        Container = createAppContainer(AppStackNavigator);
+      }
+
+      return (<Container />)
     } else {
-      Container = createAppContainer(AppStackNavigator);
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="red" />
+        </View>
+      )
     }
 
-    return (<Container />)
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#1a3f95'
+  }
+});
