@@ -6,6 +6,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "amazon-cognito-identity-js": "^3.0.15",
     "aws-amplify": "^1.1.36",
     "aws-amplify-react-native": "^2.1.16",
     "braces": "^3.0.2",

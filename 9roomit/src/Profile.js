@@ -9,7 +9,8 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Image,
-    AsyncStorage
+    AsyncStorage,
+    ActivityIndicator
 } from 'react-native';
 import uuidv1 from 'uuid/v1'
 import Drawer from 'react-native-drawer'
@@ -207,8 +208,8 @@ export default class ProfileScreen extends React.Component {
             )
         } else {
             return (
-                <View style={styles.container}>
-                    <Text style={styles.notLoadedText}>Not loaded</Text>
+                <View style={styles.loadingScreenContainer}>
+                    <ActivityIndicator size="large" color="red" />
                 </View>
             )
         }
@@ -231,10 +232,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "white",
         justifyContent: 'center'
-    },
-    notLoadedText: {
-        fontSize: width / 25,
-        color: 'red'
     },
     devicesContainer: {
         flex: 1,
@@ -267,5 +264,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'dodgerblue',
         justifyContent: 'flex-start'
+    },
+    loadingScreenContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: '#1a3f95'
     }
 });

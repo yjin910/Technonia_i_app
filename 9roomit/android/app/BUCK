@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.ble_test",
+    package = "com.groomit",
 )
 
 android_resource(
     name = "res",
-    package = "com.ble_test",
+    package = "com.groomit",
     res = "src/main/res",
 )
 

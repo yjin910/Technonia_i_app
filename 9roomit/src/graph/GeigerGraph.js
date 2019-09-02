@@ -28,6 +28,7 @@ import GraphHeader from './components/GraphHeader'
 
 
 const MENU_IMAGE = require('../../assets/menu.png');
+const BACK_IMAGE = require('../../assets/back.png');
 const INTERVAL_TIME = 300000;
 
 const { width, height } = Dimensions.get('window');
@@ -58,6 +59,7 @@ export default class GeigerGraph extends React.Component {
         this.openDrawer = this.openDrawer.bind(this);
         this.changeListViewMode = this.changeListViewMode.bind(this);
         this.changeTooltipMode = this.changeTooltipMode.bind(this);
+        this.goBack = this.goBack.bind(this);
     }
 
     static navigationOptions = {
@@ -65,7 +67,7 @@ export default class GeigerGraph extends React.Component {
     };
 
     componentDidMount = () => {
-        let deviceNum = 'u518'; //TODO
+        let deviceNum = this.props.navigation.getParam('deviceNum', '');
         this.fetchData_Async(deviceNum)
 
         this.setInterval();
@@ -242,6 +244,10 @@ export default class GeigerGraph extends React.Component {
                 //TODO teminate moving
             }
         });
+    }
+
+    goBack = () => {
+        this.props.navigation.pop();
     }
 
     _isLoaded = () => {
@@ -425,6 +431,11 @@ export default class GeigerGraph extends React.Component {
                             <View style={styles.headerContainer}>
                                 <View style={styles.menuButton}>
                                     <TouchableOpacity
+                                        onPress={() => this.goBack()}
+                                        style={{ tintColor: 'white', width: width / 10, height: width / 10, marginRight: width / 30 }}>
+                                        <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={BACK_IMAGE} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
                                         onPress={() => this.openDrawer()}
                                         style={{ tintColor: 'white', width: width / 10, height: width / 10 }}>
                                         <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={MENU_IMAGE} />
@@ -539,7 +550,8 @@ const styles = StyleSheet.create({
         marginLeft: width / 40,
         marginRight: width / 40,
         alignSelf: 'center',
-        tintColor: 'white'
+        tintColor: 'white',
+        flexDirection: 'row'
     },
     menuContainer: {
         flex: 1.0,

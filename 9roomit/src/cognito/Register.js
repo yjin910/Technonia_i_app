@@ -111,8 +111,8 @@ export default class SignUpScreen extends React.Component {
         return (
             <KeyboardAvoidingView
                 keyboardVerticalOffset={Platform.select({ ios: 0, android: width / 3 })}
-                style={{ flex: 1 }}
-                behavior={"padding"}
+                behavior={Platform.OS === "ios" ? "padding" : null}
+                style={styles.root}
                 enabled>
                 <SafeAreaView style={styles.container}>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -164,6 +164,10 @@ export default class SignUpScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    root: {
+        backgroundColor: '#1a3f95',
+        flex: 1
+    },
     container: {
         backgroundColor: '#1a3f95',
         flexGrow: 1,
