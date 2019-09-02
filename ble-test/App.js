@@ -1,4 +1,5 @@
 import React from 'react';
+import { AsyncStorage } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 
 import LoginScreen from './src/cognito/Login'
@@ -28,10 +29,47 @@ const AppStackNavigator = createStackNavigator({
   GeigerNameSetting: { screen: GeigerNameSetting }
 });
 
-let Container = createAppContainer(AppStackNavigator);
+const AppStackNavigator_signedIn = createStackNavigator({
+  Login: { screen: LoginScreen },
+  Signup: { screen: SignUpScreen },
+  Geiger: { screen: GeigerGraph },
+  TempHumiGraph: { screen: TempHumiGraph },
+  Profile: { screen: ProfileScreen },
+  BLEManaer: { screen: BLEManagerScreen },
+  BLEMenu: { screen: BLEMenu },
+  WiFiSetting: { screen: WiFiSetting },
+  GeigerNameSetting: { screen: GeigerNameSetting }
+});
+
 
 export default class App extends React.Component {
+  state = {
+    isLoggedIn: false,
+  }
+
+  checkLoggedIn = async () => {
+    const id = await AsyncStorage.getItem('Hangil@id');
+
+    if (id) {
+      this.setState({ isLoggedIn: true });
+    }
+  }
+
+  componentWillMount = () => {
+    this.checkLoggedIn();
+  }
+
   render() {
+    const { isLoggedIn } = this.state;
+
+    let Container;
+
+    if (isLoggedIn) {
+      Container = createAppContainer(AppStackNavigator_signedIn);
+    } else {
+      Container = createAppContainer(AppStackNavigator);
+    }
+
     return (<Container />)
   }
 }

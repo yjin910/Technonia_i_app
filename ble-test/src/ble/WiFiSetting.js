@@ -66,7 +66,7 @@ export default class WiFiSetting extends React.Component {
             <KeyboardAvoidingView
                 keyboardVerticalOffset={Platform.select({ ios: 0, android: width / 3 })}
                 style={styles.keyboardAvoidingContainer}
-                behavior={"padding"}
+                behavior={Platform.OS === "ios" ? "padding" : null}
                 enabled>
                 <SafeAreaView style={styles.container}>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
