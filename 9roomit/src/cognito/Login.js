@@ -95,6 +95,7 @@ export default class LoginScreen extends React.Component {
                                     onChangeText={(email) => this.setState({ email: email })}
                                     value={this.state.email}
                                     onSubmitEditing={() => this.password.focus()}
+                                    autoCapitalize={'none'}
                                 />
                                 <TextInput style={styles.inputBox}
                                     placeholder="Password"
@@ -103,6 +104,7 @@ export default class LoginScreen extends React.Component {
                                     onChangeText={(pw) => this.setState({ pw: pw })}
                                     value={this.state.pw}
                                     ref={(input) => this.password = input}
+                                    autoCapitalize={'none'}
                                 />
                                 <TouchableOpacity style={styles.loginButtonBox} onPress={() => this._signIn()}>
                                     <Text style={styles.buttonText}>Login</Text>

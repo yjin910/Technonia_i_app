@@ -131,6 +131,7 @@ export default class SignUpScreen extends React.Component {
                                     keyboardType="email-address"
                                     onSubmitEditing={() => { this.password.focus() }}
                                     onChangeText={this._addEmail}
+                                    autoCapitalize={'none'}
                                 />
                                 <TextInput style={styles.inputBox}
                                     placeholder="Password"
@@ -138,13 +139,15 @@ export default class SignUpScreen extends React.Component {
                                     placeholderTextColor="#1a3f95"
                                     onChangeText={this._addPassword}
                                     ref={(input) => this.password = input}
+                                    autoCapitalize={'none'}
                                 />
                                 <TextInput style={styles.inputBox}
                                     placeholder="Name"
                                     placeholderTextColor="#1a3f95"
                                     selectionColor="#fff"
-                                    keyboardType="name-phone-pad"
+                                    keyboardType="email-address"
                                     onChangeText={this._addName}
+                                    autoCapitalize={'none'}
                                 />
                                 <TouchableOpacity style={styles.buttonBox} onPress={this._signUp.bind(this)}>
                                     <Text style={styles.buttonText}>Signup</Text>
