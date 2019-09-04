@@ -59,7 +59,7 @@ export default class LoginScreen extends React.Component {
                 const resetAction = StackActions.reset({
                     index: 0,
                     actions: [NavigationActions.navigate({
-                        routeName: 'Profile',
+                        routeName: 'Main',
                         params: { email: email }
                     })],
                 });

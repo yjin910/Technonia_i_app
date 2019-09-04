@@ -9,13 +9,14 @@ import { createStackNavigator, createAppContainer } from 'react-navigation'
 
 import LoginScreen from './src/cognito/Login'
 import SignUpScreen from './src/cognito/Register'
-import GeigerGraph from './src/graph/GeigerGraph'
-import TempHumiGraph from './src/graph/TempHumiGraph'
+import MainScreen from './src/Main'
 import ProfileScreen from './src/Profile'
 import BLEManagerScreen from './src/ble/BLEManager'
 import BLEMenu from './src/ble/BLEMenu'
 import WiFiSetting from './src/ble/WiFiSetting'
 import GeigerNameSetting from './src/ble/GeigerNameSetting'
+import CopyrightScreen from './src/additional/CopyrightScreen'
+import HelpScreen from './src/additional/HelpScreen'
 
 import Amplify from 'aws-amplify';
 import awsConfig from './src/cognito/config';
@@ -25,25 +26,27 @@ Amplify.configure(awsConfig);
 const AppStackNavigator = createStackNavigator({
   Login: { screen: LoginScreen },
   Signup: { screen: SignUpScreen },
-  Geiger: { screen: GeigerGraph },
-  TempHumiGraph: { screen: TempHumiGraph },
+  Main: { screen: MainScreen },
   Profile: {screen: ProfileScreen},
   BLEManaer: {screen: BLEManagerScreen},
   BLEMenu: { screen: BLEMenu },
   WiFiSetting: { screen: WiFiSetting },
-  GeigerNameSetting: { screen: GeigerNameSetting }
+  GeigerNameSetting: { screen: GeigerNameSetting },
+  Help: { screen: HelpScreen },
+  Copyright: { screen: CopyrightScreen }
 });
 
 const AppStackNavigator_signedIn = createStackNavigator({
+  Main: { screen: MainScreen },
   Profile: { screen: ProfileScreen },
-  Geiger: { screen: GeigerGraph },
-  TempHumiGraph: { screen: TempHumiGraph },
   BLEManaer: { screen: BLEManagerScreen },
   BLEMenu: { screen: BLEMenu },
   WiFiSetting: { screen: WiFiSetting },
   GeigerNameSetting: { screen: GeigerNameSetting },
   Login: { screen: LoginScreen },
-  Signup: { screen: SignUpScreen },  
+  Signup: { screen: SignUpScreen },
+  Help: { screen: HelpScreen },
+  Copyright: { screen: CopyrightScreen }
 });
 
 

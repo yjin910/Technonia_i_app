@@ -24,32 +24,32 @@ import ListViewScreen from './components/ListViewScreen'
 const { width, height } = Dimensions.get('window');
 const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 
-export default class GeigerGraph extends React.Component {
+export default class TemperatureGraph extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             isLoaded: false,
-            isListViewMode: false
+            isListViewMode: false,
         }
 
         this.changeListViewMode = this.changeListViewMode.bind(this);
     }
 
     static propTypes = {
-        geigerData: PropTypes.array.isRequired,
-        g: PropTypes.array.isRequired,
+        temperatureData: PropTypes.array.isRequired,
+        t: PropTypes.array.isRequired,
         min: PropTypes.number,
         max: PropTypes.number
     };
 
+    componentDidMount = () => {
+        this._isLoaded();
+    }
+
     changeListViewMode = () => {
         let { isListViewMode } = this.state;
         this.setState({ isListViewMode: !isListViewMode });
-    }
-
-    componentDidMount = () => {
-        this._isLoaded();
     }
 
     _isLoaded = () => {
@@ -59,25 +59,28 @@ export default class GeigerGraph extends React.Component {
 
     render() {
         let { isLoaded, isListViewMode } = this.state;
-        let { geigerData, g, min, max } = this.props;
+        let { temperatureData, t, min, max } = this.props;
 
         if (!isLoaded) {
-            return (<LoadingGraph />);
+            return (
+                <LoadingGraph />
+            )
         }
 
-        if (geigerData.length == 0) {
-            return (<NoData />);
+        if (temperatureData.length == 0) {
+            return (
+                <NoData />
+            )
         } else {
             let data = [
                 {
-                    data: geigerData,
-                    svg: { stroke: 'green' }
+                    data: temperatureData,
+                    svg: { stroke: 'red' },
                 }
             ]
 
-            let startDate = moment(geigerData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
-            let endDate = moment(geigerData[geigerData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
-
+            let startDate = moment(temperatureData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let endDate = moment(temperatureData[temperatureData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
@@ -85,7 +88,6 @@ export default class GeigerGraph extends React.Component {
                     let y1 = y(value.y);
 
                     if (value.y == min || value.y == max) {
-
                         return (
                             <G key={uuidv1()}>
                                 <Circle
@@ -93,7 +95,7 @@ export default class GeigerGraph extends React.Component {
                                     cx={x1}
                                     cy={y1}
                                     r={2}
-                                    stroke={'green'}
+                                    stroke={'red'}
                                     fill={'white'}
                                     onPress={(event) => {
                                         const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
@@ -116,8 +118,8 @@ export default class GeigerGraph extends React.Component {
                                     cx={x1}
                                     cy={y1}
                                     r={1}
-                                    stroke={'green'}
-                                    fill={'green'}
+                                    stroke={'red'}
+                                    fill={'red'}
                                     onPress={(event) => {
                                         const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
 
@@ -125,6 +127,7 @@ export default class GeigerGraph extends React.Component {
                                         console.log(pageY);
                                         console.log(locationX);
                                         console.log(locationY);
+
                                         console.log(`Point (${x1}, ${y1}) is pressed`);
                                         this.changeInfoIndex(index);
                                     }}
@@ -136,7 +139,7 @@ export default class GeigerGraph extends React.Component {
             }
 
             return (
-                <View style={styles.container}>
+                <Animated.View style={styles.container}>
                     <ScrollView
                         scrollEnabled={true}
                         indicatorStyle={'white'}
@@ -144,10 +147,10 @@ export default class GeigerGraph extends React.Component {
                         <View style={styles.listViewButtonContainer}>
                             <ListViewButton changeListView={this.changeListViewMode} />
                         </View>
-                        <LabelText types='g' />
+                        <LabelText types='t' />
                         <Animated.View style={{ marginLeft: 10, flexDirection: 'row' }}>
                             <YAxis
-                                data={g}
+                                data={t}
                                 style={{ width: width / 6 }}
                                 contentInset={contentInset}
                                 svg={{
@@ -176,32 +179,32 @@ export default class GeigerGraph extends React.Component {
                             </LineChart>
                         </Animated.View>
                         <DataText
-                            currentGeiger={geigerData[geigerData.length - 1]['y']}
-                            types={'g'}
-                            minGeiger={min}
-                            maxGeiger={max}
+                            currentTemp={temperatureData[temperatureData.length - 1]['y']}
+                            types={'t'}
+                            minTemp={min}
+                            maxTemp={max}
                             startDate={startDate}
                             endDate={endDate}
                         />
-                        {isListViewMode && geigerData.map(d => {
-                            let valueStr = d['y'] + ' μSv'
+                        {isListViewMode && temperatureData.map(d => {
+                            let valueStr = d['y'] + ' °C'
                             let timeStr = moment(d['x']).format('HH:mm:ss');
                             return (<ListViewScreen valueStr={valueStr} timeStr={timeStr} key={uuidv1()} />)
                         })}
                     </ScrollView>
-                </View>
+                </Animated.View>
             )
         }
     }
 }
-
 
 const styles = StyleSheet.create({
     root: {
         flex: 1,
     },
     container: {
-        flex: 1
+        width: width,
+        height: height
     },
     containerForGraphAndXAxis: {
         flex: 1,

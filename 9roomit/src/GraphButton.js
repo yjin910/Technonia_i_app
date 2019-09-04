@@ -39,20 +39,8 @@ export default class GraphButton extends Component {
                             key={uuidv1()}
                             style={styles.itemButton}
                             activeOpacity={0.7}
-                            onPress={this.changePage.bind(this, 'g')}>
-                            <Text style={styles.linkText}>{'g'}</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={styles.item} key={uuidv1()}>
-                    <View style={styles.linkButtonContainer}>
-                        <Text style={styles.nameText}>{TEMP_HUMI_BUTTON_TEXT}</Text>
-                        <TouchableOpacity
-                            key={uuidv1()}
-                            style={styles.itemButton}
-                            activeOpacity={0.7}
-                            onPress={this.changePage.bind(this, 'th')}>
-                            <Text style={styles.linkText}>{'th'}</Text>
+                            onPress={this.changePage.bind(this)}>
+                            <Text style={styles.linkText}>{graph}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

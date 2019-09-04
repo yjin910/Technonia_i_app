@@ -24,24 +24,25 @@ import ListViewScreen from './components/ListViewScreen'
 const { width, height } = Dimensions.get('window');
 const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
 
-export default class GeigerGraph extends React.Component {
+export default class HumidityGraph extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             isLoaded: false,
-            isListViewMode: false
+            isListViewMode: false,
         }
 
         this.changeListViewMode = this.changeListViewMode.bind(this);
     }
 
     static propTypes = {
-        geigerData: PropTypes.array.isRequired,
-        g: PropTypes.array.isRequired,
+        humidityData: PropTypes.array.isRequired,
+        h: PropTypes.array.isRequired,
         min: PropTypes.number,
         max: PropTypes.number
     };
+
 
     changeListViewMode = () => {
         let { isListViewMode } = this.state;
@@ -56,27 +57,26 @@ export default class GeigerGraph extends React.Component {
         this.setState({ isLoaded: true });
     }
 
-
     render() {
         let { isLoaded, isListViewMode } = this.state;
-        let { geigerData, g, min, max } = this.props;
+        let { humidityData, h, min, max } = this.props;
 
         if (!isLoaded) {
             return (<LoadingGraph />);
         }
 
-        if (geigerData.length == 0) {
+        if (humidityData.length == 0) {
             return (<NoData />);
         } else {
             let data = [
                 {
-                    data: geigerData,
-                    svg: { stroke: 'green' }
+                    data: humidityData,
+                    svg: { stroke: 'blue' },
                 }
             ]
 
-            let startDate = moment(geigerData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
-            let endDate = moment(geigerData[geigerData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let startDate = moment(humidityData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let endDate = moment(humidityData[humidityData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
 
 
             const Decorator = ({ x, y, data }) => {
@@ -85,7 +85,6 @@ export default class GeigerGraph extends React.Component {
                     let y1 = y(value.y);
 
                     if (value.y == min || value.y == max) {
-
                         return (
                             <G key={uuidv1()}>
                                 <Circle
@@ -93,7 +92,7 @@ export default class GeigerGraph extends React.Component {
                                     cx={x1}
                                     cy={y1}
                                     r={2}
-                                    stroke={'green'}
+                                    stroke={'blue'}
                                     fill={'white'}
                                     onPress={(event) => {
                                         const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
@@ -116,11 +115,10 @@ export default class GeigerGraph extends React.Component {
                                     cx={x1}
                                     cy={y1}
                                     r={1}
-                                    stroke={'green'}
-                                    fill={'green'}
+                                    stroke={'blue'}
+                                    fill={'blue'}
                                     onPress={(event) => {
                                         const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
-
                                         console.log(pageX);
                                         console.log(pageY);
                                         console.log(locationX);
@@ -136,7 +134,7 @@ export default class GeigerGraph extends React.Component {
             }
 
             return (
-                <View style={styles.container}>
+                <Animated.View style={styles.container}>
                     <ScrollView
                         scrollEnabled={true}
                         indicatorStyle={'white'}
@@ -144,10 +142,10 @@ export default class GeigerGraph extends React.Component {
                         <View style={styles.listViewButtonContainer}>
                             <ListViewButton changeListView={this.changeListViewMode} />
                         </View>
-                        <LabelText types='g' />
+                        <LabelText types='h' />
                         <Animated.View style={{ marginLeft: 10, flexDirection: 'row' }}>
                             <YAxis
-                                data={g}
+                                data={h}
                                 style={{ width: width / 6 }}
                                 contentInset={contentInset}
                                 svg={{
@@ -176,32 +174,32 @@ export default class GeigerGraph extends React.Component {
                             </LineChart>
                         </Animated.View>
                         <DataText
-                            currentGeiger={geigerData[geigerData.length - 1]['y']}
-                            types={'g'}
-                            minGeiger={min}
-                            maxGeiger={max}
+                            currentHumi={humidityData[humidityData.length - 1]['y']}
+                            types={'h'}
+                            minHumi={min}
+                            maxHumi={max}
                             startDate={startDate}
                             endDate={endDate}
                         />
-                        {isListViewMode && geigerData.map(d => {
-                            let valueStr = d['y'] + ' μSv'
+                        {isListViewMode && humidityData.map(d => {
+                            let valueStr = d['y'] + ' %'
                             let timeStr = moment(d['x']).format('HH:mm:ss');
                             return (<ListViewScreen valueStr={valueStr} timeStr={timeStr} key={uuidv1()} />)
                         })}
                     </ScrollView>
-                </View>
+                </Animated.View>
             )
         }
     }
 }
-
 
 const styles = StyleSheet.create({
     root: {
         flex: 1,
     },
     container: {
-        flex: 1
+        width: width,
+        height: height
     },
     containerForGraphAndXAxis: {
         flex: 1,

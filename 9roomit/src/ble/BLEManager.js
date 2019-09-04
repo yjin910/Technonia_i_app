@@ -136,28 +136,14 @@ export default class BLEManagerScreen extends React.Component {
             const id = peripheral.id;
             const name = peripheral.name;
 
-            const devices = this.props.navigation.getParam('devices', '');
+            let foundTarget = (name.startswith(TARGET_BLE_DEVICE_NAME) ? true : false); //TODO need to test
 
-            let foundTarget = true;
-
-            // for (let i = 0; i < devices.length; i++) {
-            //     let deviceID = TARGET_BLE_DEVICE_NAME + devices[i];
-
-            //     if (name.startsWith(deviceID)) {
-            //         foundTarget = true;
-            //         break;
-            //     }
-            // }
-
-            await AsyncStorage.setItem('9room@device_uuid', id);
-            this.props.navigation.navigate('BLEMenu');
-
-            // if (foundTarget) {
-            //     await AsyncStorage.setItem('9room@device_uuid', id);
-            //     this.props.navigation.navigate('BLEMenu');
-            // } else {
-            //     return;
-            // }
+            if (foundTarget) {
+                await AsyncStorage.setItem('9room@device_uuid', id);
+                this.props.navigation.navigate('BLEMenu');
+            } else {
+                return;
+            }
         }
     }
 

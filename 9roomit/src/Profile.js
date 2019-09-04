@@ -24,8 +24,12 @@ const { width, height } = Dimensions.get('window');
 const MENU_IMAGE = require('../assets/menu.png');
 
 const menu = [
-    { title: 'BLE Setting' },
-    { title: 'Log out'},
+    { title: 'Main' },
+    { title: 'Profile' },
+    { title: 'Setting' },
+    { title: 'Log out' },
+    { title: 'Help' },
+    { title: 'Copyright' },
 ]
 
 export default class ProfileScreen extends React.Component {
@@ -43,6 +47,9 @@ export default class ProfileScreen extends React.Component {
 
         this.navigateToGraphScreen = this.navigateToGraphScreen.bind(this);
         this.navigateToBLESettings = this.navigateToBLESettings.bind(this);
+        this.navigateToHelpScreen = this.navigateToHelpScreen.bind(this);
+        this.navigateToCopyrightScreen = this.navigateToCopyrightScreen.bind(this);
+        this.navigateToMainScreen = this.navigateToMainScreen.bind(this);
         this.logOut_async = this.logOut_async.bind(this);
     }
 
@@ -74,11 +81,23 @@ export default class ProfileScreen extends React.Component {
             let onPress;
 
             switch (title) {
-                case 'BLE Setting':
+                case 'Setting':
                     onPress = this.navigateToBLESettings;
                     break;
                 case 'Log out':
                     onPress = this.logOut_async;
+                    break;
+                case 'Main':
+                    //TODO
+                    break;
+                case 'Profile':
+                    onPress = () => console.log('Already in the Profile screen');
+                    break;
+                case 'Help':
+                    onPress = this.navigateToHelpScreen;
+                    break;
+                case 'Copyright':
+                    onPress = this.navigateToCopyrightScreen;
                     break;
                 default:
                     console.log('Invalid title: ', title);
@@ -86,7 +105,8 @@ export default class ProfileScreen extends React.Component {
             }
 
             return (<DrawerButton onPress={onPress} title={title} key={uuidv1()} />);
-        })
+        });
+
         return (
             <SafeAreaView style={styles.drawerContainer}>
                 <View style={styles.drawerContainer}>
@@ -144,7 +164,6 @@ export default class ProfileScreen extends React.Component {
         let {devices} = this.state;
 
         if (devices || devices.length == 0) {
-            //TODO go to ble setting screen
             this.closeDrawer();
             console.log('navigate to ble setting screen');
             this.props.navigation.navigate('BLEManaer', { devices: devices })
@@ -154,15 +173,21 @@ export default class ProfileScreen extends React.Component {
         }
     }
 
-    navigateToGraphScreen = (type, deviceNum) => {
-        switch (type) {
-            case 'g' :
-                this.props.navigation.navigate('Geiger', { deviceNum: deviceNum })
-                break;
-            case 'th' :
-                this.props.navigation.navigate('TempHumiGraph', { deviceNum: deviceNum })
-                break;
-        }
+    navigateToMainScreen = () => {
+        let email = await AsyncStorage.getItem('9room@email');
+        this.props.navigation.navigate('Main', { email: email });
+    }
+
+    navigateToHelpScreen = () => {
+        this.props.navigation.navigate('Help');
+    }
+
+    navigateToCopyrightScreen = () => {
+        this.props.navigation.navigate('Copyright');
+    }
+
+    navigateToGraphScreen = (deviceNum) => {
+        //TODO
     }
 
     render() {
@@ -188,6 +213,7 @@ export default class ProfileScreen extends React.Component {
                         tapToClose={true}
                         openDrawerOffset={0.35}
                         styles={drawerStyles}
+                        side={'right'}
                     >
                         <View style={styles.headerContainer}>
                             <View style={styles.menuButton}>
