@@ -17,6 +17,7 @@ import WiFiSetting from './src/ble/WiFiSetting'
 import GeigerNameSetting from './src/ble/GeigerNameSetting'
 import CopyrightScreen from './src/additional/CopyrightScreen'
 import HelpScreen from './src/additional/HelpScreen'
+import GraphScreen from './src/graph/Graph'
 
 import Amplify from 'aws-amplify';
 import awsConfig from './src/cognito/config';
@@ -33,7 +34,8 @@ const AppStackNavigator = createStackNavigator({
   WiFiSetting: { screen: WiFiSetting },
   GeigerNameSetting: { screen: GeigerNameSetting },
   Help: { screen: HelpScreen },
-  Copyright: { screen: CopyrightScreen }
+  Copyright: { screen: CopyrightScreen },
+  Graph: { screen: GraphScreen }
 });
 
 const AppStackNavigator_signedIn = createStackNavigator({
@@ -46,7 +48,8 @@ const AppStackNavigator_signedIn = createStackNavigator({
   Login: { screen: LoginScreen },
   Signup: { screen: SignUpScreen },
   Help: { screen: HelpScreen },
-  Copyright: { screen: CopyrightScreen }
+  Copyright: { screen: CopyrightScreen },
+  Graph: { screen: GraphScreen }
 });
 
 

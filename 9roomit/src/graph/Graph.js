@@ -14,13 +14,14 @@ import Drawer from 'react-native-drawer'
 import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation';
 import uuidv1 from 'uuid/v1';
 
-import TemperatureGraph from './graph/TemperatureGraph'
-import HumidityGraph from './graph/HumidityGraph'
-import GeigerGraph from './graph/GeigerGraph'
-import DrawerButton from './graph/components/DrawerButton'
+import TemperatureGraph from './TemperatureGraph'
+import HumidityGraph from './HumidityGraph'
+import GeigerGraph from './GeigerGraph'
+import DrawerButton from './components/DrawerButton'
 
 const INTERVAL_TIME = 300000;
-const MENU_IMAGE = require('../assets/menu.png');
+const MENU_IMAGE = require('../../assets/menu.png');
+const BACK_IMAGE = require('../../assets/back.png');
 const { width } = Dimensions.get('window');
 
 const menu = [
@@ -53,10 +54,11 @@ export default class MainScreen extends React.Component {
         }
 
         this.openDrawer = this.openDrawer.bind(this);
-        this.closeDrawer = this.closeDrawer.bind(this);
         this.navigateToHelpScreen = this.navigateToHelpScreen.bind(this);
         this.navigateToCopyrightScreen = this.navigateToCopyrightScreen.bind(this);
         this.navigateToProfileScreen = this.navigateToProfileScreen.bind(this);
+        this.navigateToMainScreen = this.navigateToMainScreen.bind(this);
+        this.goBack = this.goBack.bind(this);
     }
 
     static navigationOptions = {
@@ -64,27 +66,18 @@ export default class MainScreen extends React.Component {
     };
 
     componentDidMount = () => {
-        let email = this.props.navigation.getParam('email', '');
+        let deviceNum = this.props.navigation.getParam('deviceNum', '');
+        this.fetchData_Async(deviceNum);
 
-        if (email != '') {
-            this.fetchData_Async(email);
-            this.setInterval(email);
-        } else {
-            this.getEmail_async();
-        }
+        this.setInterval();
     }
 
-    getEmail_async = async () => {
-        let email = await AsyncStorage.getItem('9room@email');
+    setInterval = () => {
+        let deviceNum = this.props.navigation.getParam('deviceNum', '');
 
-        this.fetchData_Async(email);
-        this.setInterval(email);
-    }
-
-    setInterval = (email) => {
         this._timer = setInterval(() => {
             console.log('fetch data start');
-            this.fetchData_Async(email);
+            this.fetchData_Async(deviceNum);
         }, INTERVAL_TIME);
     }
 
@@ -92,12 +85,16 @@ export default class MainScreen extends React.Component {
         clearInterval(this._timer);
     }
 
-    openDrawer = () => {
+    openDrawer() {
         this.drawer.open()
     }
 
-    closeDrawer = () => {
+    closeDrawer() {
         this.drawer.close()
+    }
+
+    goBack = () => {
+        this.props.navigation.pop();
     }
 
     renderDrawer = () => {
@@ -113,7 +110,7 @@ export default class MainScreen extends React.Component {
                     onPress = this.logOut_async;
                     break;
                 case 'Main':
-                    onPress = this.closeDrawer;
+                    onPress = this.navigateToMainScreen;
                     break;
                 case 'Profile':
                     onPress = this.navigateToProfileScreen;
@@ -156,6 +153,12 @@ export default class MainScreen extends React.Component {
         this.props.navigation.dispatch(resetAction);
     }
 
+    navigateToMainScreen = async () => {
+        this.closeDrawer();
+        let email = await AsyncStorage.getItem('9room@email');
+        this.props.navigation.navigate('Main', { email: email });
+    }
+
     navigateToHelpScreen = () => {
         this.closeDrawer();
         this.props.navigation.navigate('Help');
@@ -167,9 +170,8 @@ export default class MainScreen extends React.Component {
     }
 
     navigateToProfileScreen = async () => {
-        this.closeDrawer();
         let email = await AsyncStorage.getItem('9room@email');
-        this.props.navigation.navigate('Profile', {email: email});
+        this.props.navigation.navigate('Profile', { email: email });
     }
 
     navigateToBLESettings = () => {
@@ -178,8 +180,8 @@ export default class MainScreen extends React.Component {
         this.props.navigation.navigate('BLEManaer');
     }
 
-    fetchData_Async = async (email) => {
-        const url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/main/representative?email=${email}`;
+    fetchData_Async = async (deviceNum) => {
+        const url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/getdata?u=${deviceNum}`;
         console.log(url);
 
         fetch(url)
@@ -211,10 +213,11 @@ export default class MainScreen extends React.Component {
                                 let t = parseFloat(d['val']);
                                 if (isNotFirst_t) {
                                     min_t = (min_t < t) ? min_t : t;
+                                } else min_t = t;
+                                if (max_t) {
                                     max_t = (max_t > t) ? max_t : t;
                                 } else {
                                     max_t = t;
-                                    min_t = t;
                                     isNotFirst_t = true;
                                 }
 
@@ -227,10 +230,11 @@ export default class MainScreen extends React.Component {
 
                                 if (isNotFirst_h) {
                                     min_h = (min_h < h) ? min_h : h;
+                                } else min_h = h;
+                                if (isNotFirst_h) {
                                     max_h = (max_h > h) ? max_h : h;
                                 } else {
                                     max_h = h;
-                                    min_h = h;
                                     isNotFirst_h = true;
                                 }
 
@@ -243,10 +247,11 @@ export default class MainScreen extends React.Component {
 
                                 if (isNotFirst_g) {
                                     min_g = (min_g < g) ? min_g : g;
+                                } else min_g = g;
+                                if (isNotFirst_g) {
                                     max_g = (max_g > g) ? max_g : g;
                                 } else {
                                     max_g = g;
-                                    min_g = g;
                                     isNotFirst_g = true;
                                 }
 
@@ -306,8 +311,6 @@ export default class MainScreen extends React.Component {
                 max={props.screenProps.max_g}
             />);
 
-            //alert(min_g + ', ' + max_g);
-
             const AppNavigator = createMaterialTopTabNavigator({
                 Geiger,
                 Temperature,
@@ -330,13 +333,20 @@ export default class MainScreen extends React.Component {
                         <View style={styles.headerContainer}>
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
+                                    onPress={() => this.goBack()}
+                                    style={{ tintColor: 'white', width: width / 10, height: width / 10, marginRight: width / 30 }}>
+                                    <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={BACK_IMAGE} />
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={styles.headerTitle}>Graph</Text>
+                            <View style={styles.menuButton}>
+                                <TouchableOpacity
                                     onPress={() => this.openDrawer()}
                                     style={{ tintColor: 'white', width: width / 10, height: width / 10 }}>
                                     <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={MENU_IMAGE} />
                                 </TouchableOpacity>
                             </View>
-                            <Text style={styles.headerTitle}>Graph</Text>
-                            <View style={styles.menuButton} />
+                            {/* <View style={styles.menuButton} /> */}
                         </View>
                         <GraphApp screenProps={{
                             temperatureData: data_t,
@@ -377,7 +387,6 @@ const drawerStyles = {
     }
 }
 
-
 const styles = StyleSheet.create({
     root: {
         flex: 1,
@@ -391,9 +400,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#3B5998',
     },
     headerContainer: {
-        height: 44,
-        flexDirection: 'row-reverse',
-        justifyContent: 'center',
+        height: height / 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         backgroundColor: '#3B5998',
     },
     headerTitle: {

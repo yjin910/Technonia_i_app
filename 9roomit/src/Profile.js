@@ -22,6 +22,7 @@ import DrawerButton from './graph/components/DrawerButton'
 
 const { width, height } = Dimensions.get('window');
 const MENU_IMAGE = require('../assets/menu.png');
+const BACK_IMAGE = require('../assets/back.png');
 
 const menu = [
     { title: 'Main' },
@@ -51,6 +52,8 @@ export default class ProfileScreen extends React.Component {
         this.navigateToCopyrightScreen = this.navigateToCopyrightScreen.bind(this);
         this.navigateToMainScreen = this.navigateToMainScreen.bind(this);
         this.logOut_async = this.logOut_async.bind(this);
+        this.closeDrawer = this.closeDrawer.bind(this);
+        this.goBack = this.goBack.bind(this);
     }
 
     componentDidMount() {
@@ -88,10 +91,10 @@ export default class ProfileScreen extends React.Component {
                     onPress = this.logOut_async;
                     break;
                 case 'Main':
-                    //TODO
+                    onPress = this.navigateToMainScreen;
                     break;
                 case 'Profile':
-                    onPress = () => console.log('Already in the Profile screen');
+                    onPress = this.closeDrawer;
                     break;
                 case 'Help':
                     onPress = this.navigateToHelpScreen;
@@ -161,33 +164,33 @@ export default class ProfileScreen extends React.Component {
     }
 
     navigateToBLESettings = () => {
-        let {devices} = this.state;
-
-        if (devices || devices.length == 0) {
-            this.closeDrawer();
-            console.log('navigate to ble setting screen');
-            this.props.navigation.navigate('BLEManaer', { devices: devices })
-        } else {
-            alert('No devices detected');
-            this.closeDrawer();
-        }
+        this.closeDrawer();
+        console.log('navigate to ble setting screen');
+        this.props.navigation.navigate('BLEManaer');
     }
 
-    navigateToMainScreen = () => {
+    navigateToMainScreen = async () => {
+        this.closeDrawer();
         let email = await AsyncStorage.getItem('9room@email');
         this.props.navigation.navigate('Main', { email: email });
     }
 
     navigateToHelpScreen = () => {
+        this.closeDrawer();
         this.props.navigation.navigate('Help');
     }
 
     navigateToCopyrightScreen = () => {
+        this.closeDrawer();
         this.props.navigation.navigate('Copyright');
     }
 
     navigateToGraphScreen = (deviceNum) => {
-        //TODO
+        this.props.navigation.navigate('Graph', { deviceNum: deviceNum });
+    }
+
+    goBack = () => {
+        this.props.navigation.pop();
     }
 
     render() {
@@ -218,13 +221,20 @@ export default class ProfileScreen extends React.Component {
                         <View style={styles.headerContainer}>
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
+                                    onPress={() => this.goBack()}
+                                    style={{ tintColor: 'white', width: width / 10, height: width / 10, marginRight: width / 30 }}>
+                                    <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={BACK_IMAGE} />
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={styles.headerTitle}>Graph</Text>
+                            <View style={styles.menuButton}>
+                                <TouchableOpacity
                                     onPress={() => this.openDrawer()}
                                     style={{ tintColor: 'white', width: width / 10, height: width / 10 }}>
                                     <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={MENU_IMAGE} />
                                 </TouchableOpacity>
                             </View>
-                            <Text style={styles.headerTitle}>Profile</Text>
-                            <View style={styles.menuButton} />
+                            {/* <View style={styles.menuButton} /> */}
                         </View>
                         <View style={styles.devicesContainer}>
                             {Devices}
@@ -266,7 +276,7 @@ const styles = StyleSheet.create({
     headerContainer: {
         height: height / 10,
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         backgroundColor: '#3B5998',
     },
     headerTitle: {

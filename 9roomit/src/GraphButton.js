@@ -11,8 +11,6 @@ import uuidv1 from 'uuid/v1'
 
 
 const { width, height } = Dimensions.get('window');
-const GEIGER_GRAPH_BUTTON_TEXT = '방사능'
-const TEMP_HUMI_BUTTON_TEXT = '온습도'
 
 export default class GraphButton extends Component {
     constructor(props) {
@@ -24,9 +22,9 @@ export default class GraphButton extends Component {
         onPressed: PropTypes.func.isRequired
     }
 
-    changePage = (type) => {
+    changePage = () => {
         let { deviceNum, onPressed } = this.props;
-        onPressed(type, deviceNum);
+        onPressed(deviceNum);
     }
 
     render() {
@@ -40,7 +38,7 @@ export default class GraphButton extends Component {
                             style={styles.itemButton}
                             activeOpacity={0.7}
                             onPress={this.changePage.bind(this)}>
-                            <Text style={styles.linkText}>{graph}</Text>
+                            <Text style={styles.linkText}>{'graph'}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -71,7 +69,7 @@ const styles = StyleSheet.create({
         marginRight: width / 20
     },
     linkText: {
-        color: "darkslategrey",
+        color: '#1a3f95',
         fontSize: width / 20
     },
     nameText: {
@@ -80,7 +78,7 @@ const styles = StyleSheet.create({
         paddingRight: width / 100
     },
     itemButton: {
-        width: width / 7,
+        width: width / 6,
         height: width / 13,
         backgroundColor: 'darkgrey', //'#a8a9ad',
         borderColor: 'darkgrey',

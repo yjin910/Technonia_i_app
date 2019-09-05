@@ -97,16 +97,6 @@ export default class TemperatureGraph extends React.Component {
                                     r={2}
                                     stroke={'red'}
                                     fill={'white'}
-                                    onPress={(event) => {
-                                        const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
-
-                                        console.log(pageX);
-                                        console.log(pageY);
-                                        console.log(locationX);
-                                        console.log(locationY);
-                                        console.log(`Point (${x1}, ${y1}) is pressed`);
-                                        this.changeInfoIndex(index);
-                                    }}
                                 />
                             </G>
                         )
@@ -120,17 +110,6 @@ export default class TemperatureGraph extends React.Component {
                                     r={1}
                                     stroke={'red'}
                                     fill={'red'}
-                                    onPress={(event) => {
-                                        const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
-
-                                        console.log(pageX);
-                                        console.log(pageY);
-                                        console.log(locationX);
-                                        console.log(locationY);
-
-                                        console.log(`Point (${x1}, ${y1}) is pressed`);
-                                        this.changeInfoIndex(index);
-                                    }}
                                 />
                             </G>
                         )

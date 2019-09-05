@@ -94,16 +94,6 @@ export default class HumidityGraph extends React.Component {
                                     r={2}
                                     stroke={'blue'}
                                     fill={'white'}
-                                    onPress={(event) => {
-                                        const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
-
-                                        console.log(pageX);
-                                        console.log(pageY);
-                                        console.log(locationX);
-                                        console.log(locationY);
-                                        console.log(`Point (${x1}, ${y1}) is pressed`);
-                                        this.changeInfoIndex(index);
-                                    }}
                                 />
                             </G>
                         )
@@ -117,15 +107,6 @@ export default class HumidityGraph extends React.Component {
                                     r={1}
                                     stroke={'blue'}
                                     fill={'blue'}
-                                    onPress={(event) => {
-                                        const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
-                                        console.log(pageX);
-                                        console.log(pageY);
-                                        console.log(locationX);
-                                        console.log(locationY);
-                                        console.log(`Point (${x1}, ${y1}) is pressed`);
-                                        this.changeInfoIndex(index);
-                                    }}
                                 />
                             </G>
                         )

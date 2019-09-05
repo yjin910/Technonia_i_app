@@ -11,7 +11,7 @@ import * as scale from 'd3-scale'
 import moment from "moment";
 import PropTypes from "prop-types";
 import uuidv1 from 'uuid/v1';
-import { Circle, G } from 'react-native-svg'
+import { Circle, Text, G, Rect, Line } from 'react-native-svg'
 
 import DataText from './components/DataText'
 import LoadingGraph from './components/LoadingGraph'
@@ -43,13 +43,13 @@ export default class GeigerGraph extends React.Component {
         max: PropTypes.number
     };
 
+    componentDidMount = () => {
+        this._isLoaded();
+    }
+
     changeListViewMode = () => {
         let { isListViewMode } = this.state;
         this.setState({ isListViewMode: !isListViewMode });
-    }
-
-    componentDidMount = () => {
-        this._isLoaded();
     }
 
     _isLoaded = () => {
@@ -95,16 +95,6 @@ export default class GeigerGraph extends React.Component {
                                     r={2}
                                     stroke={'green'}
                                     fill={'white'}
-                                    onPress={(event) => {
-                                        const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
-
-                                        console.log(pageX);
-                                        console.log(pageY);
-                                        console.log(locationX);
-                                        console.log(locationY);
-                                        console.log(`Point (${x1}, ${y1}) is pressed`);
-                                        this.changeInfoIndex(index);
-                                    }}
                                 />
                             </G>
                         )
@@ -118,16 +108,6 @@ export default class GeigerGraph extends React.Component {
                                     r={1}
                                     stroke={'green'}
                                     fill={'green'}
-                                    onPress={(event) => {
-                                        const { pageX, pageY, locationX, locationY, } = event.nativeEvent;
-
-                                        console.log(pageX);
-                                        console.log(pageY);
-                                        console.log(locationX);
-                                        console.log(locationY);
-                                        console.log(`Point (${x1}, ${y1}) is pressed`);
-                                        this.changeInfoIndex(index);
-                                    }}
                                 />
                             </G>
                         )
@@ -136,7 +116,7 @@ export default class GeigerGraph extends React.Component {
             }
 
             return (
-                <View style={styles.container}>
+                <Animated.View style={styles.container}>
                     <ScrollView
                         scrollEnabled={true}
                         indicatorStyle={'white'}
@@ -158,7 +138,7 @@ export default class GeigerGraph extends React.Component {
                                 max={max}
                                 scale={scale.scale}
                                 //numberOfTicks={10}
-                                formatLabel={(value) => value}
+                                formatLabel={(value) => `${value}`}
                             />
                             <LineChart
                                 contentInset={contentInset}
@@ -189,19 +169,18 @@ export default class GeigerGraph extends React.Component {
                             return (<ListViewScreen valueStr={valueStr} timeStr={timeStr} key={uuidv1()} />)
                         })}
                     </ScrollView>
-                </View>
+                </Animated.View>
             )
         }
     }
 }
-
 
 const styles = StyleSheet.create({
     root: {
         flex: 1,
     },
     container: {
-        flex: 1
+        flex: 1,
     },
     containerForGraphAndXAxis: {
         flex: 1,
