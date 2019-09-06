@@ -115,6 +115,9 @@ export default class GeigerGraph extends React.Component {
                 })
             }
 
+            let min_grid = (min == 0) ? -0.05 : min;
+            let max_grid = ((max - min) <= 0.5) ? 0.55 : max;
+
             return (
                 <Animated.View style={styles.container}>
                     <ScrollView
@@ -134,8 +137,8 @@ export default class GeigerGraph extends React.Component {
                                     fill: 'grey',
                                     fontSize: 10,
                                 }}
-                                min={min}
-                                max={max}
+                                min={min_grid}
+                                max={max_grid}
                                 scale={scale.scale}
                                 //numberOfTicks={10}
                                 formatLabel={(value) => `${value}`}
@@ -146,8 +149,8 @@ export default class GeigerGraph extends React.Component {
                                 yAccessor={({ item }) => item.y}
                                 xAccessor={({ item }) => item.x}
                                 data={data}
-                                gridMin={min}
-                                gridMax={max}
+                                gridMin={min_grid}
+                                gridMax={max_grid}
                                 animate={true}
                                 key={uuidv1()}
                             >

@@ -32,7 +32,6 @@ export default class GraphButton extends Component {
             <View style={styles.container}>
                 <View style={styles.item} key={uuidv1()}>
                     <View style={styles.linkButtonContainer}>
-                        <Text style={styles.nameText}>{GEIGER_GRAPH_BUTTON_TEXT}</Text>
                         <TouchableOpacity
                             key={uuidv1()}
                             style={styles.itemButton}
@@ -51,6 +50,8 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "white",
         flex: 1,
+        paddingLeft: width / 3,
+        paddingTop: width / 25
     },
     item: {
         flexDirection: 'row',

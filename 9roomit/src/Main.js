@@ -11,7 +11,7 @@ import {
     ActivityIndicator
 } from 'react-native'
 import Drawer from 'react-native-drawer'
-import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation';
+import { createMaterialTopTabNavigator, createAppContainer, StackActions, NavigationActions } from 'react-navigation';
 import uuidv1 from 'uuid/v1';
 
 import TemperatureGraph from './graph/TemperatureGraph'
@@ -21,7 +21,7 @@ import DrawerButton from './graph/components/DrawerButton'
 
 const INTERVAL_TIME = 300000;
 const MENU_IMAGE = require('../assets/menu.png');
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const menu = [
     { title: 'Main' },
@@ -57,6 +57,7 @@ export default class MainScreen extends React.Component {
         this.navigateToHelpScreen = this.navigateToHelpScreen.bind(this);
         this.navigateToCopyrightScreen = this.navigateToCopyrightScreen.bind(this);
         this.navigateToProfileScreen = this.navigateToProfileScreen.bind(this);
+        this.navigateToBLESettings = this.navigateToBLESettings.bind(this);
     }
 
     static navigationOptions = {
@@ -142,7 +143,7 @@ export default class MainScreen extends React.Component {
     }
 
     componentWillUnmount = () => {
-        this.clearInterval();
+        this.removeInterval();
     }
 
     logOut_async = async () => {
@@ -284,8 +285,8 @@ export default class MainScreen extends React.Component {
 
         if (isLoaded) {
             //TODO
-            max_g = ((max_g - min_g) <= 0.5) ? 0.55 : max_g;
-            min_g = (min_g == 0) ? -0.05 : min_g;
+            // max_g = ((max_g - min_g) <= 0.5) ? 0.55 : max_g;
+            // min_g = (min_g == 0) ? -0.05 : min_g;
 
             const Temperature = (props) => (<TemperatureGraph
                 temperatureData={props.screenProps.temperatureData}
@@ -305,8 +306,6 @@ export default class MainScreen extends React.Component {
                 min={props.screenProps.min_g}
                 max={props.screenProps.max_g}
             />);
-
-            //alert(min_g + ', ' + max_g);
 
             const AppNavigator = createMaterialTopTabNavigator({
                 Geiger,

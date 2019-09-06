@@ -27,11 +27,10 @@ export default class WiFiSetting extends React.Component {
         this.state = {
             wifi: '',
             pw: '',
-            uuid: undefined
+            uuid: ''
         }
 
         this.sendWiFiSettings = this.sendWiFiSettings.bind(this);
-        this.goBack = this.goBack.bind(this);
     }
 
     sendWiFiSettings = async () => {
@@ -40,39 +39,25 @@ export default class WiFiSetting extends React.Component {
         if (uuid == '') {
             uuid = await AsyncStorage.getItem('9room@device_uuid');
         }
-        util.sendData_wifi(uuid, wifi, pw, this.goBack);
+        util.sendData_wifi(uuid, wifi, pw);
     }
 
-    getAndSetUUID = () => {
+    componentDidMount = () => {
         const uuid = this.props.navigation.getParam('uuid', '');
         this.setState({ uuid: uuid });
     }
 
-    goBack = () => {
-        this.props.navigation.goBack();
-    }
-
-    componentDidMount = () => {
-        this.getAndSetUUID();
-    }
-
     render() {
-        let {uuid} = this.state;
-        if (!uuid) {
-            this.getAndSetUUID();
-        }
-
         return (
             <KeyboardAvoidingView
                 keyboardVerticalOffset={Platform.select({ ios: 0, android: width / 3 })}
                 style={styles.keyboardAvoidingContainer}
-                behavior={Platform.OS === "ios" ? "padding" : null}
+                behavior={"padding"}
                 enabled>
                 <SafeAreaView style={styles.container}>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <ScrollView>
                             <View style={styles.container}>
-                                <Image style={styles.logoImage} source={require('../../assets/icon.png')} />
                                 <TextInput style={styles.inputBox}
                                     placeholder="Wi-Fi"
                                     placeholderTextColor="#1a3f95"

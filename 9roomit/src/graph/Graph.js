@@ -11,7 +11,7 @@ import {
     ActivityIndicator
 } from 'react-native'
 import Drawer from 'react-native-drawer'
-import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation';
+import { createMaterialTopTabNavigator, createAppContainer, StackActions, NavigationActions } from 'react-navigation';
 import uuidv1 from 'uuid/v1';
 
 import TemperatureGraph from './TemperatureGraph'
@@ -22,7 +22,7 @@ import DrawerButton from './components/DrawerButton'
 const INTERVAL_TIME = 300000;
 const MENU_IMAGE = require('../../assets/menu.png');
 const BACK_IMAGE = require('../../assets/back.png');
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const menu = [
     { title: 'Main' },
@@ -58,7 +58,9 @@ export default class MainScreen extends React.Component {
         this.navigateToCopyrightScreen = this.navigateToCopyrightScreen.bind(this);
         this.navigateToProfileScreen = this.navigateToProfileScreen.bind(this);
         this.navigateToMainScreen = this.navigateToMainScreen.bind(this);
+        this.navigateToBLESettings = this.navigateToBLESettings.bind(this);
         this.goBack = this.goBack.bind(this);
+        this.logOut_async = this.logOut_async.bind(this);
     }
 
     static navigationOptions = {
@@ -139,7 +141,7 @@ export default class MainScreen extends React.Component {
     }
 
     componentWillUnmount = () => {
-        this.clearInterval();
+        this.removeInterval();
     }
 
     logOut_async = async () => {
@@ -170,6 +172,7 @@ export default class MainScreen extends React.Component {
     }
 
     navigateToProfileScreen = async () => {
+        this.closeDrawer();
         let email = await AsyncStorage.getItem('9room@email');
         this.props.navigation.navigate('Profile', { email: email });
     }
@@ -289,8 +292,8 @@ export default class MainScreen extends React.Component {
 
         if (isLoaded) {
             //TODO
-            max_g = ((max_g - min_g) <= 0.5) ? 0.55 : max_g;
-            min_g = (min_g == 0) ? -0.05 : min_g;
+            // max_g = ((max_g - min_g) <= 0.5) ? 0.55 : max_g;
+            // min_g = (min_g == 0) ? -0.05 : min_g;
 
             const Temperature = (props) => (<TemperatureGraph
                 temperatureData={props.screenProps.temperatureData}
@@ -346,7 +349,6 @@ export default class MainScreen extends React.Component {
                                     <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={MENU_IMAGE} />
                                 </TouchableOpacity>
                             </View>
-                            {/* <View style={styles.menuButton} /> */}
                         </View>
                         <GraphApp screenProps={{
                             temperatureData: data_t,

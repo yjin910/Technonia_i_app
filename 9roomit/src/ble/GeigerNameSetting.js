@@ -8,7 +8,8 @@ import {
     NativeModules,
     ListView,
     ScrollView,
-    AsyncStorage
+    AsyncStorage,
+    Dimensions
 } from 'react-native';
 
 let utils = require('./BLEUtil');
@@ -17,6 +18,8 @@ let utils = require('./BLEUtil');
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
+const { width, height } = Dimensions.get('window');
 
 export default class GeigerNameSetting extends React.Component {
     constructor(props) {
@@ -37,8 +40,9 @@ export default class GeigerNameSetting extends React.Component {
     }
 
     sendDeviceName = async (deviceName, uuid) => {
+        //const { deviceName, uuid } = this.state;
         if (uuid == '') {
-            uuid = await AsyncStorage.getItem('9room@device_uuid');
+            uuid = await AsyncStorage.getItem('TEMS@device_uuid');
         }
         utils.sendData_deviceName(uuid, deviceName);
     }
@@ -52,13 +56,12 @@ export default class GeigerNameSetting extends React.Component {
 
     componentDidMount = () => {
         const uuid = this.props.navigation.getParam('uuid', '');
-        this.setState({uuid: uuid});
+        this.setState({ uuid: uuid });
 
         this.handlerDiscover = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', this.handleDiscoverPeripheral);
         this.handlerStop = bleManagerEmitter.addListener('BleManagerStopScan', this.handleStopScan);
         this.handlerDisconnect = bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', this.handleDisconnectedPeripheral);
         this.handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleUpdateValueForCharacteristic);
-        this.goBack = this.goBack.bind(this);
     }
 
     handleDisconnectedPeripheral(data) {
@@ -100,15 +103,11 @@ export default class GeigerNameSetting extends React.Component {
         if (!peripheral) {
             return;
         }
-        let {uuid} = this.state;
 
+        const id = peripheral.id;
         const name = peripheral.name;
 
-        await this.sendDeviceName(name, uuid, this.goBack);
-    }
-
-    goBack = () => {
-        this.props.navigation.goBack();
+        this.sendDeviceName(name, id);
     }
 
     render() {
@@ -116,9 +115,9 @@ export default class GeigerNameSetting extends React.Component {
         let list = Array.from(peripherals.values());
         let dataSource = ds.cloneWithRows(list);
 
-        if (!scanning) {
-            this.startScan();
-        }
+        // if (!scanning) {
+        //     this.startScan();
+        // }
 
         return (
             <View style={styles.container}>
@@ -156,8 +155,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFF',
-        width: window.width,
-        height: window.height
+        width: width,
+        height: height
     },
     scroll: {
         flex: 1,

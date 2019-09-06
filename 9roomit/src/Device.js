@@ -7,6 +7,8 @@ import GraphButton from "./GraphButton";
 
 const { width, height } = Dimensions.get("window");
 
+const IMG = require('../assets/ble_geiger_icon.png');
+
 export default class Device extends Component {
     constructor(props) {
         super(props);
@@ -20,32 +22,40 @@ export default class Device extends Component {
     render() {
         let { deviceNum, onPressed } = this.props;
         return (
-            <View style={{
-                backgroundColor: "white",
-                width: width,
-                height: height / 6,
-                borderBottomColor: "darkgrey",
-                borderBottomWidth: 0.5,
-                flexDirection: "row",
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                paddingLeft: 10,
-                paddingRight: 10,
-            }}>
-                <View style={styles.deviceNumContainer}>
-                    <Text style={styles.deviceNumText}>{deviceNum}</Text>
+            <View style={styles.container}>
+                <View style={styles.imgContainer}>
+                    <Image source={IMG} style={styles.img} />
                 </View>
+                {/* <Text style={styles.deviceNumText}>{deviceNum}</Text> */}
                 <GraphButton deviceNum={deviceNum} onPressed={onPressed}/>
             </View>
         );
     }
 }
 
+
 const styles = StyleSheet.create({
-    deviceNumContainer: {
+    container: {
+        backgroundColor: "white",
+        width: width,
+        height: height / 6,
+        borderBottomColor: "darkgrey",
+        borderBottomWidth: 0.5,
+        flexDirection: "row",
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    imgContainer: {
         paddingTop: 10,
         width: height / 8,
         height: height / 8
+    },
+    img: {
+        width: height / 8,
+        height: height / 8,
+        borderRadius: height / 16,
     },
     deviceNumText: {
         fontSize: width / 20,

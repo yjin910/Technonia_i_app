@@ -12,6 +12,7 @@ import {
 let util = require('./BLEUtil');
 
 const { width, height } = Dimensions.get('window');
+const LOGO_IMAGE = require('../../assets/logo.png');
 
 export default class BLEMenu extends React.Component {
 
@@ -27,6 +28,7 @@ export default class BLEMenu extends React.Component {
         this.navigateToWiFiScreen = this.navigateToWiFiScreen.bind(this);
         this.setConnectedDevice = this.setConnectedDevice.bind(this);
         this.handleConnectionError = this.handleConnectionError.bind(this);
+        this.goBack = this.goBack.bind(this);
     }
 
     componentDidMount = () => {
@@ -52,7 +54,7 @@ export default class BLEMenu extends React.Component {
     }
 
     connectDevice = async () => {
-        let {uuid} = this.state;
+        let { uuid } = this.state;
 
         if (uuid == '') {
             await this.getDeviceNumber();
@@ -64,12 +66,18 @@ export default class BLEMenu extends React.Component {
 
     disconnectDevice = async () => {
         const { uuid } = this.state;
-        if (uuid == '') {
-            await this.getDeviceNumber();
-            uuid = this.state.uuid;
-        }
+        if (uuid == '')
+            uuid = this.props.navigation.getParam('uuid', '');
 
-        util.disconnectDevice(uuid);
+        if (uuid == '') uuid = await AsyncStorage.getItem('9room@device_uuid');
+
+        BleManager.disconnect(uuid)
+            .then(() => {
+                this.setState({ uuid: '', isConnected: false });
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     goBack = () => {
@@ -88,28 +96,28 @@ export default class BLEMenu extends React.Component {
     }
 
     render() {
-        let {isConnected} = this.state;
+        let { isConnected } = this.state;
 
         if (isConnected) {
             return (
                 <View style={styles.container}>
-                    <Image style={styles.logoImage} source={require('../../assets/icon.png')} />
+                    <Image style={styles.logoImage} source={LOGO_IMAGE} />
                     <TouchableOpacity onPress={() => this.navigateToWiFiScreen()} style={styles.button}>
                         <Text style={styles.buttonText}>WiFi Setting</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.navigateToGeigerScreen()} style={styles.button}>
                         <Text style={styles.buttonText}>Device Setting</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.navigateToGeigerScreen()} style={styles.button}>
+                    <TouchableOpacity onPress={() => this.goBack()} style={styles.button}>
                         <Text style={styles.buttonText}>Other device</Text>
                     </TouchableOpacity>
                 </View>
             );
         }
 
-        return(
+        return (
             <View style={styles.container}>
-                <Image style={styles.logoImage} source={require('../../assets/icon.png')} />
+                <Image style={styles.logoImage} source={LOGO_IMAGE} />
                 <View>
                     <Text style={styles.notConnectedText}>Device not connected..</Text>
                 </View>
@@ -125,9 +133,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     logoImage: {
-        width: height / 6,
-        height: height / 6,
-        marginBottom: height / 10,
+        width: height / 3,
+        height: height / 10,
+        marginBottom: height / 7,
         marginTop: height / 20
     },
     button: {

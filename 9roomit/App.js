@@ -11,7 +11,7 @@ import LoginScreen from './src/cognito/Login'
 import SignUpScreen from './src/cognito/Register'
 import MainScreen from './src/Main'
 import ProfileScreen from './src/Profile'
-import BLEManagerScreen from './src/ble/BLEManager'
+import BluetoothManager from './src/ble/BLEManager'
 import BLEMenu from './src/ble/BLEMenu'
 import WiFiSetting from './src/ble/WiFiSetting'
 import GeigerNameSetting from './src/ble/GeigerNameSetting'
@@ -29,7 +29,7 @@ const AppStackNavigator = createStackNavigator({
   Signup: { screen: SignUpScreen },
   Main: { screen: MainScreen },
   Profile: {screen: ProfileScreen},
-  BLEManaer: {screen: BLEManagerScreen},
+  BLEManaer: { screen: BluetoothManager },
   BLEMenu: { screen: BLEMenu },
   WiFiSetting: { screen: WiFiSetting },
   GeigerNameSetting: { screen: GeigerNameSetting },
@@ -41,7 +41,7 @@ const AppStackNavigator = createStackNavigator({
 const AppStackNavigator_signedIn = createStackNavigator({
   Main: { screen: MainScreen },
   Profile: { screen: ProfileScreen },
-  BLEManaer: { screen: BLEManagerScreen },
+  BLEManaer: { screen: BluetoothManager },
   BLEMenu: { screen: BLEMenu },
   WiFiSetting: { screen: WiFiSetting },
   GeigerNameSetting: { screen: GeigerNameSetting },
