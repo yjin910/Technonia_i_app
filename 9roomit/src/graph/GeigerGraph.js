@@ -19,6 +19,7 @@ import LabelText from './components/LabelText'
 import NoData from './components/NoData'
 import ListViewButton from './components/ListViewButton'
 import ListViewScreen from './components/ListViewScreen'
+import RefreshButton from './components/RefreshButton'
 
 
 const { width, height } = Dimensions.get('window');
@@ -40,7 +41,8 @@ export default class GeigerGraph extends React.Component {
         geigerData: PropTypes.array.isRequired,
         g: PropTypes.array.isRequired,
         min: PropTypes.number,
-        max: PropTypes.number
+        max: PropTypes.number,
+        refresh: PropTypes.func.isRequired
     };
 
     componentDidMount = () => {
@@ -126,6 +128,7 @@ export default class GeigerGraph extends React.Component {
                     >
                         <View style={styles.listViewButtonContainer}>
                             <ListViewButton changeListView={this.changeListViewMode} />
+                            <RefreshButton refresh={this.props.refresh} />
                         </View>
                         <LabelText types='g' />
                         <Animated.View style={{ marginLeft: 10, flexDirection: 'row' }}>

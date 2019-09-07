@@ -54,10 +54,13 @@ export default class MainScreen extends React.Component {
 
         this.openDrawer = this.openDrawer.bind(this);
         this.closeDrawer = this.closeDrawer.bind(this);
+
         this.navigateToHelpScreen = this.navigateToHelpScreen.bind(this);
         this.navigateToCopyrightScreen = this.navigateToCopyrightScreen.bind(this);
         this.navigateToProfileScreen = this.navigateToProfileScreen.bind(this);
         this.navigateToBLESettings = this.navigateToBLESettings.bind(this);
+
+        this.refresh = this.refresh.bind(this);
     }
 
     static navigationOptions = {
@@ -179,6 +182,11 @@ export default class MainScreen extends React.Component {
         this.props.navigation.navigate('BLEManaer');
     }
 
+    refresh = async () => {
+        let email = await AsyncStorage.getItem('9room@email');
+        this.fetchData_Async(email);
+    }
+
     fetchData_Async = async (email) => {
         const url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/main/representative?email=${email}`;
         console.log(url);
@@ -293,18 +301,21 @@ export default class MainScreen extends React.Component {
                 t={props.screenProps.ts}
                 min={props.screenProps.min_t}
                 max={props.screenProps.max_t}
+                refresh={props.screenProps.refresh}
             />);
             const Humidity = (props) => (<HumidityGraph
                 humidityData={props.screenProps.humidityData}
                 h={props.screenProps.hs}
                 min={props.screenProps.min_h}
                 max={props.screenProps.max_h}
+                refresh={props.screenProps.refresh}
             />);
             const Geiger = (props) => (<GeigerGraph
                 geigerData={props.screenProps.geigerData}
                 g={props.screenProps.gs}
                 min={props.screenProps.min_g}
                 max={props.screenProps.max_g}
+                refresh={props.screenProps.refresh}
             />);
 
             const AppNavigator = createMaterialTopTabNavigator({
@@ -349,7 +360,8 @@ export default class MainScreen extends React.Component {
                             min_g: min_g,
                             max_t: max_t,
                             max_h: max_h,
-                            max_g: max_g
+                            max_g: max_g,
+                            refresh: this.refresh
                         }} />
                     </Drawer>
                 </SafeAreaView>

@@ -91,7 +91,7 @@ export default class BluetoothManager extends React.Component {
     }
 
     goBack = () => {
-        this.props.navigation.pop();
+        this.props.navigation.goBack();
     }
 
     renderDrawer = () => {

@@ -48,19 +48,17 @@ let sendData_deviceName = (device_uuid, deviceName) => {
 let connectToBLEDevice = (uuid, next, handleError) => {
     BleManager.connect(uuid)
         .then(() => {
-            alert('Success::connectBLEDevice');
             next(uuid);
         })
         .catch((error) => {
             console.log('Connection error', error);
-            alert('Err::connectBLEDevice');
             handleError(error);
         });
 }
 
 
 let startScan = () => {
-    BleManager.scan([], 3, true).then((results) => {
+    BleManager.scan([], 3, true).then(() => {
         console.log('Scanning...');
     });
 }

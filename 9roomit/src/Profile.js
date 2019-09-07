@@ -190,7 +190,7 @@ export default class ProfileScreen extends React.Component {
     }
 
     goBack = () => {
-        this.props.navigation.pop();
+        this.props.navigation.goBack();
     }
 
     render() {

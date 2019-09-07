@@ -214,7 +214,7 @@ export default class TempHumiGraph extends React.Component {
 
     /* Go back to previous screen */
     goBack = () => {
-        this.props.navigation.pop();
+        this.props.navigation.goBack();
     }
 
 
