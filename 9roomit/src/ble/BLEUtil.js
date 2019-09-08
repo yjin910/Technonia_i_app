@@ -41,7 +41,7 @@ let sendData_deviceName = (device_uuid, deviceName) => {
         .then(() => {
             console.log('success');
         })
-        .catch((err) => { alert('error::write deviceName') });
+        .catch((err) => { alert(err) });
 }
 
 

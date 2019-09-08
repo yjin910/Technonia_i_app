@@ -97,6 +97,8 @@ export default class SignUpScreen extends React.Component {
             }).then((data) => {
                 console.log(data);
                 this.alertSuccess();
+                
+                //TODO verification code
             }).catch(err => {
                 this.alertError(err);
             });
@@ -149,7 +151,7 @@ export default class SignUpScreen extends React.Component {
                                     onChangeText={this._addName}
                                     autoCapitalize={'none'}
                                 />
-                                <TouchableOpacity style={styles.buttonBox} onPress={this._signUp.bind(this)}>
+                                <TouchableOpacity style={styles.buttonBox} onPress={() => this._signUp()}>
                                     <Text style={styles.buttonText}>Signup</Text>
                                 </TouchableOpacity>
                                 <View style={styles.textContainer}>

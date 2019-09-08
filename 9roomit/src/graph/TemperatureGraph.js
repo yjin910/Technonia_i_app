@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     listViewButtonContainer: {
-        flex: 1 / 2
+        flex: 1 / 2,
+        flexDirection: 'row'
     }
 });

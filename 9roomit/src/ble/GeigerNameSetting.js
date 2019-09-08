@@ -166,10 +166,11 @@ export default class GeigerNameSetting extends React.Component {
 
     sendDeviceName = async (deviceName, uuid) => {
         //const { deviceName, uuid } = this.state;
-        if (uuid == '') {
-            uuid = await AsyncStorage.getItem('TEMS@device_uuid');
+        let id = uuid
+        if (id == '') {
+            id = await AsyncStorage.getItem('9room@device_uuid');
         }
-        utils.sendData_deviceName(uuid, deviceName);
+        utils.sendData_deviceName(id, deviceName);
     }
 
     componentWillUnmount() {
@@ -180,7 +181,7 @@ export default class GeigerNameSetting extends React.Component {
     }
 
     componentDidMount = () => {
-        const uuid = '??'; //this.props.navigation.getParam('uuid', '');
+        const uuid = this.props.navigation.getParam('uuid', '');
         this.setState({ uuid: uuid, isLoaded: true });
 
         this.handlerDiscover = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', this.handleDiscoverPeripheral);
@@ -231,7 +232,7 @@ export default class GeigerNameSetting extends React.Component {
             return;
         }
 
-        const id = peripheral.id;
+        const id = await AsyncStorage.getItem('9room@device_uuid');
         const name = peripheral.name;
 
         this.sendDeviceName(name, id);

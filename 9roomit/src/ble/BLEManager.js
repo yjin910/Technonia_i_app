@@ -318,16 +318,13 @@ export default class BluetoothManager extends React.Component {
         let Peripherals = list.map(p => {
             let name = p.name;
             //TODO if (name && name != '') {}
-            if (name == undefined || name == null || name == '') name = 'bluetooth device';
-            if (name.length > 16) {
-                name = name.split(' ')[0];
-                if (name.length > 16) name = name.slice(0, 15);
-            }
+            if (name == undefined || name == null || name == '') name = 'N/A';
             return (
                 <TouchableOpacity onPress={() => { this.connectToPeripheral(p) }}>
                     <View style={styles.row}>
-                        <Image source={BLUETOOTH_ICON} style={styles.bleIconImage} />
-                        <Text style={styles.peripheralNameText}>{name}</Text>
+                        {/* <Image source={BLUETOOTH_ICON} style={styles.bleIconImage} /> */}
+                        <Text style={styles.peripheralNameText}>Bluetooth device: </Text>
+                        <Text style={(name.lenght > 16 ? styles.peripheralLongNameText : styles.peripheralNameText)}>{name}</Text>
                     </View>
                 </TouchableOpacity>
             )
@@ -412,6 +409,13 @@ const styles = StyleSheet.create({
     },
     peripheralNameText: {
         fontSize: width / 20,
+        textAlign: 'center',
+        color: '#333333',
+        padding: 10,
+        marginBottom: width / 15
+    },
+    peripheralLongNameText: {
+        fontSize: width / 25,
         textAlign: 'center',
         color: '#333333',
         padding: 10,

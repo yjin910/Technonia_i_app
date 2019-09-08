@@ -117,7 +117,7 @@ export default class GeigerGraph extends React.Component {
                 })
             }
 
-            let min_grid = (min == 0) ? -0.05 : min;
+            let min_grid = (min == 0) ? - 0.05 : min;
             let max_grid = ((max - min) <= 0.5) ? 0.55 : max;
 
             return (
@@ -130,7 +130,6 @@ export default class GeigerGraph extends React.Component {
                             <ListViewButton changeListView={this.changeListViewMode} />
                             <RefreshButton refresh={this.props.refresh} />
                         </View>
-                        <LabelText types='g' />
                         <Animated.View style={{ marginLeft: 10, flexDirection: 'row' }}>
                             <YAxis
                                 data={g}
@@ -193,6 +192,7 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     listViewButtonContainer: {
-        flex: 1 / 2
+        flex: 1 / 2,
+        flexDirection: 'row'
     }
 });

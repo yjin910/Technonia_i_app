@@ -23,10 +23,10 @@ export default class Device extends Component {
         let { deviceNum, onPressed } = this.props;
         return (
             <View style={styles.container}>
-                <View style={styles.imgContainer}>
+                {/* <View style={styles.imgContainer}>
                     <Image source={IMG} style={styles.img} />
-                </View>
-                {/* <Text style={styles.deviceNumText}>{deviceNum}</Text> */}
+                </View> */}
+                <Text style={styles.deviceNumText}>{deviceNum}</Text>
                 <GraphButton deviceNum={deviceNum} onPressed={onPressed}/>
             </View>
         );

@@ -82,7 +82,7 @@ export default class MainScreen extends React.Component {
         let email = await AsyncStorage.getItem('9room@email');
 
         this.fetchData_Async(email);
-        this.setInterval(email);
+        //this.setInterval(email);
     }
 
     setInterval = (email) => {
