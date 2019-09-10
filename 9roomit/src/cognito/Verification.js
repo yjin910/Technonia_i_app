@@ -22,10 +22,10 @@ import { StackActions, NavigationActions } from 'react-navigation';
 const { width, height } = Dimensions.get('window');
 const LOGO_IMAGE = require('../../assets/logo.png')
 
-export default class LoginScreen extends React.Component {
+export default class VerificationScreen extends React.Component {
 
     static navigationOptions = {
-        title: 'groom',
+        title: 'Verification',
         headerStyle: {
             backgroundColor: '#1a3f95',
         },
@@ -33,48 +33,40 @@ export default class LoginScreen extends React.Component {
     };
 
     state = {
-        email: undefined,
-        pw: undefined
+        verificationCode: undefined,
+        user: {},
+        email: ''
     }
 
-    storeAsync = async (email, pw) => {
-        try {
-            await AsyncStorage.setItem('9room@email', email);
-        } catch {
-            alert('failed to store id');
+    componentDidMount = () => {
+        let email = this.props.navigation.getParam('email');
+        this.setState({ email: email});
+    }
+
+    _verify = async () => {
+        const { verificationCode, email } = this.state;
+
+        if (verificationCode.length > 0) {
+            Auth.confirmSignUp(email, code, {
+                // Optional. Force user confirmation irrespective of existing alias. By default set to True.
+                forceAliasCreation: true
+            }).then(data => console.log(data)) //TODO navigate to LoginScreen if success
+            .catch(err => console.log(err));
         }
     }
 
-    _signIn = async () => {
-        const { email, pw } = this.state;
+    _resendCode = async () => {
+        let {email} = this.state;
 
-        if (pw.length < 8) alert('Minimum password length is 8!');
-
-        if (email && pw) {
-            Auth.signIn(email, pw).then(user => {
-                console.log(user);
-                this.storeAsync(email, pw);
-
-                const resetAction = StackActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({
-                        routeName: 'Main',
-                        params: { email: email }
-                    })],
-                });
-
-                this.props.navigation.dispatch(resetAction);
-            }).catch(err => {
-                console.log(err);
-                alert('Sign in failed');
-            })
-        }
+        Auth.resendSignUp(email).then(() => {
+            alert('Code resent successfully');
+        }).catch(e => {
+            console.log(e);
+        });
     }
 
 
     render() {
-        let navigate = this.props.navigation.navigate;
-
         return (
             <KeyboardAvoidingView
                 keyboardVerticalOffset={Platform.select({ ios: 0, android: width / 3 })}
@@ -93,26 +85,14 @@ export default class LoginScreen extends React.Component {
                                     keyboardType="email-address"
                                     onChangeText={(email) => this.setState({ email: email })}
                                     value={this.state.email}
-                                    onSubmitEditing={() => this.password.focus()}
                                     autoCapitalize={'none'}
                                 />
-                                <TextInput style={styles.inputBox}
-                                    placeholder="Password"
-                                    secureTextEntry={true}
-                                    placeholderTextColor="#1a3f95"
-                                    onChangeText={(pw) => this.setState({ pw: pw })}
-                                    value={this.state.pw}
-                                    ref={(input) => this.password = input}
-                                    autoCapitalize={'none'}
-                                />
-                                <TouchableOpacity style={styles.loginButtonBox} onPress={() => this._signIn()}>
-                                    <Text style={styles.buttonText}>Login</Text>
+                                <TouchableOpacity style={styles.buttonBox} onPress={() => this._verify()}>
+                                    <Text style={styles.buttonText}>Verify</Text>
                                 </TouchableOpacity>
-                                <View style={styles.signupTextContainer}>
-                                    <TouchableOpacity onPress={() => navigate('Signup')}>
-                                        <Text style={styles.signupButton}> Register </Text>
-                                    </TouchableOpacity>
-                                </View>
+                                <TouchableOpacity style={styles.buttonBox} onPress={() => this._resendCode()}>
+                                    <Text style={styles.buttonText}>Resend Code</Text>
+                                </TouchableOpacity>
                             </View>
                         </ScrollView>
                     </TouchableWithoutFeedback>
@@ -148,7 +128,7 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         marginVertical: 5
     },
-    loginButtonBox: {
+    buttonBox: {
         width: width * 4 / 5,
         height: height / 15,
         backgroundColor: '#a8a9ad',

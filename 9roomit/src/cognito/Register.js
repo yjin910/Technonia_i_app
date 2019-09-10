@@ -17,6 +17,7 @@ import {
     Alert
 } from 'react-native';
 import { Auth } from 'aws-amplify';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 const { width, height } = Dimensions.get('window');
 const LOGO_IMAGE = require('../../assets/logo.png')
@@ -53,12 +54,23 @@ export default class SignUpScreen extends React.Component {
     }
 
     alertSuccess = async () => {
+        let {email} = this.state;
+
         Alert.alert(
             'Sign up success',
             'Please check your email to confirm the sign up',
             [
                 { text: 'OK', onPress: () => {
-                    this.props.navigation.navigate('Login')
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({
+                            routeName: 'Verification',
+                            params: { email: email }
+                        })],
+                    });
+
+                    this.props.navigation.dispatch(resetAction);
+
                 } , style: 'default' }
             ],
             { cancelable: false },
@@ -97,8 +109,6 @@ export default class SignUpScreen extends React.Component {
             }).then((data) => {
                 console.log(data);
                 this.alertSuccess();
-                
-                //TODO verification code
             }).catch(err => {
                 this.alertError(err);
             });

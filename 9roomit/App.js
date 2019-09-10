@@ -18,6 +18,7 @@ import GeigerNameSetting from './src/ble/GeigerNameSetting'
 import CopyrightScreen from './src/additional/CopyrightScreen'
 import HelpScreen from './src/additional/HelpScreen'
 import GraphScreen from './src/graph/Graph'
+import VerificationScreen from './src/cognito/Verification'
 
 import Amplify from 'aws-amplify';
 import awsConfig from './src/cognito/config';
@@ -27,6 +28,7 @@ Amplify.configure(awsConfig);
 const AppStackNavigator = createStackNavigator({
   Login: { screen: LoginScreen },
   Signup: { screen: SignUpScreen },
+  Verification: {screen: VerificationScreen},
   Main: { screen: MainScreen },
   Profile: {screen: ProfileScreen},
   BLEManaer: { screen: BluetoothManager },
@@ -47,6 +49,7 @@ const AppStackNavigator_signedIn = createStackNavigator({
   GeigerNameSetting: { screen: GeigerNameSetting },
   Login: { screen: LoginScreen },
   Signup: { screen: SignUpScreen },
+  Verification: { screen: VerificationScreen },
   Help: { screen: HelpScreen },
   Copyright: { screen: CopyrightScreen },
   Graph: { screen: GraphScreen }
