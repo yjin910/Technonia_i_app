@@ -280,9 +280,9 @@ export default class GeigerNameSetting extends React.Component {
                 <Drawer
                     ref={(ref) => this.drawer = ref}
                     content={this.renderDrawer()}
-                    type='static'
+                    type='overlay'
                     tapToClose={true}
-                    openDrawerOffset={0.35}
+                    openDrawerOffset={0.7}
                     styles={drawerStyles}
                     side={'right'}
                 >

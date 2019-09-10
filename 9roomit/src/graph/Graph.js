@@ -327,9 +327,24 @@ export default class MainScreen extends React.Component {
             />);
 
             const AppNavigator = createMaterialTopTabNavigator({
-                Geiger,
-                Temperature,
-                Humidity
+                G: {
+                    screen: Geiger,
+                    navigationOptions: {
+                        tabBarLabel: <Text style={{ fontSize: width / 30, color: 'white' }}> Geiger </Text>,
+                    }
+                },
+                T: {
+                    screen: Temperature,
+                    navigationOptions: {
+                        tabBarLabel: <Text style={{ fontSize: width / 30, color: 'white' }}> Temperature </Text>,
+                    }
+                },
+                H: {
+                    screen: Humidity,
+                    navigationOptions: {
+                        tabBarLabel: <Text style={{ fontSize: width / 30, color: 'white' }}> Humidity </Text>,
+                    }
+                }
             });
 
             const GraphApp = createAppContainer(AppNavigator);
@@ -339,9 +354,9 @@ export default class MainScreen extends React.Component {
                     <Drawer
                         ref={(ref) => this.drawer = ref}
                         content={this.renderDrawer()}
-                        type='static'
+                        type='overlay'
                         tapToClose={true}
-                        openDrawerOffset={0.35}
+                        openDrawerOffset={0.7}
                         styles={drawerStyles}
                         side={'right'}
                     >

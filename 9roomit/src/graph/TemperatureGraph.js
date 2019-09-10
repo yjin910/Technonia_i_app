@@ -81,40 +81,50 @@ export default class TemperatureGraph extends React.Component {
                 }
             ]
 
+            let min_grid = min;
+            let max_grid = max;
+
+            if (max - min < 4) {
+                min_grid -= 2;
+                max_grid += 2;
+            }
+
             let startDate = moment(temperatureData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
             let endDate = moment(temperatureData[temperatureData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
-                    let x1 = x(value.x);
-                    let y1 = y(value.y);
+                    if (x(value.x) && y(value.y)) {
+                        let x1 = x(value.x);
+                        let y1 = y(value.y);
 
-                    if (value.y == min || value.y == max) {
-                        return (
-                            <G key={uuidv1()}>
-                                <Circle
-                                    key={uuidv1()}
-                                    cx={x1}
-                                    cy={y1}
-                                    r={2}
-                                    stroke={'red'}
-                                    fill={'white'}
-                                />
-                            </G>
-                        )
-                    } else {
-                        return (
-                            <G key={uuidv1()}>
-                                <Circle
-                                    key={uuidv1()}
-                                    cx={x1}
-                                    cy={y1}
-                                    r={1}
-                                    stroke={'red'}
-                                    fill={'red'}
-                                />
-                            </G>
-                        )
+                        if (value.y == min || value.y == max) {
+                            return (
+                                <G key={uuidv1()}>
+                                    <Circle
+                                        key={uuidv1()}
+                                        cx={x1}
+                                        cy={y1}
+                                        r={2}
+                                        stroke={'red'}
+                                        fill={'white'}
+                                    />
+                                </G>
+                            )
+                        } else {
+                            return (
+                                <G key={uuidv1()}>
+                                    <Circle
+                                        key={uuidv1()}
+                                        cx={x1}
+                                        cy={y1}
+                                        r={1}
+                                        stroke={'red'}
+                                        fill={'red'}
+                                    />
+                                </G>
+                            )
+                        }
                     }
                 })
             }
@@ -139,8 +149,8 @@ export default class TemperatureGraph extends React.Component {
                                     fill: 'grey',
                                     fontSize: 10,
                                 }}
-                                min={min}
-                                max={max}
+                                min={min_grid}
+                                max={max_grid}
                                 scale={scale.scale}
                                 //numberOfTicks={10}
                                 formatLabel={(value) => value}
@@ -151,13 +161,13 @@ export default class TemperatureGraph extends React.Component {
                                 yAccessor={({ item }) => item.y}
                                 xAccessor={({ item }) => item.x}
                                 data={data}
-                                gridMin={min}
-                                gridMax={max}
+                                gridMin={min_grid}
+                                gridMax={max_grid}
                                 animate={true}
                                 key={uuidv1()}
                             >
                                 <Grid />
-                                <Decorator />
+                                {/* <Decorator /> */}
                             </LineChart>
                         </Animated.View>
                         <DataText
@@ -179,6 +189,7 @@ export default class TemperatureGraph extends React.Component {
         }
     }
 }
+
 
 const styles = StyleSheet.create({
     root: {

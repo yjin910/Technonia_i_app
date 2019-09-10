@@ -212,9 +212,9 @@ export default class ProfileScreen extends React.Component {
                     <Drawer
                         ref={(ref) => this.drawer = ref}
                         content={this.renderDrawer()}
-                        type='static'
+                        type='overlay'
                         tapToClose={true}
-                        openDrawerOffset={0.35}
+                        openDrawerOffset={0.7}
                         styles={drawerStyles}
                         side={'right'}
                     >
@@ -234,7 +234,6 @@ export default class ProfileScreen extends React.Component {
                                     <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={MENU_IMAGE} />
                                 </TouchableOpacity>
                             </View>
-                            {/* <View style={styles.menuButton} /> */}
                         </View>
                         <View style={styles.devicesContainer}>
                             {Devices}

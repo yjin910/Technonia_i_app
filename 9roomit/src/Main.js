@@ -217,7 +217,7 @@ export default class MainScreen extends React.Component {
 
                         switch (type) {
                             case 't':
-                                let t = parseFloat(d['val']);
+                                let t = d['val'];
                                 if (isNotFirst_t) {
                                     min_t = (min_t < t) ? min_t : t;
                                     max_t = (max_t > t) ? max_t : t;
@@ -232,7 +232,7 @@ export default class MainScreen extends React.Component {
 
                                 break;
                             case 'h':
-                                let h = parseFloat(d['val']);
+                                let h = d['val'];
 
                                 if (isNotFirst_h) {
                                     min_h = (min_h < h) ? min_h : h;
@@ -248,7 +248,7 @@ export default class MainScreen extends React.Component {
 
                                 break;
                             case 'g':
-                                let g = parseFloat(d['val']);
+                                let g = d['val'];
 
                                 if (isNotFirst_g) {
                                     min_g = (min_g < g) ? min_g : g;
@@ -292,9 +292,6 @@ export default class MainScreen extends React.Component {
         let { data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded } = this.state;
 
         if (isLoaded) {
-            //TODO
-            // max_g = ((max_g - min_g) <= 0.5) ? 0.55 : max_g;
-            // min_g = (min_g == 0) ? -0.05 : min_g;
 
             const Temperature = (props) => (<TemperatureGraph
                 temperatureData={props.screenProps.temperatureData}
@@ -319,9 +316,24 @@ export default class MainScreen extends React.Component {
             />);
 
             const AppNavigator = createMaterialTopTabNavigator({
-                Geiger,
-                Temperature,
-                Humidity
+                G: {
+                    screen: Geiger,
+                    navigationOptions: {
+                        tabBarLabel: <Text style={{ fontSize: width / 30, color: 'white' }}> Geiger </Text>,
+                    }
+                },
+                T: {
+                    screen: Temperature,
+                    navigationOptions: {
+                        tabBarLabel: <Text style={{ fontSize: width / 30, color: 'white' }}> Temperature </Text>,
+                    }
+                },
+                H: {
+                    screen: Humidity,
+                    navigationOptions: {
+                        tabBarLabel: <Text style={{ fontSize: width / 30, color: 'white' }}> Humidity </Text>,
+                    }
+                }
             });
 
             const GraphApp = createAppContainer(AppNavigator);
@@ -331,9 +343,9 @@ export default class MainScreen extends React.Component {
                     <Drawer
                         ref={(ref) => this.drawer = ref}
                         content={this.renderDrawer()}
-                        type='static'
+                        type='overlay'
                         tapToClose={true}
-                        openDrawerOffset={0.35}
+                        openDrawerOffset={0.7}
                         styles={drawerStyles}
                         side={'right'}
                     >

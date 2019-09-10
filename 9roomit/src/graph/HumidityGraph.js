@@ -81,37 +81,47 @@ export default class HumidityGraph extends React.Component {
             let endDate = moment(humidityData[humidityData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
 
 
+            let min_grid = min;
+            let max_grid = max;
+            if (max - min < 2) {
+                max_grid += 1;
+                min_grid -= 1;
+            }
+
+
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
-                    let x1 = x(value.x);
-                    let y1 = y(value.y);
+                    if (x(value.x) && y(value.y)) {
+                        let x1 = x(value.x);
+                        let y1 = y(value.y);
 
-                    if (value.y == min || value.y == max) {
-                        return (
-                            <G key={uuidv1()}>
-                                <Circle
-                                    key={uuidv1()}
-                                    cx={x1}
-                                    cy={y1}
-                                    r={2}
-                                    stroke={'blue'}
-                                    fill={'white'}
-                                />
-                            </G>
-                        )
-                    } else {
-                        return (
-                            <G key={uuidv1()}>
-                                <Circle
-                                    key={uuidv1()}
-                                    cx={x1}
-                                    cy={y1}
-                                    r={1}
-                                    stroke={'blue'}
-                                    fill={'blue'}
-                                />
-                            </G>
-                        )
+                        if (value.y == min || value.y == max) {
+                            return (
+                                <G key={uuidv1()}>
+                                    <Circle
+                                        key={uuidv1()}
+                                        cx={x1}
+                                        cy={y1}
+                                        r={2}
+                                        stroke={'blue'}
+                                        fill={'white'}
+                                    />
+                                </G>
+                            )
+                        } else {
+                            return (
+                                <G key={uuidv1()}>
+                                    <Circle
+                                        key={uuidv1()}
+                                        cx={x1}
+                                        cy={y1}
+                                        r={1}
+                                        stroke={'blue'}
+                                        fill={'blue'}
+                                    />
+                                </G>
+                            )
+                        }
                     }
                 })
             }
@@ -136,8 +146,8 @@ export default class HumidityGraph extends React.Component {
                                     fill: 'grey',
                                     fontSize: 10,
                                 }}
-                                min={min}
-                                max={max}
+                                min={min_grid}
+                                max={max_grid}
                                 scale={scale.scale}
                                 //numberOfTicks={10}
                                 formatLabel={(value) => value}
@@ -148,13 +158,13 @@ export default class HumidityGraph extends React.Component {
                                 yAccessor={({ item }) => item.y}
                                 xAccessor={({ item }) => item.x}
                                 data={data}
-                                gridMin={min}
-                                gridMax={max}
+                                gridMin={min_grid}
+                                gridMax={max_grid}
                                 animate={true}
                                 key={uuidv1()}
                             >
                                 <Grid />
-                                <Decorator />
+                                {/* <Decorator /> */}
                             </LineChart>
                         </Animated.View>
                         <DataText
@@ -176,6 +186,7 @@ export default class HumidityGraph extends React.Component {
         }
     }
 }
+
 
 const styles = StyleSheet.create({
     root: {

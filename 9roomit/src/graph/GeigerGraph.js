@@ -83,42 +83,49 @@ export default class GeigerGraph extends React.Component {
 
             const Decorator = ({ x, y, data }) => {
                 return data[0]['data'].map((value, index) => {
-                    let x1 = x(value.x);
-                    let y1 = y(value.y);
+                    if (x(value.x) && y(value.y)) {
+                        let x1 = x(value.x);
+                        let y1 = y(value.y);
 
-                    if (value.y == min || value.y == max) {
+                        if (value.y == min || value.y == max) {
 
-                        return (
-                            <G key={uuidv1()}>
-                                <Circle
-                                    key={uuidv1()}
-                                    cx={x1}
-                                    cy={y1}
-                                    r={2}
-                                    stroke={'green'}
-                                    fill={'white'}
-                                />
-                            </G>
-                        )
-                    } else {
-                        return (
-                            <G key={uuidv1()}>
-                                <Circle
-                                    key={uuidv1()}
-                                    cx={x1}
-                                    cy={y1}
-                                    r={1}
-                                    stroke={'green'}
-                                    fill={'green'}
-                                />
-                            </G>
-                        )
+                            return (
+                                <G key={uuidv1()}>
+                                    <Circle
+                                        key={uuidv1()}
+                                        cx={x1}
+                                        cy={y1}
+                                        r={2}
+                                        stroke={'green'}
+                                        fill={'white'}
+                                    />
+                                </G>
+                            )
+                        } else {
+                            return (
+                                <G key={uuidv1()}>
+                                    <Circle
+                                        key={uuidv1()}
+                                        cx={x1}
+                                        cy={y1}
+                                        r={1}
+                                        stroke={'green'}
+                                        fill={'green'}
+                                    />
+                                </G>
+                            )
+                        }
                     }
                 })
             }
 
-            let min_grid = (min == 0) ? - 0.05 : min;
-            let max_grid = ((max - min) <= 0.5) ? 0.55 : max;
+            let min_grid = min;
+            let max_grid = max;
+
+            if (max - min < 0.5) {
+                max_grid += 0.35;
+                min_grid -= 0.1;
+            }
 
             return (
                 <Animated.View style={styles.container}>
@@ -157,7 +164,7 @@ export default class GeigerGraph extends React.Component {
                                 key={uuidv1()}
                             >
                                 <Grid />
-                                <Decorator />
+                                {/* <Decorator /> */}
                             </LineChart>
                         </Animated.View>
                         <DataText
@@ -180,6 +187,7 @@ export default class GeigerGraph extends React.Component {
     }
 }
 
+
 const styles = StyleSheet.create({
     root: {
         flex: 1,
@@ -193,6 +201,7 @@ const styles = StyleSheet.create({
     },
     listViewButtonContainer: {
         flex: 1 / 2,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom: width / 20
     }
 });
