@@ -63,9 +63,9 @@ export default class App extends React.Component {
   }
 
   checkLoggedIn = async () => {
-    const id = await AsyncStorage.getItem('9room@email');
+    const autoLogin = await AsyncStorage.getItem('9room@autoLogin');
 
-    if (id) {
+    if (autoLogin) {
       this.setState({ isLoggedIn: true, isLoaded: true });
     } else {
       this.setState({isLoaded: true});

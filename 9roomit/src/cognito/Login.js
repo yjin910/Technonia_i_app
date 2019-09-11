@@ -43,10 +43,32 @@ export default class LoginScreen extends React.Component {
 
     storeAsync = async (email, pw) => {
         try {
-            await AsyncStorage.setItem('9room@email', email);
+            let {autoLogin, storeEmail} = this.state;
+
+            if (autoLogin) {
+                await AsyncStorage.setItem('9room@autoLogin', autoLogin);
+            }
+
+            if (storeEmail) {
+                await AsyncStorage.setItem('9room@email', email);
+                await AsyncStorage.setItem('9room@pw', pw);
+            }
         } catch {
             alert('failed to store id');
         }
+    }
+
+    getEmail_async = async () => {
+        const email = await AsyncStorage.getItem('9room@email');
+        const pw = await AsyncStorage.getItem('9room@pw');
+
+        if (email && pw) {
+            this.setState({email: email, pw: pw});
+        }
+    }
+
+    componentDidMount = () => {
+        this.getEmail_async();
     }
 
     _signIn = async () => {
@@ -112,27 +134,47 @@ export default class LoginScreen extends React.Component {
                                 <TouchableOpacity style={styles.loginButtonBox} onPress={() => this._signIn()}>
                                     <Text style={styles.buttonText}>Login</Text>
                                 </TouchableOpacity>
+                                <View style={{flexDirection: 'row'}}>
+                                    <Checkbox
+                                        label='auto login'
+                                        onChange={(checked) => {
+                                            if (checked) {
+                                                if (this.state.storeEmail) {
+                                                    this.setState({ autoLogin: !this.state.autoLogin })
+                                                } else {
+                                                    this.setState({ autoLogin: !this.state.autoLogin, storeEmail: true })
+                                                }
+                                            } else {
+                                                this.setState({ autoLogin: !this.state.autoLogin })
+                                            }
+                                        }}
+                                        checked={this.state.autoLogin}
+                                        checkboxStyle={{ tintColor: 'white' }}
+                                        containerStyle={{ padding: 10, flexDirection: 'row' }}
+                                        labelStyle={{ color: 'white' }}
+                                    />
+                                    <Checkbox
+                                        label='store email'
+                                        onChange={(checked) => {
+                                            if (this.state.autoLogin) {
+                                                if (!checked) {
+                                                    this.setState({ storeEmail: !this.state.storeEmail })
+                                                }
+                                            } else {
+                                                this.setState({ storeEmail: !this.state.storeEmail })
+                                            }
+                                        }}
+                                        checked={this.state.storeEmail}
+                                        checkboxStyle={{ tintColor: 'white' }}
+                                        containerStyle={{ padding: 10, flexDirection: 'row' }}
+                                        labelStyle={{ color: 'white' }}
+                                    />
+                                </View>
                                 <View style={styles.signupTextContainer}>
                                     <TouchableOpacity onPress={() => navigate('Signup')}>
                                         <Text style={styles.signupButton}> Register </Text>
                                     </TouchableOpacity>
                                 </View>
-                                <Checkbox
-                                    label='auto login'
-                                    onChange={(checked) => this.setState({ autoLogin: !this.state.autoLogin })}
-                                    checked={this.state.autoLogin}
-                                    checkboxStyle={{ tintColor: 'white' }}
-                                    containerStyle={{ padding: 10, flexDirection: 'row' }}
-                                    labelStyle={{ color: 'white' }}
-                                />
-                                <Checkbox
-                                    label='store email'
-                                    onChange={(checked) => this.setState({ storeEmail: !this.state.storeEmail })}
-                                    checked={this.state.storeEmail}
-                                    checkboxStyle={{ tintColor: 'white' }}
-                                    containerStyle={{ padding: 10, flexDirection: 'row' }}
-                                    labelStyle={{ color: 'white' }}
-                                />
                             </View>
                         </ScrollView>
                     </TouchableWithoutFeedback>
