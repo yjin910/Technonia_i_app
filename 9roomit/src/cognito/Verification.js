@@ -47,11 +47,23 @@ export default class VerificationScreen extends React.Component {
         const { verificationCode, email } = this.state;
 
         if (verificationCode.length > 0) {
-            Auth.confirmSignUp(email, code, {
+            Auth.confirmSignUp(email, verificationCode, {
                 // Optional. Force user confirmation irrespective of existing alias. By default set to True.
                 forceAliasCreation: true
-            }).then(data => console.log(data)) //TODO navigate to LoginScreen if success
-            .catch(err => console.log(err));
+            }).then(data => {
+                console.log(data)
+
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({
+                        routeName: 'Login'
+                    })],
+                });
+
+                this.props.navigation.dispatch(resetAction);
+            }).catch(err => {
+                console.log(err)
+            });
         }
     }
 
@@ -79,12 +91,12 @@ export default class VerificationScreen extends React.Component {
                             <View style={styles.container}>
                                 <Image style={styles.logoImage} source={LOGO_IMAGE} />
                                 <TextInput style={styles.inputBox}
-                                    placeholder="Email address"
+                                    placeholder="Verification code"
                                     placeholderTextColor="#1a3f95"
                                     selectionColor="#fff"
                                     keyboardType="email-address"
-                                    onChangeText={(email) => this.setState({ email: email })}
-                                    value={this.state.email}
+                                    onChangeText={(verificationCode) => this.setState({ verificationCode: verificationCode })}
+                                    value={this.state.verificationCode}
                                     autoCapitalize={'none'}
                                 />
                                 <TouchableOpacity style={styles.buttonBox} onPress={() => this._verify()}>
@@ -142,17 +154,5 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: "#ffffff",
         textAlign: 'center'
-    },
-    signupTextContainer: {
-        flexGrow: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingVertical: width / 20,
-        flexDirection: 'row'
-    },
-    signupButton: {
-        color: "#ffffff",
-        fontSize: width / 20,
-        fontWeight: '500'
     }
 });
