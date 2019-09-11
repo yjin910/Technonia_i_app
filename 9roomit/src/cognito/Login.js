@@ -17,6 +17,8 @@ import {
 } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { StackActions, NavigationActions } from 'react-navigation';
+import Checkbox from 'react-native-modest-checkbox'
+
 
 
 const { width, height } = Dimensions.get('window');
@@ -34,7 +36,9 @@ export default class LoginScreen extends React.Component {
 
     state = {
         email: undefined,
-        pw: undefined
+        pw: undefined,
+        autoLogin: false,
+        storeEmail: false,
     }
 
     storeAsync = async (email, pw) => {
@@ -113,6 +117,22 @@ export default class LoginScreen extends React.Component {
                                         <Text style={styles.signupButton}> Register </Text>
                                     </TouchableOpacity>
                                 </View>
+                                <Checkbox
+                                    label='auto login'
+                                    onChange={(checked) => this.setState({ autoLogin: !this.state.autoLogin })}
+                                    checked={this.state.autoLogin}
+                                    checkboxStyle={{ tintColor: 'white' }}
+                                    containerStyle={{ padding: 10, flexDirection: 'row' }}
+                                    labelStyle={{ color: 'white' }}
+                                />
+                                <Checkbox
+                                    label='store email'
+                                    onChange={(checked) => this.setState({ storeEmail: !this.state.storeEmail })}
+                                    checked={this.state.storeEmail}
+                                    checkboxStyle={{ tintColor: 'white' }}
+                                    containerStyle={{ padding: 10, flexDirection: 'row' }}
+                                    labelStyle={{ color: 'white' }}
+                                />
                             </View>
                         </ScrollView>
                     </TouchableWithoutFeedback>
