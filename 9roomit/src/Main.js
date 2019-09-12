@@ -18,9 +18,14 @@ import TemperatureGraph from './graph/TemperatureGraph'
 import HumidityGraph from './graph/HumidityGraph'
 import GeigerGraph from './graph/GeigerGraph'
 import DrawerButton from './graph/components/DrawerButton'
+import Footer from './Footer'
 
 const INTERVAL_TIME = 300000;
+
 const MENU_IMAGE = require('../assets/menu.png');
+const BACK_IMAGE = require('../assets/back.png');
+const LOGO_IMAGE = require('../assets/logo.png');
+
 const { width, height } = Dimensions.get('window');
 
 const menu = [
@@ -49,7 +54,34 @@ export default class MainScreen extends React.Component {
             max_t: 0,
             max_h: 0,
             max_g: 0,
-            isLoaded: false
+            isLoaded: false,
+            customPicker: false,
+            datePickerData: [
+                {
+                    label: '1일',
+                    value: 1,
+                    size: 15,
+                    color: 'dodgerblue'
+                },
+                {
+                    label: '1주일',
+                    value: 2,
+                    size: 15,
+                    color: 'dodgerblue'
+                },
+                {
+                    label: '1달',
+                    value: 3,
+                    size: 15,
+                    color: 'dodgerblue'
+                },
+                {
+                    label: '사용자 지정',
+                    value: 4,
+                    size: 15,
+                    color: 'dodgerblue'
+                },
+            ]
         }
 
         this.openDrawer = this.openDrawer.bind(this);
@@ -61,6 +93,8 @@ export default class MainScreen extends React.Component {
         this.navigateToBLESettings = this.navigateToBLESettings.bind(this);
 
         this.refresh = this.refresh.bind(this);
+        this.changeDatePickerData = this.changeDatePickerData.bind(this);
+        this.fetchDataWithCustomTerm_async = this.fetchDataWithCustomTerm_async.bind(this);
     }
 
     static navigationOptions = {
@@ -72,9 +106,21 @@ export default class MainScreen extends React.Component {
 
         if (email != '') {
             this.fetchData_Async(email);
-            this.setInterval(email);
+            //TODO this.setInterval(email);
         } else {
             this.getEmail_async();
+        }
+    }
+
+    changeDatePickerData = async (data) => {
+        let selectedVal = data.find(e => e.selected == true).value;
+
+        if (selectedVal == 4) {
+            this.setState({ datePickerData: data, customPicker: true })
+        } else {
+            this.setState({ datePickerData: data, customPicker: false });
+            let email = await AsyncStorage.getItem('9room@email');
+            this.fetchData_Async(email, selectedVal);
         }
     }
 
@@ -82,7 +128,7 @@ export default class MainScreen extends React.Component {
         let email = await AsyncStorage.getItem('9room@email');
 
         this.fetchData_Async(email);
-        //this.setInterval(email);
+        //TODO this.setInterval(email);
     }
 
     setInterval = (email) => {
@@ -187,9 +233,32 @@ export default class MainScreen extends React.Component {
         this.fetchData_Async(email);
     }
 
-    fetchData_Async = async (email) => {
-        const url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/main/representative?email=${email}`;
-        console.log(url);
+    fetchDataWithCustomTerm_async = async (term) => {
+        let email = await AsyncStorage.getItem('9room@email');
+        this.fetchData_Async(email, 4, term);
+    }
+
+    fetchData_Async = async (email, val, term) => {
+        let url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/main/representative?email=${email}`;
+
+        if (val) {
+            switch (val) {
+                case 1 :
+                    url += `&term=14` //1 day = 24 hours
+                    break;
+                case 2 :
+                    url += `&term=168` //1 week = 168 hours
+                    break;
+                case 3 :
+                    url += `&term=720` //30 days = 720 hours
+                    break;
+                case 4:
+                    url += `&term=${term}`
+                    break;
+                default :
+                    console.log('Invalid value!');
+            }
+        }
 
         fetch(url)
             .then(res => res.json())
@@ -289,7 +358,7 @@ export default class MainScreen extends React.Component {
     }
 
     render() {
-        let { data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded } = this.state;
+        let { data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded, datePickerData, customPicker } = this.state;
 
         if (isLoaded) {
 
@@ -299,6 +368,10 @@ export default class MainScreen extends React.Component {
                 min={props.screenProps.min_t}
                 max={props.screenProps.max_t}
                 refresh={props.screenProps.refresh}
+                pickerData={props.screenProps.pickerData}
+                changePickerData={props.screenProps.changePickerData}
+                customPicker={props.screenProps.customPicker}
+                fetchData={props.screenProps.fetchData}
             />);
             const Humidity = (props) => (<HumidityGraph
                 humidityData={props.screenProps.humidityData}
@@ -306,6 +379,10 @@ export default class MainScreen extends React.Component {
                 min={props.screenProps.min_h}
                 max={props.screenProps.max_h}
                 refresh={props.screenProps.refresh}
+                pickerData={props.screenProps.pickerData}
+                changePickerData={props.screenProps.changePickerData}
+                customPicker={props.screenProps.customPicker}
+                fetchData={props.screenProps.fetchData}
             />);
             const Geiger = (props) => (<GeigerGraph
                 geigerData={props.screenProps.geigerData}
@@ -313,6 +390,10 @@ export default class MainScreen extends React.Component {
                 min={props.screenProps.min_g}
                 max={props.screenProps.max_g}
                 refresh={props.screenProps.refresh}
+                pickerData={props.screenProps.pickerData}
+                changePickerData={props.screenProps.changePickerData}
+                customPicker={props.screenProps.customPicker}
+                fetchData={props.screenProps.fetchData}
             />);
 
             const AppNavigator = createMaterialTopTabNavigator({
@@ -352,13 +433,19 @@ export default class MainScreen extends React.Component {
                         <View style={styles.headerContainer}>
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
-                                    onPress={() => this.openDrawer()}
-                                    style={{ tintColor: 'white', width: width / 10, height: width / 10 }}>
-                                    <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={MENU_IMAGE} />
+                                    onPress={() => this.goBack()}
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
+                                    <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
                                 </TouchableOpacity>
                             </View>
-                            <Text style={styles.headerTitle}>Graph</Text>
-                            <View style={styles.menuButton} />
+                            <Image style={{ width: width / 3, height: width / 9 }} source={LOGO_IMAGE} />
+                            <View style={styles.menuButton}>
+                                <TouchableOpacity
+                                    onPress={() => this.openDrawer()}
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
+                                    <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                         <GraphApp screenProps={{
                             temperatureData: data_t,
@@ -373,8 +460,13 @@ export default class MainScreen extends React.Component {
                             max_t: max_t,
                             max_h: max_h,
                             max_g: max_g,
-                            refresh: this.refresh
+                            refresh: this.refresh,
+                            pickerData: datePickerData,
+                            changePickerData: this.changeDatePickerData,
+                            customPicker: customPicker,
+                            fetchData: this.fetchDataWithCustomTerm_async
                         }} />
+                        <Footer/>
                     </Drawer>
                 </SafeAreaView>
             )
@@ -415,8 +507,8 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         height: 44,
-        flexDirection: 'row-reverse',
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         backgroundColor: '#3B5998',
     },
     headerTitle: {

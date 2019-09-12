@@ -50,7 +50,26 @@ export default class MainScreen extends React.Component {
             max_t: 0,
             max_h: 0,
             max_g: 0,
-            isLoaded: false
+            isLoaded: false,
+            dateTimeRangeValue: 1,
+            datePickerData: [
+                {
+                    label: '1일',
+                    value: 1
+                },
+                {
+                    label: '1주일',
+                    value: 2
+                },
+                {
+                    label: '1달',
+                    value: 3
+                },
+                {
+                    label: '사용자 지정',
+                    value: 4
+                },
+            ]
         }
 
         this.openDrawer = this.openDrawer.bind(this);
@@ -65,6 +84,7 @@ export default class MainScreen extends React.Component {
         this.logOut_async = this.logOut_async.bind(this);
 
         this.refresh = this.refresh.bind(this);
+        this.changeDatePickerData = this.changeDatePickerData.bind(this);
     }
 
     static navigationOptions = {
@@ -76,6 +96,12 @@ export default class MainScreen extends React.Component {
         this.fetchData_Async(deviceNum);
 
         this.setInterval();
+    }
+
+    changeDatePickerData = (data) => {
+        let selectedVal = data.find(e => e.selected == true);
+        alert(selectedVal)
+        this.setState({ datePickerData: data, dateTimeRangeValue: selectedVal });
     }
 
     setInterval = () => {
@@ -193,6 +219,7 @@ export default class MainScreen extends React.Component {
     }
 
     fetchData_Async = async (deviceNum) => {
+        //TODO date range
         const url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/getdata?u=${deviceNum}`;
         console.log(url);
 

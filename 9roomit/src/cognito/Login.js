@@ -46,15 +46,16 @@ export default class LoginScreen extends React.Component {
             let {autoLogin, storeEmail} = this.state;
 
             if (autoLogin) {
-                await AsyncStorage.setItem('9room@autoLogin', autoLogin);
+                await AsyncStorage.setItem('9room@autoLogin', 'true');
             }
 
             if (storeEmail) {
                 await AsyncStorage.setItem('9room@email', email);
                 await AsyncStorage.setItem('9room@pw', pw);
             }
-        } catch {
-            alert('failed to store id');
+        } catch(err) {
+            alert(err);
+            //alert('failed to store id');
         }
     }
 

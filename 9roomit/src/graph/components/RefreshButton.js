@@ -29,7 +29,7 @@ export default class RefreshButton extends React.Component {
                     onPress={() => refresh()}
                     style={styles.button}
                 >
-                    <Text style={styles.buttonText}>Refresh</Text>
+                    <Text style={styles.buttonText}>REFRESH</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -39,16 +39,17 @@ export default class RefreshButton extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'flex-end',
+        alignItems: 'center',
         marginTop: width / 40
     },
     buttonText: {
-        fontSize: width / 25
+        fontSize: width / 25,
+        color: 'white'
     },
     button: {
-        width: width / 5,
+        width: width / 5 + 10,
         height: width / 13,
-        backgroundColor: '#a8a9ad',
+        backgroundColor: 'dodgerblue', //'#a8a9ad',
         borderColor: '#1a3f95',
         borderWidth: 0.7,
         borderRadius: 13,
