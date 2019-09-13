@@ -13,12 +13,13 @@ import {
 import Drawer from 'react-native-drawer'
 import { createMaterialTopTabNavigator, createAppContainer, StackActions, NavigationActions } from 'react-navigation';
 import uuidv1 from 'uuid/v1';
-import Footer from '../Footer';
 
 import TemperatureGraph from './TemperatureGraph'
 import HumidityGraph from './HumidityGraph'
 import GeigerGraph from './GeigerGraph'
 import DrawerButton from './components/DrawerButton'
+import Footer from '../Footer';
+
 
 const INTERVAL_TIME = 300000;
 const MENU_IMAGE = require('../../assets/menu.png');
@@ -288,13 +289,12 @@ export default class MainScreen extends React.Component {
 
                         switch (type) {
                             case 't':
-                                let t = parseFloat(d['val']);
+                                let t = d['val'];
                                 if (isNotFirst_t) {
                                     min_t = (min_t < t) ? min_t : t;
-                                } else min_t = t;
-                                if (max_t) {
                                     max_t = (max_t > t) ? max_t : t;
                                 } else {
+                                    min_t = t;
                                     max_t = t;
                                     isNotFirst_t = true;
                                 }
@@ -304,14 +304,13 @@ export default class MainScreen extends React.Component {
 
                                 break;
                             case 'h':
-                                let h = parseFloat(d['val']);
+                                let h = d['val'];
 
                                 if (isNotFirst_h) {
                                     min_h = (min_h < h) ? min_h : h;
-                                } else min_h = h;
-                                if (isNotFirst_h) {
                                     max_h = (max_h > h) ? max_h : h;
                                 } else {
+                                    min_h = h;
                                     max_h = h;
                                     isNotFirst_h = true;
                                 }
@@ -321,14 +320,13 @@ export default class MainScreen extends React.Component {
 
                                 break;
                             case 'g':
-                                let g = parseFloat(d['val']);
+                                let g = d['val'];
 
                                 if (isNotFirst_g) {
                                     min_g = (min_g < g) ? min_g : g;
-                                } else min_g = g;
-                                if (isNotFirst_g) {
                                     max_g = (max_g > g) ? max_g : g;
                                 } else {
+                                    min_g = g;
                                     max_g = g;
                                     isNotFirst_g = true;
                                 }
@@ -366,9 +364,6 @@ export default class MainScreen extends React.Component {
         let { data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded, datePickerData, customPicker } = this.state;
 
         if (isLoaded) {
-            //TODO
-            // max_g = ((max_g - min_g) <= 0.5) ? 0.55 : max_g;
-            // min_g = (min_g == 0) ? -0.05 : min_g;
 
             const Temperature = (props) => (<TemperatureGraph
                 temperatureData={props.screenProps.temperatureData}
@@ -442,7 +437,14 @@ export default class MainScreen extends React.Component {
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.goBack()}
-                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30 }}>
+                                    style={{ 
+                                        tintColor: 'white',
+                                        width: width / 9,
+                                        height: width / 9,
+                                        marginRight: width / 30,
+                                        justifyContent: 'center'
+                                    }}
+                                >
                                     <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
                                 </TouchableOpacity>
                             </View>
@@ -450,7 +452,12 @@ export default class MainScreen extends React.Component {
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.openDrawer()}
-                                    style={{ tintColor: 'white', width: width / 9, height: width / 9 }}>
+                                    style={{
+                                        tintColor: 'white',
+                                        width: width / 9,
+                                        height: width / 9,
+                                        justifyContent: 'center'
+                                    }}>
                                     <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
                                 </TouchableOpacity>
                             </View>
@@ -513,7 +520,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#3B5998',
     },
     headerContainer: {
-        height: height / 10,
+        height: 44,
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: '#3B5998',
