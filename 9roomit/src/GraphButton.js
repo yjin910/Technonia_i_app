@@ -30,16 +30,14 @@ export default class GraphButton extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.item} key={uuidv1()}>
-                    <View style={styles.linkButtonContainer}>
-                        <TouchableOpacity
-                            key={uuidv1()}
-                            style={styles.itemButton}
-                            activeOpacity={0.7}
-                            onPress={this.changePage.bind(this)}>
-                            <Text style={styles.linkText}>{'graph'}</Text>
-                        </TouchableOpacity>
-                    </View>
+                <View style={styles.linkButtonContainer}>
+                    <TouchableOpacity
+                        key={uuidv1()}
+                        style={styles.itemButton}
+                        activeOpacity={0.7}
+                        onPress={this.changePage.bind(this)}>
+                        <Text style={styles.linkText}>{'데이터 조회'}</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -50,36 +48,17 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "white",
         flex: 1,
-        paddingLeft: width / 3,
-        paddingTop: width / 25
-    },
-    item: {
-        flexDirection: 'row',
-        paddingTop: height / 50,
-        paddingLeft: width / 30,
-        justifyContent: 'space-between'
-    },
-    itemID: {
-        color: "#ffffff",
-        fontSize: width / 20,
-        marginRight: width / 30,
-        textAlign: 'left'
+        paddingTop: width / 20
     },
     linkButtonContainer: {
         flexDirection: 'row',
-        marginRight: width / 20
     },
     linkText: {
         color: '#1a3f95',
         fontSize: width / 20
     },
-    nameText: {
-        color: 'white',
-        fontSize: width / 20,
-        paddingRight: width / 100
-    },
     itemButton: {
-        width: width / 6,
+        width: width / 4,
         height: width / 13,
         backgroundColor: 'darkgrey', //'#a8a9ad',
         borderColor: 'darkgrey',

@@ -18,11 +18,13 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 import Device from './Device'
 import DrawerButton from './graph/components/DrawerButton'
+import Footer from './Footer'
 
 
 const { width, height } = Dimensions.get('window');
 const MENU_IMAGE = require('../assets/menu.png');
 const BACK_IMAGE = require('../assets/back.png');
+const LOGO_IMAGE = require('../assets/logo.png');
 
 const menu = [
     { title: 'Main' },
@@ -199,7 +201,14 @@ export default class ProfileScreen extends React.Component {
         if (isLoaded) {
             let Devices = devices.map(d => {
                 return (
-                    <Device key={uuidv1()} onPressed={this.navigateToGraphScreen} deviceNum={d} />
+                    <Device
+                        key={uuidv1()}
+                        onPressed={this.navigateToGraphScreen}
+                        deviceNum={d}
+                        currentGeiger={0.1}
+                        currentTemp={25}
+                        currentHumi={58}
+                    />
                 )
             });
 
@@ -222,16 +231,16 @@ export default class ProfileScreen extends React.Component {
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.goBack()}
-                                    style={{ tintColor: 'white', width: width / 10, height: width / 10, marginRight: width / 30 }}>
-                                    <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={BACK_IMAGE} />
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
+                                    <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
                                 </TouchableOpacity>
                             </View>
-                            <Text style={styles.headerTitle}>Graph</Text>
+                            <Image style={{ width: width / 3, height: width / 9 }} source={LOGO_IMAGE} />
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.openDrawer()}
-                                    style={{ tintColor: 'white', width: width / 10, height: width / 10 }}>
-                                    <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={MENU_IMAGE} />
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
+                                    <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
                                 </TouchableOpacity>
                             </View>
                         </View>

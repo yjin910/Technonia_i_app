@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Dimensions, Text } from "react-native";
+import {
+    StyleSheet,
+    View,
+    Dimensions,
+    Text,
+    Image
+} from "react-native";
 import PropTypes from "prop-types";
 
 import GraphButton from "./GraphButton";
@@ -16,18 +22,29 @@ export default class Device extends Component {
 
     static propTypes = {
         deviceNum: PropTypes.string.isRequired,
-        onPressed: PropTypes.func.isRequired
+        onPressed: PropTypes.func.isRequired,
+        currentGeiger: PropTypes.number.isRequired,
+        currentTemp: PropTypes.number.isRequired,
+        currentHumi: PropTypes.number.isRequired
     };
 
     render() {
-        let { deviceNum, onPressed } = this.props;
+        let { deviceNum, onPressed, currentGeiger, currentTemp, currentHumi } = this.props;
         return (
             <View style={styles.container}>
                 {/* <View style={styles.imgContainer}>
                     <Image source={IMG} style={styles.img} />
                 </View> */}
-                <Text style={styles.deviceNumText}>{deviceNum}</Text>
-                <GraphButton deviceNum={deviceNum} onPressed={onPressed}/>
+                <View>
+                    <Text style={styles.labelText}>Device</Text>
+                    <Text style={styles.deviceNumText}>{': ' + deviceNum}</Text>
+                </View>
+                <View style={styles.itemContainer}>
+                    <GraphButton deviceNum={deviceNum} onPressed={onPressed}/>
+                    <Text style={styles.valueText}>{`현재 방사능 : ${currentGeiger} μSv`}</Text>
+                    <Text style={styles.valueText}>{`현재 온도  : ${currentTemp} °C`}</Text>
+                    <Text style={styles.valueText}>{`현재 습도  : ${currentHumi} %`}</Text>
+                </View>
             </View>
         );
     }
@@ -60,5 +77,17 @@ const styles = StyleSheet.create({
     deviceNumText: {
         fontSize: width / 20,
         color: 'darkslategrey'
+    },
+    itemContainer: {
+        flex: 1,
+        marginLeft: width / 4
+    },
+    labelText: {
+        color: 'black',
+        fontSize: width / 20
+    },
+    valueText: {
+        color: 'darkslategrey',
+        fontSize: width / 22
     }
 });
