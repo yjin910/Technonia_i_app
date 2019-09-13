@@ -112,6 +112,10 @@ export default class MainScreen extends React.Component {
         }
     }
 
+    goBack = () => {
+        //TODO 종료하시겠습니까?
+    }
+
     changeDatePickerData = async (data) => {
         let selectedVal = data.find(e => e.selected == true).value;
 
@@ -253,7 +257,7 @@ export default class MainScreen extends React.Component {
                     url += `&term=720` //30 days = 720 hours
                     break;
                 case 4:
-                    url += `&term=${term}`
+                    if (term) url += `&term=${term}`
                     break;
                 default :
                     console.log('Invalid value!');
