@@ -430,7 +430,7 @@ export default class MainScreen extends React.Component {
                         content={this.renderDrawer()}
                         type='overlay'
                         tapToClose={true}
-                        openDrawerOffset={0.7}
+                        openDrawerOffset={0.6}
                         styles={drawerStyles}
                         side={'right'}
                     >

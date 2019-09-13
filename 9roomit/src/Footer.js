@@ -9,7 +9,7 @@ import {
 
 
 const { width } = Dimensions.get('window');
-const APP_ICON = require('../assets/app_icon.png');
+const GROOM_ICON = require('../assets/groom.png');
 
 const FOOTER_HEIGHT = width / 13;
 
@@ -21,7 +21,7 @@ export default class Footer extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Image style={styles.img} source={APP_ICON}></Image>
+                <Image style={styles.img} source={GROOM_ICON}></Image>
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>groom monitoring</Text>
                     <Text style={styles.versionText}>V0.91</Text>
