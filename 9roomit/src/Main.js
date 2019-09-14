@@ -265,8 +265,8 @@ export default class MainScreen extends React.Component {
     }
 
     refresh = async () => {
-        let email = await AsyncStorage.getItem('9room@email');
-        this.fetchData_Async(email);
+        let { url } = this.state;
+        if (url != '') this.processDataFetching_async(url);
     }
 
     fetchDataWithCustomTerm_async = async (term) => {
@@ -296,6 +296,10 @@ export default class MainScreen extends React.Component {
             }
         }
 
+        this.processDataFetching_async(url);
+    }
+
+    processDataFetching_async = async (url) => {
         fetch(url)
             .then(res => res.json())
             .then(
@@ -372,6 +376,7 @@ export default class MainScreen extends React.Component {
                     }
 
                     this.setState({
+                        url: url,
                         data_t: data_t,
                         data_h: data_h,
                         data_g: data_g,

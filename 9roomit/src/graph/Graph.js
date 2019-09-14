@@ -41,6 +41,7 @@ export default class MainScreen extends React.Component {
         super(props);
 
         this.state = {
+            url: '',
             data_t: [],
             data_h: [],
             data_g: [],
@@ -233,8 +234,8 @@ export default class MainScreen extends React.Component {
     }
 
     refresh = async () => {
-        let deviceNum = this.props.navigation.getParam('deviceNum', '');
-        this.fetchData_Async(deviceNum);
+        let {url} = this.state;
+        if (url != '') this.processDataFetching_async(url);
     }
 
     fetchDataWithCustomTerm_async = async (term) => {
@@ -244,7 +245,7 @@ export default class MainScreen extends React.Component {
 
     fetchData_Async = async (deviceNum, val, term) => {
         const url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/getdata?u=${deviceNum}`;
-        
+
         if (val) {
             switch (val) {
                 case 1:
@@ -264,6 +265,10 @@ export default class MainScreen extends React.Component {
             }
         }
 
+        this.processDataFetching_async();
+    }
+
+    processDataFetching_async = async (url) => {
         fetch(url)
             .then(res => res.json())
             .then(
@@ -340,6 +345,7 @@ export default class MainScreen extends React.Component {
                     }
 
                     this.setState({
+                        url: url,
                         data_t: data_t,
                         data_h: data_h,
                         data_g: data_g,
