@@ -6,7 +6,6 @@ import {
   StyleSheet
 } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
-import SplashScreen from 'react-native-splash-screen'
 
 import LoginScreen from './src/cognito/Login'
 import SignUpScreen from './src/cognito/Register'
@@ -75,10 +74,6 @@ export default class App extends React.Component {
 
   componentWillMount = () => {
     this.checkLoggedIn();
-  }
-
-  componentDidMount = () => {
-    SplashScreen.hide();
   }
 
   render() {

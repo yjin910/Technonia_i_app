@@ -138,7 +138,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-splash-screen')
     implementation project(':amazon-cognito-identity-js')
     implementation project(':react-native-svg')
     implementation project(':react-native-gesture-handler')
