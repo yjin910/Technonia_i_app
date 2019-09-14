@@ -238,52 +238,6 @@ export default class BLEMenu extends React.Component {
                         styles={drawerStyles}
                         side={'right'}
                     >
-                        <View style={styles.container}>
-                            <View style={styles.headerContainer}>
-                                <View style={styles.menuButton}>
-                                    <TouchableOpacity
-                                        onPress={() => this.goBack()}
-                                        style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
-                                        <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
-                                    </TouchableOpacity>
-                                </View>
-                                <Image style={{ width: width / 3, height: height / 12 - 15, marginTop: 10 }} source={LOGO_IMAGE} />
-                                <View style={styles.menuButton}>
-                                    <TouchableOpacity
-                                        onPress={() => this.openDrawer()}
-                                        style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
-                                        <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            <TouchableOpacity onPress={() => this.navigateToWiFiScreen()} style={styles.button}>
-                                <Text style={styles.buttonText}>WiFi Setting</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.navigateToGeigerScreen()} style={styles.button}>
-                                <Text style={styles.buttonText}>Device Setting</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.goBack()} style={styles.button}>
-                                <Text style={styles.buttonText}>Other device</Text>
-                            </TouchableOpacity>
-                            <Footer/>
-                        </View>
-                    </Drawer>
-                </SafeAreaView>
-            );
-        }
-
-        return (
-            <SafeAreaView style={styles.root}>
-                <Drawer
-                    ref={(ref) => this.drawer = ref}
-                    content={this.renderDrawer()}
-                    type='overlay'
-                    tapToClose={true}
-                    openDrawerOffset={0.6}
-                    styles={drawerStyles}
-                    side={'right'}
-                >
-                    <View style={styles.container}>
                         <View style={styles.headerContainer}>
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
@@ -301,11 +255,57 @@ export default class BLEMenu extends React.Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        <View style={styles.container}>
+                            <TouchableOpacity onPress={() => this.navigateToWiFiScreen()} style={styles.button}>
+                                <Text style={styles.buttonText}>WiFi Setting</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.navigateToGeigerScreen()} style={styles.button}>
+                                <Text style={styles.buttonText}>Device Setting</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.goBack()} style={styles.button}>
+                                <Text style={styles.buttonText}>Other device</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Footer />
+                    </Drawer>
+                </SafeAreaView>
+            );
+        }
+
+        return (
+            <SafeAreaView style={styles.root}>
+                <Drawer
+                    ref={(ref) => this.drawer = ref}
+                    content={this.renderDrawer()}
+                    type='overlay'
+                    tapToClose={true}
+                    openDrawerOffset={0.6}
+                    styles={drawerStyles}
+                    side={'right'}
+                >
+                    <View style={styles.headerContainer}>
+                        <View style={styles.menuButton}>
+                            <TouchableOpacity
+                                onPress={() => this.goBack()}
+                                style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
+                                <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
+                            </TouchableOpacity>
+                        </View>
+                        <Image style={{ width: width / 3, height: height / 12 - 15, marginTop: 10 }} source={LOGO_IMAGE} />
+                        <View style={styles.menuButton}>
+                            <TouchableOpacity
+                                onPress={() => this.openDrawer()}
+                                style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
+                                <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={styles.container}>
                         <View>
                             <Text style={styles.notConnectedText}>Device not connected..</Text>
                         </View>
-                        <Footer/>
                     </View>
+                    <Footer />
                 </Drawer>
             </SafeAreaView>
         )
@@ -326,11 +326,13 @@ const drawerStyles = {
 const styles = StyleSheet.create({
     root: {
         flex: 1,
+        backgroundColor: 'white'
     },
     container: {
-        backgroundColor: '#1a3f95',
-        flexGrow: 1,
+        backgroundColor: 'white',
+        flex: 1,
         alignItems: 'center',
+        justifyContent: 'center'
     },
     button: {
         width: width / 5 * 4,
@@ -338,7 +340,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#a8a9ad',
         borderRadius: 25,
         paddingVertical: width / 20,
-        marginVertical: width / 20,
+        marginVertical: width / 15,
         justifyContent: 'center'
     },
     buttonText: {
@@ -359,12 +361,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: '#3B5998',
-    },
-    headerTitle: {
-        flex: 1.0,
-        textAlign: 'center',
-        alignSelf: 'center',
-        color: 'white'
     },
     menuButton: {
         marginLeft: 8,

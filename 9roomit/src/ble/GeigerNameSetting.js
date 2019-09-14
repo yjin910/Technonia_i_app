@@ -31,6 +31,7 @@ const BLUETOOTH_ICON = require('../../assets/icon_bluetooth.png');
 const MAIN_GEIGER_ICON = require('../../assets/main_geiger.png');
 const BACK_IMAGE = require('../../assets/back.png');
 const MENU_IMAGE = require('../../assets/menu.png');
+const LOGO_IMAGE = require('../../assets/logo.png');
 
 const { width, height } = Dimensions.get('window');
 
@@ -274,7 +275,7 @@ export default class GeigerNameSetting extends React.Component {
     }
 
     render() {
-        let { peripherals, scanning, isLoaded } = this.state;
+        let { peripherals, scanning, isLoaded, refreshing } = this.state;
         let list = Array.from(peripherals.values());
 
         if (!isLoaded) {
