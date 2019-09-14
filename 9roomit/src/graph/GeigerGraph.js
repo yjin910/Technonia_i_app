@@ -206,7 +206,7 @@ export default class GeigerGraph extends React.Component {
                         indicatorStyle={'white'}
                     >
                         <View style={styles.datePickerContainer}>
-                            <Text style={styles.text}>조회기간: </Text>
+                            <Text style={styles.text}>조회기간 </Text>
                             <RadioGroup
                                 radioButtons={pickerData}
                                 onPress={changePickerData}
