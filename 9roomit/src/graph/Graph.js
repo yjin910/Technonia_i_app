@@ -437,27 +437,15 @@ export default class MainScreen extends React.Component {
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.goBack()}
-                                    style={{ 
-                                        tintColor: 'white',
-                                        width: width / 9,
-                                        height: width / 9,
-                                        marginRight: width / 30,
-                                        justifyContent: 'center'
-                                    }}
-                                >
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
                                     <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
                                 </TouchableOpacity>
                             </View>
-                            <Image style={{ width: width / 3, height: width / 9 }} source={LOGO_IMAGE} />
+                            <Image style={{ width: width / 3, height: height / 12 - 15, marginTop: 10 }} source={LOGO_IMAGE} />
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.openDrawer()}
-                                    style={{
-                                        tintColor: 'white',
-                                        width: width / 9,
-                                        height: width / 9,
-                                        justifyContent: 'center'
-                                    }}>
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
                                     <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
                                 </TouchableOpacity>
                             </View>
@@ -520,7 +508,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#3B5998',
     },
     headerContainer: {
-        height: 44,
+        height: height / 12,
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: '#3B5998',

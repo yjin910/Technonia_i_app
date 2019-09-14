@@ -243,7 +243,7 @@ export default class TemperatureGraph extends React.Component {
                             />
                             <LineChart
                                 contentInset={contentInset}
-                                style={{ height: height / 5 * 2, width: width / 3 * 2 }}
+                                style={{ height: height / 8 * 3, width: width / 3 * 2 }}
                                 yAccessor={({ item }) => item.y}
                                 xAccessor={({ item }) => item.x}
                                 data={data}
