@@ -6,13 +6,32 @@ import {
     AsyncStorage,
     TouchableOpacity,
     Dimensions,
-    Image
+    Image,
+    SafeAreaView
 } from 'react-native';
+import Drawer from 'react-native-drawer'
+import uuidv1 from 'uuid/v1';
+import { StackActions, NavigationActions } from 'react-navigation';
+
+import DrawerButton from '../graph/components/DrawerButton'
+import Footer from '../Footer';
 
 let util = require('./BLEUtil');
 
 const { width, height } = Dimensions.get('window');
+
 const LOGO_IMAGE = require('../../assets/logo.png');
+const BACK_IMAGE = require('../../assets/back.png');
+const MENU_IMAGE = require('../../assets/menu.png');
+
+const menu = [
+    { title: 'Main' },
+    { title: 'Profile' },
+    { title: 'Setting' },
+    { title: 'Log out' },
+    { title: 'Help' },
+    { title: 'Copyright' },
+]
 
 export default class BLEMenu extends React.Component {
 
@@ -29,6 +48,118 @@ export default class BLEMenu extends React.Component {
         this.setConnectedDevice = this.setConnectedDevice.bind(this);
         this.handleConnectionError = this.handleConnectionError.bind(this);
         this.goBack = this.goBack.bind(this);
+
+        this.goBack_Drawer = this.goBack_Drawer.bind(this);
+        this.logOut_async = this.logOut_async.bind(this);
+        this.navigateToMainScreen = this.navigateToMainScreen.bind(this);
+        this.navigateToHelpScreen = this.navigateToHelpScreen.bind(this);
+        this.navigateToCopyrightScreen = this.navigateToCopyrightScreen.bind(this);
+        this.navigateToProfileScreen = this.navigateToProfileScreen.bind(this);
+
+        this._successDisconnect = this._successDisconnect.bind(this);
+    }
+
+    static navigationOptions = {
+        header: null
+    };
+
+    openDrawer() {
+        this.drawer.open()
+    }
+
+    closeDrawer() {
+        this.drawer.close()
+    }
+
+    goBack_Drawer = () => {
+        this.disconnectDevice();
+        this.closeDrawer();
+        this.props.navigation.goBack();
+    }
+
+    logOut_async = async () => {
+        this.disconnectDevice();
+
+        await AsyncStorage.removeItem('9room@email');
+        await AsyncStorage.removeItem('9room@autoLogin');
+
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })],
+        });
+
+        this.props.navigation.dispatch(resetAction);
+    }
+
+    navigateToMainScreen = async () => {
+        this.disconnectDevice();
+
+        this.closeDrawer();
+        let email = await AsyncStorage.getItem('9room@email');
+        this.props.navigation.navigate('Main', { email: email });
+    }
+
+    navigateToHelpScreen = () => {
+        this.disconnectDevice();
+
+        this.closeDrawer();
+        this.props.navigation.navigate('Help');
+    }
+
+    navigateToCopyrightScreen = () => {
+        this.disconnectDevice();
+
+        this.closeDrawer();
+        this.props.navigation.navigate('Copyright');
+    }
+
+    navigateToProfileScreen = async () => {
+        this.disconnectDevice();
+
+        this.closeDrawer();
+        let email = await AsyncStorage.getItem('9room@email');
+        this.props.navigation.navigate('Profile', { email: email });
+    }
+
+    renderDrawer = () => {
+        const MENU_VIEW = menu.map((item, index) => {
+            let title = item.title;
+            let onPress;
+
+            switch (title) {
+                case 'Setting':
+                    onPress = this.goBack_Drawer;
+                    break;
+                case 'Log out':
+                    onPress = this.logOut_async;
+                    break;
+                case 'Main':
+                    onPress = this.navigateToMainScreen;
+                    break;
+                case 'Profile':
+                    onPress = this.navigateToProfileScreen;
+                    break;
+                case 'Help':
+                    onPress = this.navigateToHelpScreen;
+                    break;
+                case 'Copyright':
+                    onPress = this.navigateToCopyrightScreen;
+                    break;
+                default:
+                    console.log('Invalid title: ', title);
+                    onPress = null;
+            }
+
+            return (<DrawerButton onPress={onPress} title={title} key={uuidv1()} />);
+        });
+
+        return (
+            <SafeAreaView style={styles.drawerContainer}>
+                <View style={styles.drawerContainer}>
+                    {MENU_VIEW}
+                </View>
+            </SafeAreaView>
+        );
     }
 
     componentDidMount = () => {
@@ -65,6 +196,10 @@ export default class BLEMenu extends React.Component {
         util.connectBLEDevice(uuid, this.setConnectedDevice, this.handleConnectionError);
     }
 
+    _successDisconnect = () => {
+        this.setState({ uuid: '', isConnected: false });
+    }
+
     disconnectDevice = async () => {
         const { uuid } = this.state;
         if (uuid == '')
@@ -72,13 +207,7 @@ export default class BLEMenu extends React.Component {
 
         if (uuid == '') uuid = await AsyncStorage.getItem('9room@device_uuid');
 
-        BleManager.disconnect(uuid)
-            .then(() => {
-                this.setState({ uuid: '', isConnected: false });
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+        util.disconnectBLEDevice(uuid, this._successDisconnect);
     }
 
     goBack = () => {
@@ -101,29 +230,98 @@ export default class BLEMenu extends React.Component {
 
         if (isConnected) {
             return (
-                <View style={styles.container}>
-                    <Image style={styles.logoImage} source={LOGO_IMAGE} />
-                    <TouchableOpacity onPress={() => this.navigateToWiFiScreen()} style={styles.button}>
-                        <Text style={styles.buttonText}>WiFi Setting</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.navigateToGeigerScreen()} style={styles.button}>
-                        <Text style={styles.buttonText}>Device Setting</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.goBack()} style={styles.button}>
-                        <Text style={styles.buttonText}>Other device</Text>
-                    </TouchableOpacity>
-                </View>
+                <SafeAreaView style={styles.root}>
+                    <Drawer
+                        ref={(ref) => this.drawer = ref}
+                        content={this.renderDrawer()}
+                        type='overlay'
+                        tapToClose={true}
+                        openDrawerOffset={0.6}
+                        styles={drawerStyles}
+                        side={'right'}
+                    >
+                        <View style={styles.container}>
+                            <View style={styles.headerContainer}>
+                                <View style={styles.menuButton}>
+                                    <TouchableOpacity
+                                        onPress={() => this.goBack()}
+                                        style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
+                                        <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
+                                    </TouchableOpacity>
+                                </View>
+                                <Image style={{ width: width / 3, height: height / 12 - 15, marginTop: 10 }} source={LOGO_IMAGE} />
+                                <View style={styles.menuButton}>
+                                    <TouchableOpacity
+                                        onPress={() => this.openDrawer()}
+                                        style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
+                                        <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            <TouchableOpacity onPress={() => this.navigateToWiFiScreen()} style={styles.button}>
+                                <Text style={styles.buttonText}>WiFi Setting</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.navigateToGeigerScreen()} style={styles.button}>
+                                <Text style={styles.buttonText}>Device Setting</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.goBack()} style={styles.button}>
+                                <Text style={styles.buttonText}>Other device</Text>
+                            </TouchableOpacity>
+                            <Footer/>
+                        </View>
+                    </Drawer>
+                </SafeAreaView>
             );
         }
 
         return (
-            <View style={styles.container}>
-                <Image style={styles.logoImage} source={LOGO_IMAGE} />
-                <View>
-                    <Text style={styles.notConnectedText}>Device not connected..</Text>
-                </View>
-            </View>
+            <SafeAreaView style={styles.root}>
+                <Drawer
+                    ref={(ref) => this.drawer = ref}
+                    content={this.renderDrawer()}
+                    type='overlay'
+                    tapToClose={true}
+                    openDrawerOffset={0.6}
+                    styles={drawerStyles}
+                    side={'right'}
+                >
+                    <View style={styles.container}>
+                        <View style={styles.headerContainer}>
+                            <View style={styles.menuButton}>
+                                <TouchableOpacity
+                                    onPress={() => this.goBack()}
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
+                                    <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
+                                </TouchableOpacity>
+                            </View>
+                            <Image style={{ width: width / 3, height: height / 12 - 15, marginTop: 10 }} source={LOGO_IMAGE} />
+                            <View style={styles.menuButton}>
+                                <TouchableOpacity
+                                    onPress={() => this.openDrawer()}
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
+                                    <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <View>
+                            <Text style={styles.notConnectedText}>Device not connected..</Text>
+                        </View>
+                        <Footer/>
+                    </View>
+                </Drawer>
+            </SafeAreaView>
         )
+    }
+}
+
+const drawerStyles = {
+    drawer: {
+        flex: 1.0,
+        backgroundColor: '#3B5998',
+    },
+    main: {
+        flex: 1.0,
+        backgroundColor: 'white'
     }
 }
 
@@ -132,12 +330,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#1a3f95',
         flexGrow: 1,
         alignItems: 'center',
-    },
-    logoImage: {
-        width: height / 3,
-        height: height / 10,
-        marginBottom: height / 7,
-        marginTop: height / 20
     },
     button: {
         width: width / 5 * 4,
@@ -151,14 +343,39 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: width / 25,
         fontWeight: '500',
-        color: "#ffffff",
+        color: "#1a3f95",
         textAlign: 'center'
     },
     notConnectedText: {
         fontSize: width / 25,
         fontWeight: '500',
-        color: "#ffffff",
+        color: '#1a3f95',
         textAlign: 'center',
         paddingVertical: width / 10
-    }
+    },
+    headerContainer: {
+        height: height / 12,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: '#3B5998',
+    },
+    headerTitle: {
+        flex: 1.0,
+        textAlign: 'center',
+        alignSelf: 'center',
+        color: 'white'
+    },
+    menuButton: {
+        marginLeft: 8,
+        marginRight: 8,
+        alignSelf: 'center',
+        tintColor: 'white'
+    },
+    menuContainer: {
+        flex: 1.0,
+        backgroundColor: '#3B5998',
+    },
+    drawerContainer: {
+        flex: 1,
+    },
 });

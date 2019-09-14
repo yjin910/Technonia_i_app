@@ -143,6 +143,7 @@ export default class BluetoothManager extends React.Component {
 
     logOut_async = async () => {
         await AsyncStorage.removeItem('9room@email');
+        await AsyncStorage.removeItem('9room@autoLogin');
 
         const resetAction = StackActions.reset({
             index: 0,
@@ -309,7 +310,7 @@ export default class BluetoothManager extends React.Component {
 
         setTimeout(() => {
             this.setState({ refreshing: false });
-        }, 1000);
+        }, 3500);
     }
 
     render() {
@@ -328,7 +329,6 @@ export default class BluetoothManager extends React.Component {
 
         let Peripherals = list.map(p => {
             let name = p.name;
-            //TODO if (name && name != '') {}
             if (name == undefined || name == null || name == '') name = 'N/A';
             return (
                 <TouchableOpacity onPress={() => { this.connectToPeripheral(p) }}>
@@ -420,7 +420,6 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     row: {
-        //margin: 10,
         backgroundColor: 'lightgrey',
         borderBottomColor: "#bbbbbb",
         borderBottomWidth: 0.4,

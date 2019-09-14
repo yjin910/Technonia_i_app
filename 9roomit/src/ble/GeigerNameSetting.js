@@ -5,22 +5,21 @@ import {
     View,
     NativeEventEmitter,
     NativeModules,
-    Platform,
-    PermissionsAndroid,
     ScrollView,
-    AppState,
     AsyncStorage,
     TouchableOpacity,
     Dimensions,
     Image,
     ActivityIndicator,
-    SafeAreaView
+    SafeAreaView,
+    RefreshControl
 } from 'react-native';
 import Drawer from 'react-native-drawer'
 import uuidv1 from 'uuid/v1';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import DrawerButton from '../graph/components/DrawerButton'
-import { StackActions, NavigationActions } from 'react-navigation';
+import Footer from '../Footer'
 
 let utils = require('./BLEUtil');
 
@@ -53,7 +52,8 @@ export default class GeigerNameSetting extends React.Component {
             uuid: '',
             peripherals: new Map(),
             scanning: false,
-            isLoaded: false
+            isLoaded: false,
+            refreshing: false
         }
 
         this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
@@ -66,12 +66,16 @@ export default class GeigerNameSetting extends React.Component {
         this.navigateToCopyrightScreen = this.navigateToCopyrightScreen.bind(this);
         this.navigateToProfileScreen = this.navigateToProfileScreen.bind(this);
         this.navigateToMainScreen = this.navigateToMainScreen.bind(this);
-
+        this.navigateToBLESettings = this.navigateToBLESettings.bind(this);
         this.goBack = this.goBack.bind(this);
         this.logOut_async = this.logOut_async.bind(this);
 
         this.openDrawer = this.openDrawer.bind(this);
         this.closeDrawer = this.closeDrawer.bind(this);
+
+        this.onRefresh = this.onRefresh.bind(this);
+
+        this._successDisconnect = this._successDisconnect.bind(this);
     }
 
     static navigationOptions = {
@@ -97,7 +101,7 @@ export default class GeigerNameSetting extends React.Component {
 
             switch (title) {
                 case 'Setting':
-                    onPress = this.closeDrawer;
+                    onPress = this.navigateToBLESettings;
                     break;
                 case 'Log out':
                     onPress = this.logOut_async;
@@ -132,7 +136,10 @@ export default class GeigerNameSetting extends React.Component {
     }
 
     logOut_async = async () => {
+        this.disconnectDevice();
+
         await AsyncStorage.removeItem('9room@email');
+        await AsyncStorage.removeItem('9room@autoLogin');
 
         const resetAction = StackActions.reset({
             index: 0,
@@ -143,29 +150,48 @@ export default class GeigerNameSetting extends React.Component {
     }
 
     navigateToMainScreen = async () => {
+        this.disconnectDevice();
         this.closeDrawer();
         let email = await AsyncStorage.getItem('9room@email');
         this.props.navigation.navigate('Main', { email: email });
     }
 
     navigateToHelpScreen = () => {
+        this.disconnectDevice();
         this.closeDrawer();
         this.props.navigation.navigate('Help');
     }
 
     navigateToCopyrightScreen = () => {
+        this.disconnectDevice();
         this.closeDrawer();
         this.props.navigation.navigate('Copyright');
     }
 
+    navigateToBLESettings = () => {
+        this.disconnectDevice();
+        this.closeDrawer();
+        console.log('navigate to ble setting screen');
+        this.props.navigation.navigate('BLEManaer');
+    }
+
     navigateToProfileScreen = async () => {
+        this.disconnectDevice();
         this.closeDrawer();
         let email = await AsyncStorage.getItem('9room@email');
         this.props.navigation.navigate('Profile', { email: email });
     }
 
+    _successDisconnect = () => {
+        console.log('disconnected successfully');
+    }
+
+    disconnectDevice = async () => {
+        let uuid = await AsyncStorage.getItem('9room@device_uuid');
+        util.disconnectBLEDevice(uuid, this._successDisconnect);
+    }
+
     sendDeviceName = async (deviceName, uuid) => {
-        //const { deviceName, uuid } = this.state;
         let id = uuid
         if (id == '') {
             id = await AsyncStorage.getItem('9room@device_uuid');
@@ -238,12 +264,20 @@ export default class GeigerNameSetting extends React.Component {
         this.sendDeviceName(name, id);
     }
 
+    onRefresh = () => {
+        this.setState({ refreshing: true });
+        this.startScan();
+
+        setTimeout(() => {
+            this.setState({ refreshing: false });
+        }, 3500);
+    }
+
     render() {
         let { peripherals, scanning, isLoaded } = this.state;
         let list = Array.from(peripherals.values());
 
         if (!isLoaded) {
-            //TODO activity indicator
             return (
                 <View style={styles.container}>
                     <ScrollView style={styles.scroll} />
@@ -282,7 +316,7 @@ export default class GeigerNameSetting extends React.Component {
                     content={this.renderDrawer()}
                     type='overlay'
                     tapToClose={true}
-                    openDrawerOffset={0.7}
+                    openDrawerOffset={0.6}
                     styles={drawerStyles}
                     side={'right'}
                 >
@@ -291,23 +325,32 @@ export default class GeigerNameSetting extends React.Component {
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.goBack()}
-                                    style={{ tintColor: 'white', width: width / 10, height: width / 10, marginRight: width / 30 }}>
-                                    <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={BACK_IMAGE} />
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
+                                    <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
                                 </TouchableOpacity>
                             </View>
-                            <Text style={styles.headerTitle}>Device Name</Text>
+                            <Image style={{ width: width / 3, height: height / 12 - 15, marginTop: 10 }} source={LOGO_IMAGE} />
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.openDrawer()}
-                                    style={{ tintColor: 'white', width: width / 10, height: width / 10 }}>
-                                    <Image style={{ tintColor: 'white', width: width / 10, height: width / 10 }} source={MENU_IMAGE} />
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
+                                    <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <ScrollView style={styles.scroll}>
+                        <ScrollView
+                            style={styles.scroll}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={this.onRefresh}
+                                />
+                            }
+                        >
                             {(list.length != 0) && Peripherals}
-                            {(list.lenght == 0) && <ActivityIndicator size="large" color="red" />}
+                            {scanning && <ActivityIndicator size="large" color="red" />}
                         </ScrollView>
+                        <Footer/>
                     </View>
                 </Drawer>
             </SafeAreaView>
@@ -344,7 +387,6 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     row: {
-        //margin: 10,
         backgroundColor: 'lightgrey',
         borderBottomColor: "#bbbbbb",
         borderBottomWidth: 0.4,
@@ -364,7 +406,7 @@ const styles = StyleSheet.create({
         tintColor: 'lightskyblue'
     },
     headerContainer: {
-        height: height / 10,
+        height: height / 12,
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: '#3B5998',

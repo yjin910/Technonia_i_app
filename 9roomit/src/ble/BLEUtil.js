@@ -56,6 +56,16 @@ let connectToBLEDevice = (uuid, next, handleError) => {
         });
 }
 
+let disconnectBLEDevice = (uuid, next) => {
+    BleManager.disconnect(uuid)
+        .then(() => {
+            next();
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+}
+
 
 let startScan = () => {
     BleManager.scan([], 3, true).then(() => {
@@ -74,3 +84,4 @@ module.exports.sendData_wifi = sendData_wifi;
 module.exports.sendData_deviceName = sendData_deviceName;
 module.exports.startScan = startScan;
 module.exports.getConnectedItems = getConnectedItems;
+module.exports.disconnectBLEDevice = disconnectBLEDevice;
