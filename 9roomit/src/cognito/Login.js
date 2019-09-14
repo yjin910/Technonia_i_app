@@ -29,11 +29,7 @@ const LOGO_IMAGE = require('../../assets/logo.png')
 export default class LoginScreen extends React.Component {
 
     static navigationOptions = {
-        title: 'groom',
-        headerStyle: {
-            backgroundColor: '#1a3f95',
-        },
-        headerTintColor: '#fff',
+        header: null
     };
 
     state = {

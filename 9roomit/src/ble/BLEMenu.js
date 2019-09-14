@@ -180,7 +180,6 @@ export default class BLEMenu extends React.Component {
     }
 
     setConnectedDevice = (uuid) => {
-        alert(uuid);
         this.setState({ device: uuid, isConnected: true });
     }
 
