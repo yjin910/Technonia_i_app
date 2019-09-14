@@ -8,7 +8,10 @@ import {
     Dimensions,
     Text,
     AsyncStorage,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert,
+    BackHandler,
+    Platform
 } from 'react-native'
 import Drawer from 'react-native-drawer'
 import { createMaterialTopTabNavigator, createAppContainer, StackActions, NavigationActions } from 'react-navigation';
@@ -95,6 +98,8 @@ export default class MainScreen extends React.Component {
         this.refresh = this.refresh.bind(this);
         this.changeDatePickerData = this.changeDatePickerData.bind(this);
         this.fetchDataWithCustomTerm_async = this.fetchDataWithCustomTerm_async.bind(this);
+
+        this.handleBackButtonPressed = this.handleBackButtonPressed.bind(this);
     }
 
     static navigationOptions = {
@@ -110,10 +115,30 @@ export default class MainScreen extends React.Component {
         } else {
             this.getEmail_async();
         }
+
+        if (Platform.OS == 'android') {
+            this.backhandler = BackHandler.addEventListener('hardwareBackPress', () => {
+                this.handleBackButtonPressed();
+                return true;
+            })
+        }
     }
 
-    goBack = () => {
-        //TODO 종료하시겠습니까?
+    handleBackButtonPressed = async () => {
+        let name = this.props.navigation.state.routeName;
+
+        if (name == 'Login' || name == 'Main') {
+            Alert.alert("앱 종료",
+                "프로그램을 종료하시겠습니까?",
+                [
+                    { text: "취소", onPress: () => console.log('cancel back press event'), style: "cancel" },
+                    { text: "종료", onPress: () => BackHandler.exitApp() }
+                ],
+                { cancelable: true }
+            );
+        } else {
+            this.props.navigation.goBack();
+        }
     }
 
     changeDatePickerData = async (data) => {
@@ -197,6 +222,10 @@ export default class MainScreen extends React.Component {
 
     componentWillUnmount = () => {
         this.removeInterval();
+
+        if (Platform.OS == 'android') {
+            BackHandler.removeEventListener("hardwareBackPress", this.handleBackButtonPressed);
+        }
     }
 
     logOut_async = async () => {
@@ -437,7 +466,7 @@ export default class MainScreen extends React.Component {
                         <View style={styles.headerContainer}>
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
-                                    onPress={() => this.goBack()}
+                                    onPress={() => this.handleBackButtonPressed()}
                                     style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
                                     <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
                                 </TouchableOpacity>

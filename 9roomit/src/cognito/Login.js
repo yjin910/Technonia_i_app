@@ -13,7 +13,9 @@ import {
     SafeAreaView,
     Keyboard,
     Platform,
-    ScrollView
+    ScrollView,
+    BackHandler,
+    Alert
 } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -70,6 +72,36 @@ export default class LoginScreen extends React.Component {
 
     componentDidMount = () => {
         this.getEmail_async();
+
+        if (Platform.OS == 'android') {
+            this.backhandler = BackHandler.addEventListener('hardwareBackPress', () => {
+                this.handleBackButtonPressed();
+                return true;
+            })
+        }
+    }
+
+    componentWillUnmount = () => {
+        if (Platform.OS == 'android') {
+            BackHandler.removeEventListener("hardwareBackPress", this.handleBackButtonPressed);
+        }
+    }
+
+    handleBackButtonPressed = async () => {
+        let name = this.props.navigation.state.routeName;
+
+        if (name == 'Login' || name == 'Main') {
+            Alert.alert("앱 종료",
+                "프로그램을 종료하시겠습니까?",
+                [
+                    { text: "취소", onPress: () => console.log('cancel back press event'), style: "cancel" },
+                    { text: "종료", onPress: () => BackHandler.exitApp() }
+                ],
+                { cancelable: true }
+            );
+        } else {
+            this.props.navigation.goBack();
+        }
     }
 
     _signIn = async () => {
