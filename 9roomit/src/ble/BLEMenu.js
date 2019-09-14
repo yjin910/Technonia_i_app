@@ -72,9 +72,8 @@ export default class BLEMenu extends React.Component {
     }
 
     goBack_Drawer = () => {
-        this.disconnectDevice();
         this.closeDrawer();
-        this.props.navigation.goBack();
+        this.goBack();
     }
 
     logOut_async = async () => {
@@ -326,6 +325,9 @@ const drawerStyles = {
 }
 
 const styles = StyleSheet.create({
+    root: {
+        flex: 1,
+    },
     container: {
         backgroundColor: '#1a3f95',
         flexGrow: 1,
