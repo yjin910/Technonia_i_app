@@ -83,7 +83,7 @@ export default class LoginScreen extends React.Component {
 
     componentWillUnmount = () => {
         if (Platform.OS == 'android') {
-            BackHandler.removeEventListener("hardwareBackPress", this.handleBackButtonPressed);
+            this.backhandler.remove();
         }
     }
 

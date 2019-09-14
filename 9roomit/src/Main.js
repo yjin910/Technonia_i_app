@@ -117,28 +117,29 @@ export default class MainScreen extends React.Component {
         }
 
         if (Platform.OS == 'android') {
-            this.backhandler = BackHandler.addEventListener('hardwareBackPress', () => {
-                this.handleBackButtonPressed();
-                return true;
+
+            this.focusListener = this.props.navigation.addListener('didFocus', () => {
+                this.backhandler = BackHandler.addEventListener('hardwareBackPress', () => {
+                    this.handleBackButtonPressed();
+                    return true;
+                })
+            });
+
+            this.blurListener = this.props.navigation.addListener('willBlur', payload => {
+                this.backhandler.remove();
             })
         }
     }
 
     handleBackButtonPressed = async () => {
-        let name = this.props.navigation.state.routeName;
-
-        if (name == 'Login' || name == 'Main') {
-            Alert.alert("앱 종료",
-                "프로그램을 종료하시겠습니까?",
-                [
-                    { text: "취소", onPress: () => console.log('cancel back press event'), style: "cancel" },
-                    { text: "종료", onPress: () => BackHandler.exitApp() }
-                ],
-                { cancelable: true }
-            );
-        } else {
-            this.props.navigation.goBack();
-        }
+        Alert.alert("앱 종료",
+            "프로그램을 종료하시겠습니까?",
+            [
+                { text: "취소", onPress: () => console.log('cancel back press event'), style: "cancel" },
+                { text: "종료", onPress: () => BackHandler.exitApp() }
+            ],
+            { cancelable: true }
+        );
     }
 
     changeDatePickerData = async (data) => {
@@ -224,7 +225,8 @@ export default class MainScreen extends React.Component {
         this.removeInterval();
 
         if (Platform.OS == 'android') {
-            BackHandler.removeEventListener("hardwareBackPress", this.handleBackButtonPressed);
+            this.focusListener.remove();
+            this.blurListener.remove();
         }
     }
 
@@ -471,7 +473,7 @@ export default class MainScreen extends React.Component {
                                     <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
                                 </TouchableOpacity>
                             </View>
-                            <Image style={{ width: width / 3, height: width / 9 }} source={LOGO_IMAGE} />
+                            <Image style={{ width: width / 3, height: height / 12 - 15, marginTop: 10 }} source={LOGO_IMAGE} />
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.openDrawer()}
@@ -539,7 +541,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#3B5998',
     },
     headerContainer: {
-        height: 44,
+        height: height / 12, //44,
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: '#3B5998',
