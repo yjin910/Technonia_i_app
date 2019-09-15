@@ -76,7 +76,7 @@ export default class MainScreen extends React.Component {
                     color: 'dodgerblue'
                 },
                 {
-                    label: '사용자 지정',
+                    label: '지정',
                     value: 4,
                     size: 15,
                     color: 'dodgerblue'
