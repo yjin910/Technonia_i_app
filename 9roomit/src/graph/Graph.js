@@ -42,6 +42,7 @@ export default class MainScreen extends React.Component {
 
         this.state = {
             url: '',
+            errorOccured: false,
             data_t: [],
             data_h: [],
             data_g: [],
@@ -244,7 +245,7 @@ export default class MainScreen extends React.Component {
     }
 
     fetchData_Async = async (deviceNum, val, term) => {
-        const url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/getdata?u=${deviceNum}`;
+        let url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/getdata?u=${deviceNum}`;
 
         if (val) {
             switch (val) {
@@ -265,7 +266,7 @@ export default class MainScreen extends React.Component {
             }
         }
 
-        this.processDataFetching_async();
+        this.processDataFetching_async(url);
     }
 
     processDataFetching_async = async (url) => {
@@ -364,13 +365,55 @@ export default class MainScreen extends React.Component {
             )
             .catch((error) => {
                 console.log(error);
+
+                this.setState({ isLoaded: true, errorOccured: true });
             });
     }
 
     render() {
-        let { data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded, datePickerData, customPicker } = this.state;
+        let { errorOccured, data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded, datePickerData, customPicker } = this.state;
 
         if (isLoaded) {
+
+            if (errorOccured) {
+                return (
+                    <SafeAreaView style={styles.root}>
+                        <Drawer
+                            ref={(ref) => this.drawer = ref}
+                            content={this.renderDrawer()}
+                            type='overlay'
+                            tapToClose={true}
+                            openDrawerOffset={0.6}
+                            styles={drawerStyles}
+                            side={'right'}
+                        >
+                            <View style={styles.headerContainer}>
+                                <View style={styles.menuButton}>
+                                    <TouchableOpacity
+                                        onPress={() => this.goBack()}
+                                        style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
+                                        <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
+                                    </TouchableOpacity>
+                                </View>
+                                <Image style={{ width: width / 3, height: height / 12 - 15, marginTop: 10 }} source={LOGO_IMAGE} />
+                                <View style={styles.menuButton}>
+                                    <TouchableOpacity
+                                        onPress={() => this.openDrawer()}
+                                        style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
+                                        <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            <View style={styles.requestFailedContainer}>
+                                <Text style={styles.requestFailedText}>
+                                    Request failed
+                                </Text>
+                            </View>
+                            <Footer />
+                        </Drawer>
+                    </SafeAreaView>
+                );
+            }
 
             const Temperature = (props) => (<TemperatureGraph
                 temperatureData={props.screenProps.temperatureData}
@@ -543,5 +586,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         backgroundColor: '#1a3f95'
+    },
+    requestFailedText: {
+        color: 'red',
+        fontSize: width / 25
+    },
+    requestFailedContainer: {
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        flex: 1
     }
 });
