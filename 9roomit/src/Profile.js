@@ -142,16 +142,10 @@ export default class ProfileScreen extends React.Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result);
-                    let devices = [];
-
-                    for (i = 0; i < result.length; i++) {
-                        if (result[i]['deviceNum']) devices.push(result[i]['deviceNum']);
-                    }
-
+                    let devices = result;
                     this.setState({
                         isLoaded: true,
-                        devices: devices
+                        devices: result
                     });
                 }
             )
@@ -201,14 +195,30 @@ export default class ProfileScreen extends React.Component {
 
         if (isLoaded) {
             let Devices = devices.map(d => {
+                let deviceNum = d['deviceNum'];
+                let geiger = d['geiger'];
+                let temperature = d['temperature'];
+                let humidity = d['humidity'];
+
+                let geigerIsNull = false;
+                let temperatureIsNull = false;
+                let humidityIsNull = false;
+
+                if (geiger == null) geigerIsNull = true;
+                if (temperature == null) temperatureIsNull = true;
+                if (humidity == null) humidityIsNull = true;
+
                 return (
                     <Device
                         key={uuidv1()}
                         onPressed={this.navigateToGraphScreen}
-                        deviceNum={d}
-                        currentGeiger={0.1}
-                        currentTemp={25}
-                        currentHumi={58}
+                        deviceNum={deviceNum}
+                        currentGeiger={geigerIsNull ? 0.1 : geiger}
+                        currentTemp={temperatureIsNull ? 25 : temperature}
+                        currentHumi={humidityIsNull? 58 : humidity}
+                        geigerIsNull={geigerIsNull}
+                        temperatureIsNull={temperatureIsNull}
+                        humidityIsNull={humidityIsNull}
                     />
                 )
             });

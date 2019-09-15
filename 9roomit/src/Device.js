@@ -25,11 +25,19 @@ export default class Device extends Component {
         onPressed: PropTypes.func.isRequired,
         currentGeiger: PropTypes.number.isRequired,
         currentTemp: PropTypes.number.isRequired,
-        currentHumi: PropTypes.number.isRequired
+        currentHumi: PropTypes.number.isRequired,
+        geigerIsNull: PropTypes.bool.isRequired,
+        temperatureIsNull: PropTypes.bool.isRequired,
+        humidityIsNull: PropTypes.bool.isRequired
     };
 
     render() {
-        let { deviceNum, onPressed, currentGeiger, currentTemp, currentHumi } = this.props;
+        let { deviceNum, onPressed, currentGeiger, currentTemp, currentHumi, geigerIsNull, temperatureIsNull, humidityIsNull } = this.props;
+
+        let geiger = geigerIsNull ? `현재 방사능 : N/A` : `현재 방사능 : ${currentGeiger} μSv`
+        let temperature = temperatureIsNull ? `현재 온도  : N/A` : `현재 온도  : ${currentTemp} °C`
+        let humidity = humidityIsNull ? `현재 습도  : N/A` : `현재 습도  : ${currentHumi} %`;
+
         return (
             <View style={styles.container}>
                 {/* <View style={styles.imgContainer}>
@@ -41,9 +49,9 @@ export default class Device extends Component {
                 </View>
                 <View style={styles.itemContainer}>
                     <GraphButton deviceNum={deviceNum} onPressed={onPressed}/>
-                    <Text style={styles.valueText}>{`현재 방사능 : ${currentGeiger} μSv`}</Text>
-                    <Text style={styles.valueText}>{`현재 온도  : ${currentTemp} °C`}</Text>
-                    <Text style={styles.valueText}>{`현재 습도  : ${currentHumi} %`}</Text>
+                    <Text style={styles.valueText}>{geiger}</Text>
+                    <Text style={styles.valueText}>{temperature}</Text>
+                    <Text style={styles.valueText}>{humidity}</Text>
                 </View>
             </View>
         );
@@ -88,6 +96,6 @@ const styles = StyleSheet.create({
     },
     valueText: {
         color: 'darkslategrey',
-        fontSize: width / 22
+        fontSize: width / 23
     }
 });

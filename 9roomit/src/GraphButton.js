@@ -48,14 +48,15 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "white",
         flex: 1,
-        paddingTop: width / 20
+        paddingTop: width / 30,
+        paddingBottom: width / 25
     },
     linkButtonContainer: {
         flexDirection: 'row',
     },
     linkText: {
         color: '#1a3f95',
-        fontSize: width / 20
+        fontSize: width / 22
     },
     itemButton: {
         width: width / 4,
