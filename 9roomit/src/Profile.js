@@ -142,7 +142,6 @@ export default class ProfileScreen extends React.Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    let devices = result;
                     this.setState({
                         isLoaded: true,
                         devices: result

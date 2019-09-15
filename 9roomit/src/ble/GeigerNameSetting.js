@@ -189,15 +189,7 @@ export default class GeigerNameSetting extends React.Component {
 
     disconnectDevice = async () => {
         let uuid = await AsyncStorage.getItem('9room@device_uuid');
-        util.disconnectBLEDevice(uuid, this._successDisconnect);
-    }
-
-    sendDeviceName = async (deviceName, uuid) => {
-        let id = uuid
-        if (id == '') {
-            id = await AsyncStorage.getItem('9room@device_uuid');
-        }
-        utils.sendData_deviceName(id, deviceName);
+        utils.disconnectBLEDevice(uuid, this._successDisconnect);
     }
 
     componentWillUnmount() {
@@ -255,14 +247,18 @@ export default class GeigerNameSetting extends React.Component {
     }
 
     selectPeripheral = async (peripheral) => {
-        if (!peripheral) {
+        if (!peripheral || peripheral.name == '') {
             return;
         }
 
-        const id = await AsyncStorage.getItem('9room@device_uuid');
+        let {uuid} = this.state;
+        if (uuid == '') {
+            uuid = await AsyncStorage.getItem('9room@device_uuid');
+        }
+
         const name = peripheral.name;
 
-        this.sendDeviceName(name, id);
+        utils.sendData_deviceName(uuid, name);
     }
 
     onRefresh = () => {
@@ -291,7 +287,7 @@ export default class GeigerNameSetting extends React.Component {
         let Peripherals = list.map(p => {
             let name = p.name;
             //TODO if (name && name != '') {}
-            if (name == undefined || name == null || name == '') name = 'bluetooth device';
+            if (name == undefined || name == null || name == '') name = 'N/A';
             if (name.length > 16) {
                 name = name.split(' ')[0];
                 if (name.length > 16) name = name.slice(0, 15);

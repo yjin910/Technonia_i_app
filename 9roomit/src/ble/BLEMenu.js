@@ -162,6 +162,8 @@ export default class BLEMenu extends React.Component {
     }
 
     componentDidMount = () => {
+        let uuid = this.props.navigation.getParam('uuid', '');
+        this.setState({uuid: uuid});
         this.connectDevice();
     }
 
@@ -213,13 +215,15 @@ export default class BLEMenu extends React.Component {
         this.props.navigation.goBack();
     }
 
-    navigateToWiFiScreen = () => {
+    navigateToWiFiScreen = async () => {
         const { uuid } = this.state;
+        if (uuid == '') uuid = await AsyncStorage.getItem('9room@device_uuid');
         this.props.navigation.navigate('WiFiSetting', { uuid: uuid });
     }
 
-    navigateToGeigerScreen() {
+    navigateToGeigerScreen = async () => {
         const { uuid } = this.state;
+        if (uuid == '') uuid = await AsyncStorage.getItem('9room@device_uuid');
         this.props.navigation.navigate('GeigerNameSetting', { uuid: uuid });
     }
 
