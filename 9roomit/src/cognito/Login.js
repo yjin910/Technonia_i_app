@@ -70,9 +70,16 @@ export default class LoginScreen extends React.Component {
         this.getEmail_async();
 
         if (Platform.OS == 'android') {
-            this.backhandler = BackHandler.addEventListener('hardwareBackPress', () => {
-                this.handleBackButtonPressed();
-                return true;
+
+            this.focusListener = this.props.navigation.addListener('didFocus', () => {
+                this.backhandler = BackHandler.addEventListener('hardwareBackPress', () => {
+                    this.handleBackButtonPressed();
+                    return true;
+                })
+            });
+
+            this.blurListener = this.props.navigation.addListener('willBlur', payload => {
+                this.backhandler.remove();
             })
         }
     }
@@ -84,20 +91,14 @@ export default class LoginScreen extends React.Component {
     }
 
     handleBackButtonPressed = async () => {
-        let name = this.props.navigation.state.routeName;
-
-        if (name == 'Login' || name == 'Main') {
-            Alert.alert("앱 종료",
-                "프로그램을 종료하시겠습니까?",
-                [
-                    { text: "취소", onPress: () => console.log('cancel back press event'), style: "cancel" },
-                    { text: "종료", onPress: () => BackHandler.exitApp() }
-                ],
-                { cancelable: true }
-            );
-        } else {
-            this.props.navigation.goBack();
-        }
+        Alert.alert("앱 종료",
+            "프로그램을 종료하시겠습니까?",
+            [
+                { text: "취소", onPress: () => console.log('cancel back press event'), style: "cancel" },
+                { text: "종료", onPress: () => BackHandler.exitApp() }
+            ],
+            { cancelable: true }
+        );
     }
 
     _signIn = async () => {
@@ -226,8 +227,8 @@ const styles = StyleSheet.create({
     logoImage: {
         width: height / 3,
         height: height / 10,
-        marginBottom: height / 7,
-        marginTop: height / 20
+        marginBottom: height / 10,
+        marginTop: height / 7
     },
     inputBox: {
         width: width * 4 / 5,

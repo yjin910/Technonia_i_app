@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
     logoImage: {
         width: height / 3,
         height: height / 10,
-        marginBottom: height / 7,
-        marginTop: height / 20
+        marginBottom: height / 10,
+        marginTop: height / 7
     },
     inputBox: {
         width: width * 4 / 5,
