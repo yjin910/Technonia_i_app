@@ -97,6 +97,7 @@ export default class MainScreen extends React.Component {
 
         this.refresh = this.refresh.bind(this);
         this.changeDatePickerData = this.changeDatePickerData.bind(this);
+        this.fetchData_Async = this.fetchData_Async.bind(this);
         this.fetchDataWithCustomTerm_async = this.fetchDataWithCustomTerm_async.bind(this);
 
         this.handleBackButtonPressed = this.handleBackButtonPressed.bind(this);
@@ -149,7 +150,8 @@ export default class MainScreen extends React.Component {
             this.setState({ datePickerData: data, customPicker: true })
         } else {
             this.setState({ datePickerData: data, customPicker: false });
-            let email = await AsyncStorage.getItem('9room@email');
+            let email = this.props.navigation.getParam('email', '');
+            if (email == '') email = await AsyncStorage.getItem('9room@email');
             this.fetchData_Async(email, selectedVal);
         }
     }
@@ -232,6 +234,7 @@ export default class MainScreen extends React.Component {
 
     logOut_async = async () => {
         await AsyncStorage.removeItem('9room@email');
+        await AsyncStorage.removeItem('9room@pw');
         await AsyncStorage.removeItem('9room@autoLogin');
 
         const resetAction = StackActions.reset({
@@ -270,7 +273,8 @@ export default class MainScreen extends React.Component {
     }
 
     fetchDataWithCustomTerm_async = async (term) => {
-        let email = await AsyncStorage.getItem('9room@email');
+        let email = this.props.navigation.getParam('email', '');
+        if (email == '') email = await AsyncStorage.getItem('9room@email');
         this.fetchData_Async(email, 4, term);
     }
 

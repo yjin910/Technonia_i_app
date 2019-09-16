@@ -4,7 +4,8 @@ import {
     View,
     Dimensions,
     Text,
-    Image
+    Image,
+    TouchableOpacity
 } from "react-native";
 import PropTypes from "prop-types";
 
@@ -18,6 +19,8 @@ const IMG = require('../assets/ble_geiger_icon.png');
 export default class Device extends Component {
     constructor(props) {
         super(props);
+
+        this.changePage = this.changePage.bind(this);
     }
 
     static propTypes = {
@@ -31,6 +34,11 @@ export default class Device extends Component {
         humidityIsNull: PropTypes.bool.isRequired
     };
 
+    changePage = () => {
+        let { deviceNum, onPressed } = this.props;
+        onPressed(deviceNum);
+    }
+
     render() {
         let { deviceNum, onPressed, currentGeiger, currentTemp, currentHumi, geigerIsNull, temperatureIsNull, humidityIsNull } = this.props;
 
@@ -40,6 +48,10 @@ export default class Device extends Component {
 
         return (
             <View style={styles.container}>
+                <TouchableOpacity
+                    style={styles.container}
+                    onPress={this.changePage}
+                >
                 {/* <View style={styles.imgContainer}>
                     <Image source={IMG} style={styles.img} />
                 </View> */}
@@ -48,11 +60,12 @@ export default class Device extends Component {
                     <Text style={styles.deviceNumText}>{': ' + deviceNum}</Text>
                 </View>
                 <View style={styles.itemContainer}>
-                    <GraphButton deviceNum={deviceNum} onPressed={onPressed}/>
+                    {/* <GraphButton deviceNum={deviceNum} onPressed={onPressed}/> */}
                     <Text style={styles.valueText}>{geiger}</Text>
                     <Text style={styles.valueText}>{temperature}</Text>
                     <Text style={styles.valueText}>{humidity}</Text>
                 </View>
+                </TouchableOpacity>
             </View>
         );
     }

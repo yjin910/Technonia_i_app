@@ -140,6 +140,7 @@ export default class GeigerNameSetting extends React.Component {
         this.disconnectDevice();
 
         await AsyncStorage.removeItem('9room@email');
+        await AsyncStorage.removeItem('9room@pw');
         await AsyncStorage.removeItem('9room@autoLogin');
 
         const resetAction = StackActions.reset({
@@ -152,6 +153,7 @@ export default class GeigerNameSetting extends React.Component {
 
     navigateToMainScreen = async () => {
         this.disconnectDevice();
+
         this.closeDrawer();
         let email = await AsyncStorage.getItem('9room@email');
         this.props.navigation.navigate('Main', { email: email });

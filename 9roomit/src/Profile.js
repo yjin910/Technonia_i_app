@@ -59,7 +59,7 @@ export default class ProfileScreen extends React.Component {
     }
 
     componentDidMount() {
-        const email = this.props.navigation.getParam('email', '');
+        let email = this.props.navigation.getParam('email', '');
         if (email) {
             this.fetchData(email);
         } else {
@@ -68,7 +68,7 @@ export default class ProfileScreen extends React.Component {
     }
 
     getEmailFromAsyncStorage_async = async () => {
-        const email = await AsyncStorage.getItem('9room@email');
+        let email = await AsyncStorage.getItem('9room@email');
         this.fetchData(email);
     }
 
@@ -123,6 +123,7 @@ export default class ProfileScreen extends React.Component {
 
     logOut_async = async () => {
         await AsyncStorage.removeItem('9room@email');
+        await AsyncStorage.removeItem('9room@pw');
         await AsyncStorage.removeItem('9room@autoLogin');
 
         const resetAction = StackActions.reset({
@@ -134,7 +135,6 @@ export default class ProfileScreen extends React.Component {
     }
 
     fetchData = (email) => {
-        //TODO url for device list ??
         const url = 'http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/main/mainUuid?email=' + email;
         console.log(url);
 

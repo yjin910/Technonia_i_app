@@ -196,6 +196,7 @@ export default class MainScreen extends React.Component {
 
     logOut_async = async () => {
         await AsyncStorage.removeItem('9room@email');
+        await AsyncStorage.removeItem('9room@pw');
         await AsyncStorage.removeItem('9room@autoLogin');
 
         const resetAction = StackActions.reset({

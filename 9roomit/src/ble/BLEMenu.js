@@ -80,6 +80,7 @@ export default class BLEMenu extends React.Component {
         this.disconnectDevice();
 
         await AsyncStorage.removeItem('9room@email');
+        await AsyncStorage.removeItem('9room@pw');
         await AsyncStorage.removeItem('9room@autoLogin');
 
         const resetAction = StackActions.reset({

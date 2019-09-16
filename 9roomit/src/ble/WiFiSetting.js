@@ -81,6 +81,7 @@ export default class WiFiSetting extends React.Component {
         //TODO disconnect device
 
         await AsyncStorage.removeItem('9room@email');
+        await AsyncStorage.removeItem('9room@pw');
         await AsyncStorage.removeItem('9room@autoLogin');
 
         const resetAction = StackActions.reset({

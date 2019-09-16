@@ -48,12 +48,13 @@ export default class LoginScreen extends React.Component {
             }
 
             if (storeEmail) {
-                await AsyncStorage.setItem('9room@email', email);
                 await AsyncStorage.setItem('9room@pw', pw);
             }
+            await AsyncStorage.setItem('9room@email', email);
+
         } catch(err) {
-            alert(err);
-            //alert('failed to store id');
+            alert('Failed to store email');
+            console.log(err);
         }
     }
 
