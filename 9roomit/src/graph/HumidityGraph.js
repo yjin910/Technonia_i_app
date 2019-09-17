@@ -133,9 +133,13 @@ export default class HumidityGraph extends React.Component {
 
             let min_grid = min;
             let max_grid = max;
-            if (max - min < 2) {
-                max_grid += 1;
-                min_grid -= 1;
+
+            if (max - min < 5) {
+                max_grid += 4;
+                min_grid -= 4;
+            } else if (max - min < 7) {
+                max_grid += 3;
+                min_grid -= 3;
             }
 
 
