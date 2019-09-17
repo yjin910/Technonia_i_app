@@ -119,10 +119,71 @@ export default class TemperatureGraph extends React.Component {
             )
         }
 
+        let year_s = ''
+        let year_e = ''
+        let month_s = ''
+        let month_e = ''
+        let date_s = ''
+        let date_e = ''
+
+        if (startDate_picker) {
+            year_s = startDate_picker.getYear() + 1900;
+            month_s = startDate_picker.getMonth() + 1;
+            date_s = startDate_picker.getDate();
+        }
+
+        if (endDate_picker) {
+            year_e = endDate_picker.getYear() + 1900;
+            month_e = endDate_picker.getMonth() + 1;
+            date_e = endDate_picker.getDate();
+        }
+
+        let timeStr_start = startDate_picker == undefined ? '시작' : `${year_s}/${month_s}/${date_s}`;
+        let timeStr_end = endDate_picker == undefined ? '종료' : `${year_e}/${month_e}/${date_e}`;
+
         if (temperatureData.length == 0) {
             return (
-                <NoData />
-            )
+                <View style={{ flex: 1, backgroundColor: 'white' }}>
+                    <View style={styles.datePickerContainer}>
+                        <Text style={styles.text}>조회기간 </Text>
+                        <RadioGroup
+                            radioButtons={pickerData}
+                            onPress={changePickerData}
+                            flexDirection='row'
+                        ></RadioGroup>
+                    </View>
+                    {customPicker && <View style={styles.datePickerButtonContainer}>
+                        <TouchableOpacity style={styles.datePickerButton} onPress={this.makeDatePickerVisible_start}>
+                            <Text>{timeStr_start}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.datePickerButton} onPress={this.makeDatePickerVisible_end}>
+                            <Text>{timeStr_end}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.datePickerButton} onPress={this.requestDataWithCustomDateRange}>
+                            <Text>OK</Text>
+                        </TouchableOpacity>
+                    </View>}
+                    <NoData />
+                    <View style={styles.listViewButtonContainer}>
+                        {/* <ListViewButton changeListView={this.changeListViewMode} /> */}
+                        <RefreshButton refresh={this.props.refresh} />
+                    </View>
+                    <DateTimePicker
+                        isVisible={isDatePicker1Visible}
+                        onConfirm={(res) => this.handleTimePicked_start(res)}
+                        onCancel={() => this.hideDateTimePicker_start()}
+                        datePickerModeAndroid='spinner'
+                        mode='date' //TODO date? datetime? time?
+                    />
+                    <DateTimePicker
+                        isVisible={isDatePicker2Visible}
+                        onConfirm={(res) => this.handleTimePicked_end(res)}
+                        onCancel={() => this.hideDateTimePicker_end()}
+                        datePickerModeAndroid='spinner'
+                        mode='date' //TODO date? datetime? time?
+                    />
+                </View>
+            );
         } else {
             let data = [
                 {
@@ -178,28 +239,6 @@ export default class TemperatureGraph extends React.Component {
                     }
                 })
             }
-
-            let year_s = ''
-            let year_e = ''
-            let month_s = ''
-            let month_e = ''
-            let date_s = ''
-            let date_e = ''
-
-            if (startDate_picker) {
-                year_s = startDate_picker.getYear() + 1900;
-                month_s = startDate_picker.getMonth() + 1;
-                date_s = startDate_picker.getDate();
-            }
-
-            if (endDate_picker) {
-                year_e = endDate_picker.getYear() + 1900;
-                month_e = endDate_picker.getMonth() + 1;
-                date_e = endDate_picker.getDate();
-            }
-
-            let timeStr_start = startDate_picker == undefined ? '시작' : `${year_s}/${month_s}/${date_s}`;
-            let timeStr_end = endDate_picker == undefined ? '종료' : `${year_e}/${month_e}/${date_e}`;
 
             return (
                 <Animated.View style={styles.container}>

@@ -6,7 +6,7 @@ import {
     Text
 } from 'react-native'
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default class LoadingGraph extends React.Component {
     constructor(props) {
@@ -16,7 +16,7 @@ export default class LoadingGraph extends React.Component {
     render() {
         return (
             <View style={styles.warningContainer}>
-                <Text style={styles.warningText}>Data not enough to draw the graph</Text>
+                <Text style={styles.warningText}>Data not enough</Text>
             </View>
         )
     }
@@ -25,7 +25,8 @@ export default class LoadingGraph extends React.Component {
 const styles = StyleSheet.create({
     warningContainer: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: height / 7
     },
     warningText: {
         fontSize: width / 15,
