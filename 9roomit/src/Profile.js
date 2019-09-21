@@ -257,6 +257,7 @@ export default class ProfileScreen extends React.Component {
                         <View style={styles.devicesContainer}>
                             {Devices}
                         </View>
+                        <Footer/>
                     </Drawer>
                 </ScrollView>
             )

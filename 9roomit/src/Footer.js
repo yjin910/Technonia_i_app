@@ -6,12 +6,14 @@ import {
     Text,
     Image
 } from 'react-native'
+import VersionNumber from 'react-native-version-number';
 
 
 const { width } = Dimensions.get('window');
 const GROOM_ICON = require('../assets/groom.png');
 
 const FOOTER_HEIGHT = width / 13;
+const VERSION_NUMBER = 'V' + VersionNumber.appVersion;
 
 export default class Footer extends React.Component {
     constructor(props) {
@@ -24,7 +26,7 @@ export default class Footer extends React.Component {
                 <Image style={styles.img} source={GROOM_ICON}></Image>
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>groom monitoring</Text>
-                    <Text style={styles.versionText}>V0.91</Text>
+                    <Text style={styles.versionText}>{VERSION_NUMBER}</Text>
                 </View>
             </View>
         )
@@ -46,7 +48,8 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     versionText: {
-        color: 'white'
+        color: 'white',
+        marginRight: 10
     },
     textContainer: {
         flex: 1,
