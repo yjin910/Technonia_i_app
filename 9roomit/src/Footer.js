@@ -6,14 +6,14 @@ import {
     Text,
     Image
 } from 'react-native'
-import VersionNumber from 'react-native-version-number';
+import VersionInfo from 'react-native-version-info';
 
 
 const { width } = Dimensions.get('window');
 const GROOM_ICON = require('../assets/groom.png');
 
 const FOOTER_HEIGHT = width / 13;
-const VERSION_NUMBER = 'V' + VersionNumber.appVersion;
+const VERSION_NUMBER = 'V' + VersionInfo.appVersion;
 
 export default class Footer extends React.Component {
     constructor(props) {

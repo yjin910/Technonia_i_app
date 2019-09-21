@@ -3,7 +3,7 @@ package com.groomit;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.apsl.versionnumber.RNVersionNumberPackage;
+import cx.evermeet.versioninfo.RNVersionInfoPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.amazonaws.RNAWSCognitoPackage;
 import com.horcrux.svg.SvgPackage;
@@ -29,7 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNVersionNumberPackage(),
+            new RNVersionInfoPackage(),
             new SplashScreenReactPackage(),
             new RNAWSCognitoPackage(),
             new SvgPackage(),
