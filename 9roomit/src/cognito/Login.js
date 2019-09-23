@@ -87,7 +87,8 @@ export default class LoginScreen extends React.Component {
 
     componentWillUnmount = () => {
         if (Platform.OS == 'android') {
-            this.backhandler.remove();
+            this.focusListener.remove();
+            this.blurListener.remove();
         }
     }
 
