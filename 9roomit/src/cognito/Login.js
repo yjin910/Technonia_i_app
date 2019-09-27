@@ -71,24 +71,13 @@ export default class LoginScreen extends React.Component {
         this.getEmail_async();
 
         if (Platform.OS == 'android') {
-
-            this.focusListener = this.props.navigation.addListener('didFocus', () => {
-                this.backhandler = BackHandler.addEventListener('hardwareBackPress', () => {
-                    this.handleBackButtonPressed();
-                    return true;
-                })
-            });
-
-            this.blurListener = this.props.navigation.addListener('willBlur', payload => {
-                this.backhandler.remove();
-            })
+            //TODO
         }
     }
 
     componentWillUnmount = () => {
         if (Platform.OS == 'android') {
-            this.focusListener.remove();
-            this.blurListener.remove();
+            //TODO
         }
     }
 
