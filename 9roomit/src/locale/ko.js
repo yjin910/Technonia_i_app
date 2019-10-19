@@ -5,5 +5,6 @@ export default {
     cancel: '취소',
     terminate: '종료',
     appTerminate: "앱 종료",
-    appTerminateMsg: "프로그램을 종료하시겠습니까?"
+    appTerminateMsg: "프로그램을 종료하시겠습니까?",
+    period: "조회기간 "
 };

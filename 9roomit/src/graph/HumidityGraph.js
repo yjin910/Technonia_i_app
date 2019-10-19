@@ -24,6 +24,7 @@ import NoData from './components/NoData'
 import ListViewButton from './components/ListViewButton'
 import ListViewScreen from './components/ListViewScreen'
 import RefreshButton from './components/RefreshButton'
+import I18n from '../i18n'
 
 
 const { width, height } = Dimensions.get('window');
@@ -143,7 +144,7 @@ export default class HumidityGraph extends React.Component {
             return (
                 <View style={{flex: 1, backgroundColor: 'white'}}>
                     <View style={styles.datePickerContainer}>
-                        <Text style={styles.text}>조회기간 </Text>
+                        <Text style={styles.text}>{I18n.t('period')}</Text>
                         <RadioGroup
                             radioButtons={pickerData}
                             onPress={changePickerData}
