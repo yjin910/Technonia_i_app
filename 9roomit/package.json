@@ -22,6 +22,7 @@
     "react-native-ble-manager": "^6.6.8",
     "react-native-drawer": "^2.5.1",
     "react-native-gesture-handler": "^1.3.0",
+    "react-native-i18n": "^2.0.15",
     "react-native-modal-datetime-picker": "^7.5.0",
     "react-native-modest-checkbox": "^3.3.0",
     "react-native-radio-buttons-group": "^1.0.7",

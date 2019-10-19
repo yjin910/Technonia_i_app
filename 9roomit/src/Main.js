@@ -22,6 +22,7 @@ import HumidityGraph from './graph/HumidityGraph'
 import GeigerGraph from './graph/GeigerGraph'
 import DrawerButton from './graph/components/DrawerButton'
 import Footer from './Footer'
+import I18n from './i18n'
 
 const INTERVAL_TIME = 300000;
 
@@ -61,19 +62,19 @@ export default class MainScreen extends React.Component {
             customPicker: false,
             datePickerData: [
                 {
-                    label: '1일',
+                    label: I18n.t('day'),
                     value: 1,
                     size: 15,
                     color: 'dodgerblue'
                 },
                 {
-                    label: '1주일',
+                    label: I18n.t('week'),
                     value: 2,
                     size: 15,
                     color: 'dodgerblue'
                 },
                 {
-                    label: '1달',
+                    label: I18n.t('month'),
                     value: 3,
                     size: 15,
                     color: 'dodgerblue'
@@ -133,11 +134,11 @@ export default class MainScreen extends React.Component {
     }
 
     handleBackButtonPressed = async () => {
-        Alert.alert("앱 종료",
-            "프로그램을 종료하시겠습니까?",
+        Alert.alert(I18n.t('appTerminate'),
+            I18n.t('appTerminateMsg'),
             [
-                { text: "취소", onPress: () => console.log('cancel back press event'), style: "cancel" },
-                { text: "종료", onPress: () => BackHandler.exitApp() }
+                { text: I18n.t('cancel'), onPress: () => console.log('cancel back press event'), style: "cancel" },
+                { text: I18n.t('terminate'), onPress: () => BackHandler.exitApp() }
             ],
             { cancelable: true }
         );

@@ -1,4 +1,6 @@
 rootProject.name = 'groomit'
+include ':react-native-i18n'
+project(':react-native-i18n').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-i18n/android')
 include ':react-native-version-info'
 project(':react-native-version-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-version-info/android')
 include ':react-native-splash-screen'

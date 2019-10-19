@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-i18n')
     implementation project(':react-native-version-info')
     implementation project(':react-native-splash-screen')
     implementation project(':amazon-cognito-identity-js')

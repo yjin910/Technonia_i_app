@@ -74,6 +74,8 @@ export default class App extends React.Component {
   }
 
   componentWillMount = () => {
+    //
+
     this.checkLoggedIn();
   }
 
