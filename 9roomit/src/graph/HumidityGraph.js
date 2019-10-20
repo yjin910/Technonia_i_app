@@ -204,45 +204,11 @@ export default class HumidityGraph extends React.Component {
             } else if (max - min < 7) {
                 max_grid += 3;
                 min_grid -= 3;
+            } else {
+                max_grid += 2;
+                min_grid -= 2;
             }
 
-
-            const Decorator = ({ x, y, data }) => {
-                return data[0]['data'].map((value, index) => {
-                    if (x(value.x) && y(value.y)) {
-                        let x1 = x(value.x);
-                        let y1 = y(value.y);
-
-                        if (value.y == min || value.y == max) {
-                            return (
-                                <G key={uuidv1()}>
-                                    <Circle
-                                        key={uuidv1()}
-                                        cx={x1}
-                                        cy={y1}
-                                        r={2}
-                                        stroke={'blue'}
-                                        fill={'white'}
-                                    />
-                                </G>
-                            )
-                        } else {
-                            return (
-                                <G key={uuidv1()}>
-                                    <Circle
-                                        key={uuidv1()}
-                                        cx={x1}
-                                        cy={y1}
-                                        r={1}
-                                        stroke={'blue'}
-                                        fill={'blue'}
-                                    />
-                                </G>
-                            )
-                        }
-                    }
-                })
-            }
 
             return (
                 <Animated.View style={styles.container}>
@@ -269,36 +235,40 @@ export default class HumidityGraph extends React.Component {
                                 <Text>OK</Text>
                             </TouchableOpacity>
                         </View>}
-                        <Animated.View style={{ marginLeft: 10, flexDirection: 'row' }}>
-                            <YAxis
-                                data={h}
-                                style={{ width: width / 6 }}
-                                contentInset={contentInset}
-                                svg={{
-                                    fill: 'grey',
-                                    fontSize: 10,
-                                }}
-                                min={min_grid}
-                                max={max_grid}
-                                scale={scale.scale}
-                                //numberOfTicks={10}
-                                formatLabel={(value) => value}
-                            />
-                            <LineChart
-                                contentInset={contentInset}
-                                style={{ height: height / 8 * 3, width: width / 3 * 2 }}
-                                yAccessor={({ item }) => item.y}
-                                xAccessor={({ item }) => item.x}
-                                data={data}
-                                gridMin={min_grid}
-                                gridMax={max_grid}
-                                animate={true}
-                                key={uuidv1()}
-                            >
-                                <Grid />
-                                {/* <Decorator /> */}
-                            </LineChart>
-                        </Animated.View>
+                        <View style={{ marginLeft: 10, width: width - 10, height: height / 3 * 2 }}>
+                            <View style={{flex: 1, flexDirection: 'row'}} >
+                                <YAxis
+                                    data={h}
+                                    style={{ width: width / 6 }}
+                                    //style={{flex: 1}}
+                                    contentInset={contentInset}
+                                    svg={{
+                                        fill: 'grey',
+                                        fontSize: 10,
+                                    }}
+                                    min={min_grid}
+                                    max={max_grid}
+                                    scale={scale.scale}
+                                    //numberOfTicks={10}
+                                    formatLabel={(value) => value}
+                                />
+                                <LineChart
+                                    contentInset={contentInset}
+                                    style={{ height: height / 8 * 3, width: width / 3 * 2 }}
+                                    //style={{flex: 1}}
+                                    yAccessor={({ item }) => item.y}
+                                    xAccessor={({ item }) => item.x}
+                                    data={data}
+                                    gridMin={min_grid}
+                                    gridMax={max_grid}
+                                    animate={true}
+                                    key={uuidv1()}
+                                >
+                                    <Grid />
+                                    {/* <Decorator /> */}
+                                </LineChart>
+                            </View>
+                        </View>
                         <DataText
                             currentHumi={humidityData[humidityData.length - 1]['y']}
                             types={'h'}

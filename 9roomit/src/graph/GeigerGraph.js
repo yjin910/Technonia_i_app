@@ -194,50 +194,14 @@ export default class GeigerGraph extends React.Component {
             let startDate = moment(geigerData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
             let endDate = moment(geigerData[geigerData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
 
-
-            const Decorator = ({ x, y, data }) => {
-                return data[0]['data'].map((value, index) => {
-                    if (x(value.x) && y(value.y)) {
-                        let x1 = x(value.x);
-                        let y1 = y(value.y);
-
-                        if (value.y == min || value.y == max) {
-
-                            return (
-                                <G key={uuidv1()}>
-                                    <Circle
-                                        key={uuidv1()}
-                                        cx={x1}
-                                        cy={y1}
-                                        r={2}
-                                        stroke={'green'}
-                                        fill={'white'}
-                                    />
-                                </G>
-                            )
-                        } else {
-                            return (
-                                <G key={uuidv1()}>
-                                    <Circle
-                                        key={uuidv1()}
-                                        cx={x1}
-                                        cy={y1}
-                                        r={1}
-                                        stroke={'green'}
-                                        fill={'green'}
-                                    />
-                                </G>
-                            )
-                        }
-                    }
-                })
-            }
-
             let min_grid = min;
             let max_grid = max;
 
             if (max - min < 0.5) {
                 max_grid += 0.35;
+                min_grid -= 0.1;
+            } else {
+                max_grid += 0.1;
                 min_grid -= 0.1;
             }
 
@@ -266,36 +230,38 @@ export default class GeigerGraph extends React.Component {
                                 <Text>OK</Text>
                             </TouchableOpacity>
                         </View>}
-                        <Animated.View style={{ marginLeft: 10, flexDirection: 'row' }}>
-                            <YAxis
-                                data={g}
-                                style={{ width: width / 6 }}
-                                contentInset={contentInset}
-                                svg={{
-                                    fill: 'grey',
-                                    fontSize: 10,
-                                }}
-                                min={min_grid}
-                                max={max_grid}
-                                scale={scale.scale}
-                                //numberOfTicks={10}
-                                formatLabel={(value) => `${value}`}
-                            />
-                            <LineChart
-                                contentInset={contentInset}
-                                style={{ height: height / 8 * 3, width: width / 3 * 2 }}
-                                yAccessor={({ item }) => item.y}
-                                xAccessor={({ item }) => item.x}
-                                data={data}
-                                gridMin={min_grid}
-                                gridMax={max_grid}
-                                animate={true}
-                                key={uuidv1()}
-                            >
-                                <Grid />
-                                {/* <Decorator /> */}
-                            </LineChart>
-                        </Animated.View>
+                        <View style={{ marginLeft: 10, width: width - 10, height: height / 3 * 2 }}>
+                            <View style={{ flex: 1, flexDirection: 'row' }} >
+                                <YAxis
+                                    data={g}
+                                    style={{ width: width / 6 }}
+                                    contentInset={contentInset}
+                                    svg={{
+                                        fill: 'grey',
+                                        fontSize: 10,
+                                    }}
+                                    min={min_grid}
+                                    max={max_grid}
+                                    scale={scale.scale}
+                                    //numberOfTicks={10}
+                                    formatLabel={(value) => `${value}`}
+                                />
+                                <LineChart
+                                    contentInset={contentInset}
+                                    style={{ height: height / 8 * 3, width: width / 3 * 2 }}
+                                    yAccessor={({ item }) => item.y}
+                                    xAccessor={({ item }) => item.x}
+                                    data={data}
+                                    gridMin={min_grid}
+                                    gridMax={max_grid}
+                                    animate={true}
+                                    key={uuidv1()}
+                                >
+                                    <Grid />
+                                    {/* <Decorator /> */}
+                                </LineChart>
+                            </View>
+                        </View>
                         <DataText
                             currentGeiger={geigerData[geigerData.length - 1]['y']}
                             types={'g'}
