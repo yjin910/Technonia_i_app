@@ -19,7 +19,7 @@ import HumidityGraph from './HumidityGraph'
 import GeigerGraph from './GeigerGraph'
 import DrawerButton from './components/DrawerButton'
 import Footer from '../Footer';
-import I18n from './i18n'
+import I18n from '../i18n'
 
 
 const INTERVAL_TIME = 300000;
@@ -74,12 +74,6 @@ export default class MainScreen extends React.Component {
                 {
                     label: I18n.t('month'),
                     value: 3,
-                    size: 15,
-                    color: 'dodgerblue'
-                },
-                {
-                    label: '지정',
-                    value: 4,
                     size: 15,
                     color: 'dodgerblue'
                 },

@@ -30,7 +30,7 @@ const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const TARGET_BLE_DEVICE_NAME = '9room';
-const BLUETOOTH_ICON = require('../../assets/icon_bluetooth.png');
+//const BLUETOOTH_ICON = require('../../assets/icon_bluetooth.png');
 
 const { width, height } = Dimensions.get('window');
 
@@ -57,7 +57,7 @@ export default class BluetoothManager extends React.Component {
             peripherals: new Map(),
             appState: '',
             isLoaded: false,
-            refreshing: false
+            refreshing: false,
         }
 
         this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
@@ -241,13 +241,14 @@ export default class BluetoothManager extends React.Component {
     }
 
     handleDiscoverPeripheral(peripheral) {
-        //TODO if (peripheral.name && peripheral.name != '') {}
         var peripherals = this.state.peripherals;
+        var id = peripheral.id;
+        var name = peripheral.name;
 
-        if (!peripherals.has(peripheral.id)) {
+        if (!peripherals.has(id) && name && name.startsWith('9room')) {
             console.log('Got ble peripheral', peripheral);
-            peripherals.set(peripheral.id, peripheral);
-            this.setState({ peripherals })
+            peripherals.set(id, peripheral);
+            this.setState({ peripherals });
         }
     }
 
