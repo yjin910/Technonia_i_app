@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import PropTypes from "prop-types";
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
+import I18n from '../../i18n'
 
 const { width } = Dimensions.get('window');
 
@@ -38,17 +39,17 @@ export default class DataText extends React.Component {
                 return (
                     <View style={styles.container}>
                         <View style={styles.dateTextContainer}>
-                            <Text style={styles.text}>{`시작: ${startDate}`}</Text>
-                            <Text style={styles.text}>{`종료: ${endDate}`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('start')} ${startDate}`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('end')} ${endDate}`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`현재 온도: ${currentTemp} ºC`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('curT')} ${currentTemp} ºC`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`최고 온도: ${maxTemp} ºC`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('maxT')} ${maxTemp} ºC`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`최저 온도: ${minTemp} ºC`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('minT')} ${minTemp} ºC`}</Text>
                         </View>
                     </View>
                 )
@@ -56,17 +57,17 @@ export default class DataText extends React.Component {
                 return (
                     <View style={styles.container}>
                         <View style={styles.dateTextContainer}>
-                            <Text style={styles.text}>{`시작: ${startDate}`}</Text>
-                            <Text style={styles.text}>{`종료: ${endDate}`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('start')} ${startDate}`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('end')} ${endDate}`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`현재 습도: ${currentHumi} %`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('curH')} ${currentHumi} %`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`최고 습도: ${maxHumi} %`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('maxH')} ${maxHumi} %`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`최저 습도: ${minHumi} %`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('minH')} ${minHumi} %`}</Text>
                         </View>
                     </View>
                 )
@@ -74,17 +75,17 @@ export default class DataText extends React.Component {
                 return (
                     <View style={styles.container}>
                         <View style={styles.dateTextContainer}>
-                            <Text style={styles.text}>{`시작: ${startDate}`}</Text>
-                            <Text style={styles.text}>{`종료: ${endDate}`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('start')} ${startDate}`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('end')} ${endDate}`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`현재 방사능 값: ${currentGeiger} μSv`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('curG')} ${currentGeiger} μSv`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`방사능 최고값: ${maxGeiger} μSv`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('maxG')} ${maxGeiger} μSv`}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.text}>{`방사능 최저값: ${minGeiger} μSv`}</Text>
+                            <Text style={styles.text}>{`${I18n.t('minG')} ${minGeiger} μSv`}</Text>
                         </View>
                     </View>
                 )

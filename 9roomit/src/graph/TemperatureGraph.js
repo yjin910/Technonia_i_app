@@ -219,8 +219,8 @@ export default class TemperatureGraph extends React.Component {
                 max_grid += 1;
             }
 
-            let startDate = moment(temperatureData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
-            let endDate = moment(temperatureData[temperatureData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let startDate = moment(temperatureData[0]['x']).format(I18n.t('dateFormatStr'));
+            let endDate = moment(temperatureData[temperatureData.length - 1]['x']).format(I18n.t('dateFormatStr'));
 
 
             return (

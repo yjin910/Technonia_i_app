@@ -204,8 +204,8 @@ export default class HumidityGraph extends React.Component {
                 }
             ]
 
-            let startDate = moment(humidityData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
-            let endDate = moment(humidityData[humidityData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let startDate = moment(humidityData[0]['x']).format(I18n.t('dateFormatStr'));
+            let endDate = moment(humidityData[humidityData.length - 1]['x']).format(I18n.t('dateFormatStr'));
 
 
             let min_grid = min;

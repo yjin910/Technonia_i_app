@@ -204,8 +204,8 @@ export default class GeigerGraph extends React.Component {
                 }
             ]
 
-            let startDate = moment(geigerData[0]['x']).format('YYYY년 MM월 DD일 HH:mm');
-            let endDate = moment(geigerData[geigerData.length - 1]['x']).format('YYYY년 MM월 DD일 HH:mm');
+            let startDate = moment(geigerData[0]['x']).format(I18n.t('dateFormatStr'));
+            let endDate = moment(geigerData[geigerData.length - 1]['x']).format(I18n.t('dateFormatStr'));
 
             let min_grid = min;
             let max_grid = max;
