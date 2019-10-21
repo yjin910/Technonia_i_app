@@ -13,14 +13,11 @@ import * as scale from 'd3-scale'
 import moment from "moment";
 import PropTypes from "prop-types";
 import uuidv1 from 'uuid/v1';
-import { Circle, G } from 'react-native-svg'
 import RadioGroup from 'react-native-radio-buttons-group';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import DataText from './components/DataText'
 import LoadingGraph from './components/LoadingGraph'
-import LabelText from './components/LabelText'
-import NoData from './components/NoData'
 import ListViewButton from './components/ListViewButton'
 import ListViewScreen from './components/ListViewScreen'
 import RefreshButton from './components/RefreshButton'
@@ -141,6 +138,9 @@ export default class HumidityGraph extends React.Component {
         let timeStr_end = endDate_picker == undefined ? '종료' : `${year_e}/${month_e}/${date_e}`;
 
         if (humidityData.length == 0) {
+            let dummyData = [{ x: 1, y: 52 }, { x: 2, y: 54 }, { x: 3, y: 56 }, { x: 4, y: 58 }, { x: 5, y: 60 }];
+            let dummyYData = [52, 54, 56, 58, 60];
+
             return (
                 <View style={{flex: 1, backgroundColor: 'white'}}>
                     <View style={styles.datePickerContainer}>
@@ -162,25 +162,38 @@ export default class HumidityGraph extends React.Component {
                             <Text>OK</Text>
                         </TouchableOpacity>
                     </View>}
-                    <NoData />
-                    <View style={styles.listViewButtonContainer}>
+                    <View style={{ marginLeft: 10, width: width - 10, height: height / 8 * 3, flexDirection: 'row' }}>
+                        <YAxis
+                            data={dummyYData}
+                            style={{ width: width / 6 }}
+                            contentInset={contentInset}
+                            svg={{
+                                fill: 'grey',
+                                fontSize: 10,
+                            }}
+                            min={50}
+                            max={65}
+                            scale={scale.scale}
+                            formatLabel={(value) => value}
+                        />
+                        <LineChart
+                            contentInset={contentInset}
+                            style={{ height: height / 8 * 3, width: width / 3 * 2 }}
+                            yAccessor={({ item }) => item.y}
+                            xAccessor={({ item }) => item.x}
+                            data={dummyData}
+                            gridMin={50}
+                            gridMax={65}
+                            animate={true}
+                            key={uuidv1()}
+                        >
+                            <Grid />
+                        </LineChart>
+                    </View>
+                    <View style={styles.emptyListViewButtonContainer}>
                         {/* <ListViewButton changeListView={this.changeListViewMode} /> */}
                         <RefreshButton refresh={this.props.refresh} />
                     </View>
-                    <DateTimePicker
-                        isVisible={isDatePicker1Visible}
-                        onConfirm={(res) => this.handleTimePicked_start(res)}
-                        onCancel={() => this.hideDateTimePicker_start()}
-                        datePickerModeAndroid='spinner'
-                        mode='date' //TODO date? datetime? time?
-                    />
-                    <DateTimePicker
-                        isVisible={isDatePicker2Visible}
-                        onConfirm={(res) => this.handleTimePicked_end(res)}
-                        onCancel={() => this.hideDateTimePicker_end()}
-                        datePickerModeAndroid='spinner'
-                        mode='date' //TODO date? datetime? time?
-                    />
                 </View>
             );
         } else {
@@ -217,7 +230,7 @@ export default class HumidityGraph extends React.Component {
                         indicatorStyle={'white'}
                     >
                         <View style={styles.datePickerContainer}>
-                            <Text style={styles.text}>조회기간 </Text>
+                            <Text style={styles.text}>{I18n.t('period')}</Text>
                             <RadioGroup
                                 radioButtons={pickerData}
                                 onPress={changePickerData}
@@ -235,39 +248,36 @@ export default class HumidityGraph extends React.Component {
                                 <Text>OK</Text>
                             </TouchableOpacity>
                         </View>}
-                        <View style={{ marginLeft: 10, width: width - 10, height: height / 3 * 2 }}>
-                            <View style={{flex: 1, flexDirection: 'row'}} >
-                                <YAxis
-                                    data={h}
-                                    style={{ width: width / 6 }}
-                                    //style={{flex: 1}}
-                                    contentInset={contentInset}
-                                    svg={{
-                                        fill: 'grey',
-                                        fontSize: 10,
-                                    }}
-                                    min={min_grid}
-                                    max={max_grid}
-                                    scale={scale.scale}
-                                    //numberOfTicks={10}
-                                    formatLabel={(value) => value}
-                                />
-                                <LineChart
-                                    contentInset={contentInset}
-                                    style={{ height: height / 8 * 3, width: width / 3 * 2 }}
-                                    //style={{flex: 1}}
-                                    yAccessor={({ item }) => item.y}
-                                    xAccessor={({ item }) => item.x}
-                                    data={data}
-                                    gridMin={min_grid}
-                                    gridMax={max_grid}
-                                    animate={true}
-                                    key={uuidv1()}
-                                >
-                                    <Grid />
-                                    {/* <Decorator /> */}
-                                </LineChart>
-                            </View>
+                        <View style={{ marginLeft: 10, width: width - 10, height: height / 8 * 3, flexDirection: 'row' }}>
+                            <YAxis
+                                data={h}
+                                style={{ width: width / 6 }}
+                                //style={{flex: 1}}
+                                contentInset={contentInset}
+                                svg={{
+                                    fill: 'grey',
+                                    fontSize: 10,
+                                }}
+                                min={min_grid}
+                                max={max_grid}
+                                scale={scale.scale}
+                                //numberOfTicks={10}
+                                formatLabel={(value) => value}
+                            />
+                            <LineChart
+                                contentInset={contentInset}
+                                style={{ height: height / 8 * 3, width: width / 3 * 2 }}
+                                //style={{flex: 1}}
+                                yAccessor={({ item }) => item.y}
+                                xAccessor={({ item }) => item.x}
+                                data={data}
+                                gridMin={min_grid}
+                                gridMax={max_grid}
+                                animate={true}
+                                key={uuidv1()}
+                            >
+                                <Grid />
+                            </LineChart>
                         </View>
                         <DataText
                             currentHumi={humidityData[humidityData.length - 1]['y']}
@@ -281,7 +291,7 @@ export default class HumidityGraph extends React.Component {
                             {/* <ListViewButton changeListView={this.changeListViewMode} /> */}
                             <RefreshButton refresh={this.props.refresh} />
                         </View>
-                        <DateTimePicker
+                        {/* <DateTimePicker
                             isVisible={isDatePicker1Visible}
                             onConfirm={(res) => this.handleTimePicked_start(res)}
                             onCancel={() => this.hideDateTimePicker_start()}
@@ -294,7 +304,7 @@ export default class HumidityGraph extends React.Component {
                             onCancel={() => this.hideDateTimePicker_end()}
                             datePickerModeAndroid='spinner'
                             mode='date' //TODO date? datetime? time?
-                        />
+                        /> */}
                         {isListViewMode && humidityData.map(d => {
                             let valueStr = d['y'] + ' %'
                             let timeStr = moment(d['x']).format('HH:mm:ss');
@@ -322,7 +332,14 @@ const styles = StyleSheet.create({
     },
     listViewButtonContainer: {
         flex: 1 / 2,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom: width / 20
+    },
+    emptyListViewButtonContainer: {
+        flex: 1 / 2,
+        flexDirection: 'row',
+        marginBottom: width / 20,
+        marginTop: width / 5
     },
     datePickerContainer: {
         flexDirection: 'row',

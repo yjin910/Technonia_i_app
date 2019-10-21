@@ -13,14 +13,11 @@ import * as scale from 'd3-scale'
 import moment from "moment";
 import PropTypes from "prop-types";
 import uuidv1 from 'uuid/v1';
-import { Circle, G } from 'react-native-svg'
 import RadioGroup from 'react-native-radio-buttons-group';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import DataText from './components/DataText'
 import LoadingGraph from './components/LoadingGraph'
-import LabelText from './components/LabelText'
-import NoData from './components/NoData'
 import ListViewButton from './components/ListViewButton'
 import ListViewScreen from './components/ListViewScreen'
 import RefreshButton from './components/RefreshButton'
@@ -141,10 +138,13 @@ export default class GeigerGraph extends React.Component {
         let timeStr_end = endDate_picker == undefined ? '종료' : `${year_e}/${month_e}/${date_e}`;
 
         if (geigerData.length == 0) {
+            let dummyData = [{ x: 1, y: 0.1 }, { x: 2, y: 0.2 }, { x: 3, y: 0.3 }, { x: 4, y: 0.4 }, { x: 5, y: 0.5 }];
+            let dummyYData = [0.1, 0.2, 0.3, 0.4, 0.5];
+
             return (
                 <View style={{ flex: 1, backgroundColor: 'white' }}>
                     <View style={styles.datePickerContainer}>
-                        <Text style={styles.text}>조회기간 </Text>
+                        <Text style={styles.text}>{I18n.t('period')}</Text>
                         <RadioGroup
                             radioButtons={pickerData}
                             onPress={changePickerData}
@@ -162,25 +162,38 @@ export default class GeigerGraph extends React.Component {
                             <Text>OK</Text>
                         </TouchableOpacity>
                     </View>}
-                    <NoData />
+                    <View style={{ marginLeft: 10, width: width - 10, height: height / 8 * 3 + 20, flexDirection: 'row' }}>
+                        <YAxis
+                            data={dummyYData}
+                            style={{ width: width / 6, height: height / 8 * 3 }}
+                            contentInset={contentInset}
+                            min={0}
+                            max={1}
+                            svg={{
+                                fill: 'grey',
+                                fontSize: 10,
+                            }}
+                            scale={scale.scale}
+                            formatLabel={(value) => `${value}`}
+                        />
+                        <LineChart
+                            contentInset={contentInset}
+                            style={{ height: height / 8 * 3, width: width / 3 * 2 }}
+                            data={dummyData}
+                            yAccessor={({ item }) => item.y}
+                            xAccessor={({ item }) => item.x}
+                            gridMax={1}
+                            gridMin={0}
+                            animate={true}
+                            key={uuidv1()}
+                        >
+                            <Grid />
+                        </LineChart>
+                    </View>
                     <View style={styles.listViewButtonContainer}>
                         {/* <ListViewButton changeListView={this.changeListViewMode} /> */}
                         <RefreshButton refresh={this.props.refresh} />
                     </View>
-                    <DateTimePicker
-                        isVisible={isDatePicker1Visible}
-                        onConfirm={(res) => this.handleTimePicked_start(res)}
-                        onCancel={() => this.hideDateTimePicker_start()}
-                        datePickerModeAndroid='spinner'
-                        mode='date' //TODO date? datetime? time?
-                    />
-                    <DateTimePicker
-                        isVisible={isDatePicker2Visible}
-                        onConfirm={(res) => this.handleTimePicked_end(res)}
-                        onCancel={() => this.hideDateTimePicker_end()}
-                        datePickerModeAndroid='spinner'
-                        mode='date' //TODO date? datetime? time?
-                    />
                 </View>
             );
         } else {
@@ -230,37 +243,34 @@ export default class GeigerGraph extends React.Component {
                                 <Text>OK</Text>
                             </TouchableOpacity>
                         </View>}
-                        <View style={{ marginLeft: 10, width: width - 10, height: height / 3 * 2 }}>
-                            <View style={{ flex: 1, flexDirection: 'row' }} >
-                                <YAxis
-                                    data={g}
-                                    style={{ width: width / 6 }}
-                                    contentInset={contentInset}
-                                    svg={{
-                                        fill: 'grey',
-                                        fontSize: 10,
-                                    }}
-                                    min={min_grid}
-                                    max={max_grid}
-                                    scale={scale.scale}
-                                    //numberOfTicks={10}
-                                    formatLabel={(value) => `${value}`}
-                                />
-                                <LineChart
-                                    contentInset={contentInset}
-                                    style={{ height: height / 8 * 3, width: width / 3 * 2 }}
-                                    yAccessor={({ item }) => item.y}
-                                    xAccessor={({ item }) => item.x}
-                                    data={data}
-                                    gridMin={min_grid}
-                                    gridMax={max_grid}
-                                    animate={true}
-                                    key={uuidv1()}
-                                >
-                                    <Grid />
-                                    {/* <Decorator /> */}
-                                </LineChart>
-                            </View>
+                        <View style={{ marginLeft: 10, width: width - 10, height: height / 8 * 3, flexDirection: 'row' }}>
+                            <YAxis
+                                data={g}
+                                style={{ width: width / 6 }}
+                                contentInset={contentInset}
+                                svg={{
+                                    fill: 'grey',
+                                    fontSize: 10,
+                                }}
+                                min={min_grid}
+                                max={max_grid}
+                                scale={scale.scale}
+                                //numberOfTicks={10}
+                                formatLabel={(value) => `${value}`}
+                            />
+                            <LineChart
+                                contentInset={contentInset}
+                                style={{ height: height / 8 * 3, width: width / 3 * 2 }}
+                                yAccessor={({ item }) => item.y}
+                                xAccessor={({ item }) => item.x}
+                                data={data}
+                                gridMin={min_grid}
+                                gridMax={max_grid}
+                                animate={true}
+                                key={uuidv1()}
+                            >
+                                <Grid />
+                            </LineChart>
                         </View>
                         <DataText
                             currentGeiger={geigerData[geigerData.length - 1]['y']}
@@ -274,7 +284,7 @@ export default class GeigerGraph extends React.Component {
                             {/* <ListViewButton changeListView={this.changeListViewMode} /> */}
                             <RefreshButton refresh={this.props.refresh} />
                         </View>
-                        <DateTimePicker
+                        {/* <DateTimePicker
                             isVisible={isDatePicker1Visible}
                             onConfirm={(res) => this.handleTimePicked_start(res)}
                             onCancel={() => this.hideDateTimePicker_start()}
@@ -287,7 +297,7 @@ export default class GeigerGraph extends React.Component {
                             onCancel={() => this.hideDateTimePicker_end()}
                             datePickerModeAndroid='spinner'
                             mode='date' //TODO date? datetime? time?
-                        />
+                        /> */}
                         {isListViewMode && geigerData.map(d => {
                             let valueStr = d['y'] + ' μSv'
                             let timeStr = moment(d['x']).format('HH:mm:ss');
@@ -316,6 +326,12 @@ const styles = StyleSheet.create({
         flex: 1 / 2,
         flexDirection: 'row',
         marginBottom: width / 20
+    },
+    emptyListViewButtonContainer: {
+        flex: 1 / 2,
+        flexDirection: 'row',
+        marginBottom: width / 20,
+        marginTop: width / 5
     },
     datePickerContainer: {
         flexDirection: 'row',

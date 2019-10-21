@@ -19,8 +19,6 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import DataText from './components/DataText'
 import LoadingGraph from './components/LoadingGraph'
-import LabelText from './components/LabelText'
-import NoData from './components/NoData'
 import ListViewButton from './components/ListViewButton'
 import ListViewScreen from './components/ListViewScreen'
 import RefreshButton from './components/RefreshButton'
@@ -143,10 +141,13 @@ export default class TemperatureGraph extends React.Component {
         let timeStr_end = endDate_picker == undefined ? '종료' : `${year_e}/${month_e}/${date_e}`;
 
         if (temperatureData.length == 0) {
+            let dummyData = [{ x: 1, y: 22 }, { x: 2, y: 24 }, { x: 3, y: 26 }, { x: 4, y: 28 }, { x: 5, y: 30 }];
+            let dummyYData = [22, 24, 26, 28, 30];
+
             return (
                 <View style={{ flex: 1, backgroundColor: 'white' }}>
                     <View style={styles.datePickerContainer}>
-                        <Text style={styles.text}>조회기간 </Text>
+                        <Text style={styles.text}>{I18n.t('period')}</Text>
                         <RadioGroup
                             radioButtons={pickerData}
                             onPress={changePickerData}
@@ -164,25 +165,39 @@ export default class TemperatureGraph extends React.Component {
                             <Text>OK</Text>
                         </TouchableOpacity>
                     </View>}
-                    <NoData />
-                    <View style={styles.listViewButtonContainer}>
+                    <View style={{ marginLeft: 10, width: width - 10, height: height / 8 * 3, flexDirection: 'row' }}>
+                        <YAxis
+                            data={dummyYData}
+                            style={{ width: width / 6 }}
+                            contentInset={contentInset}
+                            svg={{
+                                fill: 'grey',
+                                fontSize: 10,
+                            }}
+                            min={20}
+                            max={33}
+                            scale={scale.scale}
+                            //numberOfTicks={10}
+                            formatLabel={(value) => value}
+                        />
+                        <LineChart
+                            contentInset={contentInset}
+                            style={{ height: height / 8 * 3, width: width / 3 * 2 }}
+                            yAccessor={({ item }) => item.y}
+                            xAccessor={({ item }) => item.x}
+                            data={dummyData}
+                            gridMin={20}
+                            gridMax={33}
+                            animate={true}
+                            key={uuidv1()}
+                        >
+                            <Grid />
+                        </LineChart>
+                    </View>
+                    <View style={styles.emptyListViewButtonContainer}>
                         {/* <ListViewButton changeListView={this.changeListViewMode} /> */}
                         <RefreshButton refresh={this.props.refresh} />
                     </View>
-                    <DateTimePicker
-                        isVisible={isDatePicker1Visible}
-                        onConfirm={(res) => this.handleTimePicked_start(res)}
-                        onCancel={() => this.hideDateTimePicker_start()}
-                        datePickerModeAndroid='spinner'
-                        mode='date' //TODO date? datetime? time?
-                    />
-                    <DateTimePicker
-                        isVisible={isDatePicker2Visible}
-                        onConfirm={(res) => this.handleTimePicked_end(res)}
-                        onCancel={() => this.hideDateTimePicker_end()}
-                        datePickerModeAndroid='spinner'
-                        mode='date' //TODO date? datetime? time?
-                    />
                 </View>
             );
         } else {
@@ -233,37 +248,34 @@ export default class TemperatureGraph extends React.Component {
                                 <Text>OK</Text>
                             </TouchableOpacity>
                         </View>}
-                        <View style={{ marginLeft: 10, width: width - 10, height: height / 3 * 2 }}>
-                            <View style={{ flex: 1, flexDirection: 'row' }} >
-                                <YAxis
-                                    data={t}
-                                    style={{ width: width / 6 }}
-                                    contentInset={contentInset}
-                                    svg={{
-                                        fill: 'grey',
-                                        fontSize: 10,
-                                    }}
-                                    min={min_grid}
-                                    max={max_grid}
-                                    scale={scale.scale}
-                                    //numberOfTicks={10}
-                                    formatLabel={(value) => value}
-                                />
-                                <LineChart
-                                    contentInset={contentInset}
-                                    style={{ height: height / 8 * 3, width: width / 3 * 2 }}
-                                    yAccessor={({ item }) => item.y}
-                                    xAccessor={({ item }) => item.x}
-                                    data={data}
-                                    gridMin={min_grid}
-                                    gridMax={max_grid}
-                                    animate={true}
-                                    key={uuidv1()}
-                                >
-                                    <Grid />
-                                    {/* <Decorator /> */}
-                                </LineChart>
-                            </View>
+                        <View style={{ marginLeft: 10, width: width - 10, height: height / 8 * 3, flexDirection: 'row' }}>
+                            <YAxis
+                                data={t}
+                                style={{ width: width / 6 }}
+                                contentInset={contentInset}
+                                svg={{
+                                    fill: 'grey',
+                                    fontSize: 10,
+                                }}
+                                min={min_grid}
+                                max={max_grid}
+                                scale={scale.scale}
+                                //numberOfTicks={10}
+                                formatLabel={(value) => value}
+                            />
+                            <LineChart
+                                contentInset={contentInset}
+                                style={{ height: height / 8 * 3, width: width / 3 * 2 }}
+                                yAccessor={({ item }) => item.y}
+                                xAccessor={({ item }) => item.x}
+                                data={data}
+                                gridMin={min_grid}
+                                gridMax={max_grid}
+                                animate={true}
+                                key={uuidv1()}
+                            >
+                                <Grid />
+                            </LineChart>
                         </View>
                         <DataText
                             currentTemp={temperatureData[temperatureData.length - 1]['y']}
@@ -318,7 +330,14 @@ const styles = StyleSheet.create({
     },
     listViewButtonContainer: {
         flex: 1 / 2,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom: width / 20,
+    },
+    emptyListViewButtonContainer: {
+        flex: 1 / 2,
+        flexDirection: 'row',
+        marginBottom: width / 20,
+        marginTop: width / 5
     },
     datePickerContainer: {
         flexDirection: 'row',
