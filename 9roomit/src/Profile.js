@@ -35,6 +35,8 @@ const menu = [
     { title: 'Copyright' },
 ]
 
+const ADD_DEVICE_IMAGE = require('../assets/addDevice.png');
+
 export default class ProfileScreen extends React.Component {
     static navigationOptions = {
         header: null
@@ -142,9 +144,10 @@ export default class ProfileScreen extends React.Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    let devicesList = result.concat(['add'])
                     this.setState({
                         isLoaded: true,
-                        devices: result
+                        devices: devicesList
                     });
                 }
             )
@@ -194,6 +197,16 @@ export default class ProfileScreen extends React.Component {
 
         if (isLoaded) {
             let Devices = devices.map(d => {
+                if (d == 'add') {
+                    return (
+                        <View style={styles.addDeviceContainer}>
+                            <TouchableOpacity>
+                                <Image style={styles.addDeviceImage} source={ADD_DEVICE_IMAGE} />
+                            </TouchableOpacity>
+                        </View>
+                    );
+                }
+
                 let deviceNum = d['deviceNum'];
                 let geiger = d['geiger'];
                 let temperature = d['temperature'];
@@ -324,5 +337,17 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         backgroundColor: '#1a3f95'
+    },
+    addDeviceImage: {
+        width: 30,
+        height: 30,
+        tintColor: '#3B5998'
+    },
+    addDeviceContainer: {
+        width: width,
+        height: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10
     }
 });
