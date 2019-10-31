@@ -20,6 +20,7 @@ import CopyrightScreen from './src/additional/CopyrightScreen'
 import HelpScreen from './src/additional/HelpScreen'
 import GraphScreen from './src/graph/Graph'
 import VerificationScreen from './src/cognito/Verification'
+import DeviceListSettingScreen from './src/additional/DeviceListSetting'
 
 import Amplify from 'aws-amplify';
 import awsConfig from './src/cognito/config';
@@ -38,7 +39,8 @@ const AppStackNavigator = createStackNavigator({
   GeigerNameSetting: { screen: GeigerNameSetting },
   Help: { screen: HelpScreen },
   Copyright: { screen: CopyrightScreen },
-  Graph: { screen: GraphScreen }
+  Graph: { screen: GraphScreen },
+  DeviceListSetting: { screen: DeviceListSettingScreen }
 });
 
 const AppStackNavigator_signedIn = createStackNavigator({
@@ -53,7 +55,8 @@ const AppStackNavigator_signedIn = createStackNavigator({
   Verification: { screen: VerificationScreen },
   Help: { screen: HelpScreen },
   Copyright: { screen: CopyrightScreen },
-  Graph: { screen: GraphScreen }
+  Graph: { screen: GraphScreen },
+  DeviceListSetting: { screen: DeviceListSettingScreen }
 });
 
 

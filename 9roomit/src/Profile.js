@@ -10,7 +10,8 @@ import {
     TouchableOpacity,
     Image,
     AsyncStorage,
-    ActivityIndicator
+    ActivityIndicator,
+    RefreshControl
 } from 'react-native';
 import uuidv1 from 'uuid/v1'
 import Drawer from 'react-native-drawer'
@@ -47,7 +48,8 @@ export default class ProfileScreen extends React.Component {
 
         this.state = {
             isLoaded: false,
-            devices: undefined
+            devices: undefined,
+            refreshing: false
         };
 
         this.navigateToGraphScreen = this.navigateToGraphScreen.bind(this);
@@ -58,6 +60,8 @@ export default class ProfileScreen extends React.Component {
         this.logOut_async = this.logOut_async.bind(this);
         this.closeDrawer = this.closeDrawer.bind(this);
         this.goBack = this.goBack.bind(this);
+        this.moveToDeviceListSettingScreen = this.moveToDeviceListSettingScreen.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
     }
 
     componentDidMount() {
@@ -147,7 +151,8 @@ export default class ProfileScreen extends React.Component {
                     let devicesList = result.concat(['add'])
                     this.setState({
                         isLoaded: true,
-                        devices: devicesList
+                        devices: devicesList,
+                        refreshing: false
                     });
                 }
             )
@@ -157,7 +162,8 @@ export default class ProfileScreen extends React.Component {
                 // exceptions from actual bugs in components.
                 console.log(error);
                 this.setState({
-                    isLoaded: false
+                    isLoaded: false,
+                    refreshing: false
                 });
             });
     }
@@ -192,15 +198,24 @@ export default class ProfileScreen extends React.Component {
         this.props.navigation.goBack();
     }
 
+    moveToDeviceListSettingScreen = () => {
+        this.props.navigation.navigate('DeviceListSetting');
+    }
+
+    onRefresh = () => {
+        this.setState({ refreshing: true });
+        this.getEmailFromAsyncStorage_async();
+    }
+
     render() {
-        let { isLoaded, devices } = this.state;
+        let { isLoaded, devices, refreshing } = this.state;
 
         if (isLoaded) {
             let Devices = devices.map(d => {
                 if (d == 'add') {
                     return (
-                        <View style={styles.addDeviceContainer}>
-                            <TouchableOpacity>
+                        <View key={uuidv1()} style={styles.addDeviceContainer}>
+                            <TouchableOpacity style={styles.addDeviceContainer} onPress={this.moveToDeviceListSettingScreen}>
                                 <Image style={styles.addDeviceImage} source={ADD_DEVICE_IMAGE} />
                             </TouchableOpacity>
                         </View>
@@ -267,9 +282,19 @@ export default class ProfileScreen extends React.Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={styles.devicesContainer}>
+                        <ScrollView
+                            contentContainerStyle={styles.devicesContainer}
+                            scrollEnabled={true}
+                            indicatorStyle={'white'}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={this.onRefresh}
+                                />
+                            }
+                        >
                             {Devices}
-                        </View>
+                        </ScrollView>
                         <Footer/>
                     </Drawer>
                 </ScrollView>
@@ -300,6 +325,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "white",
         justifyContent: 'center'
+    },
+    scroll: {
+        flex: 1,
+        backgroundColor: '#f0f0f0',
+        margin: 10,
     },
     devicesContainer: {
         flex: 1,
