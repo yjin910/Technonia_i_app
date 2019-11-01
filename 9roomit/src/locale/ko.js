@@ -19,4 +19,8 @@ export default {
     maxH: '최고 습도:',
     minH: '최저 습도:',
     dateFormatStr: 'YYYY년 MM월 DD일 HH:mm',
+    deviceUUID: '기기번호를 입력하시오',
+    currentGeiger: '현재 방사능 :',
+    currentTemp: '현재 온도  :',
+    currentHumi: '현재 습도  :'
 };

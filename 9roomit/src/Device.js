@@ -9,8 +9,7 @@ import {
 } from "react-native";
 import PropTypes from "prop-types";
 
-import GraphButton from "./GraphButton";
-
+import I18n from './i18n';
 
 const { width, height } = Dimensions.get("window");
 
@@ -42,9 +41,9 @@ export default class Device extends Component {
     render() {
         let { deviceNum, onPressed, currentGeiger, currentTemp, currentHumi, geigerIsNull, temperatureIsNull, humidityIsNull } = this.props;
 
-        let geiger = geigerIsNull ? `현재 방사능 : N/A` : `현재 방사능 : ${currentGeiger} μSv`
-        let temperature = temperatureIsNull ? `현재 온도  : N/A` : `현재 온도  : ${currentTemp} °C`
-        let humidity = humidityIsNull ? `현재 습도  : N/A` : `현재 습도  : ${currentHumi} %`;
+        let geiger = geigerIsNull ? `${I18n.t('currentGeiger')} N/A` : `${I18n.t('currentGeiger')} ${currentGeiger} μSv`
+        let temperature = temperatureIsNull ? `${I18n.t('currentTemp')} N/A` : `${I18n.t('currentTemp')} ${currentTemp} °C`
+        let humidity = humidityIsNull ? `${I18n.t('currentHumi')} N/A` : `${I18n.t('currentHumi')} ${currentHumi} %`;
 
         return (
             <View style={styles.container}>

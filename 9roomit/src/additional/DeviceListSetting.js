@@ -21,6 +21,8 @@ import Drawer from 'react-native-drawer'
 
 import DrawerButton from '../graph/components/DrawerButton'
 import Footer from '../Footer';
+import I18n from '../i18n'
+
 
 const { width, height } = Dimensions.get('window');
 const MENU_IMAGE = require('../../assets/menu.png');
@@ -224,7 +226,7 @@ export default class DeviceListSettingScreen extends React.Component {
                             <ScrollView>
                                 <View style={styles.container}>
                                     <TextInput style={styles.inputBox}
-                                        placeholder="DeviceName"
+                                        placeholder={I18n.t('deviceUUID')}
                                         placeholderTextColor="#ffffff"
                                         selectionColor="#1a3f95"
                                         keyboardType="email-address"
@@ -268,7 +270,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: height / 7
+        marginTop: height / 6
     },
     logoImage: {
         width: height / 6,
@@ -278,7 +280,7 @@ const styles = StyleSheet.create({
     },
     inputBox: {
         width: width * 4 / 5,
-        height: height / 15,
+        height: height / 14,
         backgroundColor: "#1a3f95",
         borderRadius: 25,
         paddingHorizontal: 16,
@@ -288,7 +290,7 @@ const styles = StyleSheet.create({
     },
     buttonBox: {
         width: width * 4 / 5,
-        height: height / 15,
+        height: height / 14,
         backgroundColor: '#a8a9ad',
         borderRadius: 25,
         marginVertical: width / 15,
@@ -296,7 +298,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     buttonText: {
-        fontSize: width / 25,
+        fontSize: width / 23,
         fontWeight: '500',
         color: '#1a3f95',
         textAlign: 'center'

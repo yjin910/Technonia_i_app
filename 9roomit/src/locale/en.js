@@ -19,4 +19,8 @@ export default {
     maxH: 'maximum:',
     minH: 'minimum: ',
     dateFormatStr: 'YYYY MM/DD HH:mm',
+    deviceUUID: 'Device  UUID',
+    currentGeiger: 'Geiger           :',
+    currentTemp: 'Temperature :',
+    currentHumi: 'Humidity       :'
 };
