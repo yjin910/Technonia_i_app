@@ -22,5 +22,6 @@ export default {
     deviceUUID: 'Device  UUID',
     currentGeiger: 'Geiger           :',
     currentTemp: 'Temperature :',
-    currentHumi: 'Humidity       :'
+    currentHumi: 'Humidity       :',
+    minPasswordLen: 'Minimum password length is 8!'
 };

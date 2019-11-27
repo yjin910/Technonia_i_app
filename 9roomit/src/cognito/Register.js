@@ -160,11 +160,9 @@ export default class SignUpScreen extends React.Component {
                                 <TouchableOpacity style={styles.buttonBox} onPress={() => this._signUp()}>
                                     <Text style={styles.buttonText}>Signup</Text>
                                 </TouchableOpacity>
-                                <View style={styles.textContainer}>
-                                    <TouchableOpacity onPress={() => navigate('Login')}>
-                                        <Text style={styles.toLoginPageButton}>Sign In</Text>
-                                    </TouchableOpacity>
-                                </View>
+                                <TouchableOpacity style={styles.buttonBox} onPress={() => navigate('Login')}>
+                                    <Text style={styles.buttonText}>Sign In</Text>
+                                </TouchableOpacity>
                             </View>
                         </ScrollView>
                     </TouchableWithoutFeedback>
@@ -184,18 +182,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    textContainer: {
-        flexGrow: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingVertical: 16,
-        flexDirection: 'row'
-    },
-    toLoginPageButton: {
-        color: "#ffffff",
-        fontSize: width / 20,
-        fontWeight: '500'
     },
     inputBox: {
         width: width * 4 / 5,

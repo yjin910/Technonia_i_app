@@ -215,7 +215,7 @@ export default class ProfileScreen extends React.Component {
                 if (d == 'add') {
                     return (
                         <View key={uuidv1()} style={styles.addDeviceContainer}>
-                            <TouchableOpacity style={styles.addDeviceContainer} onPress={this.moveToDeviceListSettingScreen}>
+                            <TouchableOpacity style={styles.addDeviceButton} onPress={this.moveToDeviceListSettingScreen}>
                                 <Image style={styles.addDeviceImage} source={ADD_DEVICE_IMAGE} />
                             </TouchableOpacity>
                         </View>
@@ -251,10 +251,7 @@ export default class ProfileScreen extends React.Component {
             });
 
             return (
-                <ScrollView
-                    contentContainerStyle={styles.container}
-                    scrollEnabled={true}
-                    indicatorStyle={'white'}>
+                <SafeAreaView style={styles.container}>
                     <StatusBar barStyle="light-content" />
                     <Drawer
                         ref={(ref) => this.drawer = ref}
@@ -283,7 +280,7 @@ export default class ProfileScreen extends React.Component {
                             </View>
                         </View>
                         <ScrollView
-                            contentContainerStyle={styles.devicesContainer}
+                            style={styles.devicesContainer}
                             scrollEnabled={true}
                             indicatorStyle={'white'}
                             refreshControl={
@@ -297,7 +294,7 @@ export default class ProfileScreen extends React.Component {
                         </ScrollView>
                         <Footer/>
                     </Drawer>
-                </ScrollView>
+                </SafeAreaView>
             )
         } else {
             return (
@@ -360,7 +357,6 @@ const styles = StyleSheet.create({
     },
     drawerContainer: {
         flex: 1,
-        backgroundColor: 'dodgerblue',
         justifyContent: 'flex-start'
     },
     loadingScreenContainer: {
@@ -373,9 +369,17 @@ const styles = StyleSheet.create({
         height: 30,
         tintColor: '#3B5998'
     },
-    addDeviceContainer: {
+    addDeviceButton: {
         width: width,
         height: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+        marginBottom: 10
+    },
+    addDeviceContainer: {
+        width: width,
+        height: 60,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10

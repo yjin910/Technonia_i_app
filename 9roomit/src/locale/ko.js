@@ -22,5 +22,6 @@ export default {
     deviceUUID: '기기번호를 입력하시오',
     currentGeiger: '현재 방사능 :',
     currentTemp: '현재 온도  :',
-    currentHumi: '현재 습도  :'
+    currentHumi: '현재 습도  :',
+    minPasswordLen: '비밀번호는 8자 이상이어야 합니다!'
 };

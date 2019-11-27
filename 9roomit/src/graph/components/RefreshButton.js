@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        marginTop: width / 40
+        marginTop: width / 40,
+        justifyContent: 'center'
     },
     buttonText: {
         fontSize: width / 25,
@@ -55,5 +56,6 @@ const styles = StyleSheet.create({
         borderRadius: 13,
         alignItems: 'center',
         marginRight: width / 25,
+        justifyContent: 'center'
     }
 });

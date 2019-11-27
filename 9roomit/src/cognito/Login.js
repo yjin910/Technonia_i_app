@@ -21,6 +21,7 @@ import { Auth } from 'aws-amplify';
 import { StackActions, NavigationActions } from 'react-navigation';
 import Checkbox from 'react-native-modest-checkbox'
 
+import I18n from '../i18n';
 
 
 const { width, height } = Dimensions.get('window');
@@ -81,23 +82,17 @@ export default class LoginScreen extends React.Component {
         }
     }
 
-    handleBackButtonPressed = async () => {
-        Alert.alert("앱 종료",
-            "프로그램을 종료하시겠습니까?",
-            [
-                { text: "취소", onPress: () => console.log('cancel back press event'), style: "cancel" },
-                { text: "종료", onPress: () => BackHandler.exitApp() }
-            ],
-            { cancelable: true }
-        );
-    }
-
     _signIn = async () => {
         const { email, pw } = this.state;
 
-        if (pw.length < 8) alert('Minimum password length is 8!');
 
         if (email && pw) {
+            // check the length of the password
+            if (pw.length < 8) {
+                alert(I18n.t('minPasswordLen'));
+                return;
+            }
+
             Auth.signIn(email, pw).then(user => {
                 console.log(user);
                 this.storeAsync(email, pw);
@@ -155,6 +150,9 @@ export default class LoginScreen extends React.Component {
                                 <TouchableOpacity style={styles.loginButtonBox} onPress={() => this._signIn()}>
                                     <Text style={styles.buttonText}>Login</Text>
                                 </TouchableOpacity>
+                                <TouchableOpacity style={styles.loginButtonBox} onPress={() => navigate('Signup')}>
+                                    <Text style={styles.buttonText}>Register</Text>
+                                </TouchableOpacity>
                                 <View style={{flexDirection: 'row'}}>
                                     <Checkbox
                                         label='auto login'
@@ -190,11 +188,6 @@ export default class LoginScreen extends React.Component {
                                         containerStyle={{ padding: 10, flexDirection: 'row' }}
                                         labelStyle={{ color: 'white' }}
                                     />
-                                </View>
-                                <View style={styles.signupTextContainer}>
-                                    <TouchableOpacity onPress={() => navigate('Signup')}>
-                                        <Text style={styles.signupButton}> Register </Text>
-                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </ScrollView>
@@ -245,17 +238,5 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: "#ffffff",
         textAlign: 'center'
-    },
-    signupTextContainer: {
-        flexGrow: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingVertical: width / 20,
-        flexDirection: 'row'
-    },
-    signupButton: {
-        color: "#ffffff",
-        fontSize: width / 20,
-        fontWeight: '500'
     }
 });

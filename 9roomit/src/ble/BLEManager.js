@@ -343,7 +343,7 @@ export default class BluetoothManager extends React.Component {
             )
         });
 
-        if (list.length == 0) Peripherals = (<ActivityIndicator size="large" color="red" />);
+        //if (list.length == 0) Peripherals = (<ActivityIndicator size="large" color="red" />);
 
         return (
             <SafeAreaView style={styles.root}>
