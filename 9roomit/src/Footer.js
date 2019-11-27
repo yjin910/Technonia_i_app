@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     textContainer: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
     }
 });

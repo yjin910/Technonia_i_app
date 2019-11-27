@@ -341,7 +341,9 @@ const styles = StyleSheet.create({
     },
     datePickerContainer: {
         flexDirection: 'row',
-        marginTop: height / 18
+        marginTop: height / 18,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     text: {
         marginLeft: width / 20

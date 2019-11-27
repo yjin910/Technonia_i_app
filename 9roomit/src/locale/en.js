@@ -6,7 +6,7 @@ export default {
     terminate: 'Terminate',
     appTerminate: "Terminate app",
     appTerminateMsg: "Do you want to terminate the app?",
-    period: "Period ",
+    period: "Period : ",
     start: 'start:',
     end: 'end:',
     curT: 'current:    ',
