@@ -250,21 +250,27 @@ export default class MainScreen extends React.Component {
 
             switch (val) {
                 case 1:
+                    // date object for yesterday
                     let startDate = (d => new Date(d.setDate(d.getDate() - 1)))(new Date);
                     let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
 
+                    // request the data for last 24 hours
                     url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 2:
+                    // date object for last week
                     let startDate = (d => new Date(d.setDate(d.getDate() - 7)))(new Date);
                     let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
 
+                    // request the data for last 1 week
                     url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 3:
+                    // date object for last month
                     let startDate = (d => new Date(d.setMonth(d.getMonth() - 1)))(new Date);
                     let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
 
+                    // request the data for last 1 month
                     url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 4:
