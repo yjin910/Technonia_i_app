@@ -16,6 +16,7 @@ import {
 import Drawer from 'react-native-drawer'
 import { createMaterialTopTabNavigator, createAppContainer, StackActions, NavigationActions } from 'react-navigation';
 import uuidv1 from 'uuid/v1';
+import moment from "moment";
 
 import TemperatureGraph from './graph/TemperatureGraph'
 import HumidityGraph from './graph/HumidityGraph'
@@ -118,7 +119,9 @@ export default class MainScreen extends React.Component {
                 this.backhandler = BackHandler.addEventListener('hardwareBackPress', () => {
                     this.handleBackButtonPressed();
                     return true;
-                })
+                });
+
+                //TODO change device -> issue list (19, 21, 22)
             });
 
             this.blurListener = this.props.navigation.addListener('willBlur', payload => {
@@ -154,14 +157,14 @@ export default class MainScreen extends React.Component {
     getEmail_async = async () => {
         let email = await AsyncStorage.getItem('9room@email');
 
-        this.fetchData_Async(email);
+        this.fetchData_Async(email, 1);
         //TODO this.setInterval(email);
     }
 
     setInterval = (email) => {
         this._timer = setInterval(() => {
             console.log('fetch data start');
-            this.fetchData_Async(email);
+            this.fetchData_Async(email, 1);
         }, INTERVAL_TIME);
     }
 
@@ -277,15 +280,33 @@ export default class MainScreen extends React.Component {
         let url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/main/representative?email=${email}`;
 
         if (val) {
+            let currentDate = new Date();
+            let currentDate_str = moment(currentDate).format('YYYY-MM-DD HH:mm:ss');
+
             switch (val) {
                 case 1 :
-                    url += `&term=14` //1 day = 24 hours
+                    // date object for yesterday
+                    let startDate = (d => new Date(d.setDate(d.getDate() - 1)))(new Date);
+                    let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+
+                    // request the data for last 24 hours
+                    url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 2 :
-                    url += `&term=168` //1 week = 168 hours
+                    // date object for last week
+                    let startDate = (d => new Date(d.setDate(d.getDate() - 7)))(new Date);
+                    let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+
+                    // request the data for last 1 week
+                    url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 3 :
-                    url += `&term=720` //30 days = 720 hours
+                    // date object for last month
+                    let startDate = (d => new Date(d.setMonth(d.getMonth() - 1)))(new Date);
+                    let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+
+                    // request the data for last 1 month
+                    url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 4:
                     if (term) url += `&term=${term}`

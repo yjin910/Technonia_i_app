@@ -13,6 +13,7 @@ import {
 import Drawer from 'react-native-drawer'
 import { createMaterialTopTabNavigator, createAppContainer, StackActions, NavigationActions } from 'react-navigation';
 import uuidv1 from 'uuid/v1';
+import moment from "moment";
 
 import TemperatureGraph from './TemperatureGraph'
 import HumidityGraph from './HumidityGraph'
@@ -102,7 +103,7 @@ export default class MainScreen extends React.Component {
 
     componentDidMount = () => {
         let deviceNum = this.props.navigation.getParam('deviceNum', '');
-        this.fetchData_Async(deviceNum);
+        this.fetchData_Async(deviceNum, 1);
 
         //TODO this.setInterval();
     }
@@ -124,7 +125,7 @@ export default class MainScreen extends React.Component {
 
         this._timer = setInterval(() => {
             console.log('fetch data start');
-            this.fetchData_Async(deviceNum);
+            this.fetchData_Async(deviceNum, 1);
         }, INTERVAL_TIME);
     }
 
@@ -244,15 +245,27 @@ export default class MainScreen extends React.Component {
         let url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/getdata?u=${deviceNum}`;
 
         if (val) {
+            let currentDate = new Date();
+            let currentDate_str = moment(currentDate).format('YYYY-MM-DD HH:mm:ss');
+
             switch (val) {
                 case 1:
-                    url += `&term=14` //1 day = 24 hours
+                    let startDate = (d => new Date(d.setDate(d.getDate() - 1)))(new Date);
+                    let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+
+                    url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 2:
-                    url += `&term=168` //1 week = 168 hours
+                    let startDate = (d => new Date(d.setDate(d.getDate() - 7)))(new Date);
+                    let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+
+                    url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 3:
-                    url += `&term=720` //30 days = 720 hours
+                    let startDate = (d => new Date(d.setMonth(d.getMonth() - 1)))(new Date);
+                    let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+
+                    url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 4:
                     if (term) url += `&term=${term}`
