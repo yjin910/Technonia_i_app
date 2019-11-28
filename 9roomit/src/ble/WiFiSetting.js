@@ -51,6 +51,7 @@ export default class WiFiSetting extends React.Component {
         }
 
         this.sendWiFiSettings = this.sendWiFiSettings.bind(this);
+        this._successDisconnect = this._successDisconnect.bind(this);
 
         this.goBack = this.goBack.bind(this);
         this.goBack_Drawer = this.goBack_Drawer.bind(this);
@@ -73,13 +74,37 @@ export default class WiFiSetting extends React.Component {
         this.drawer.close()
     }
 
+    /**
+     * Log if the BLE disconnection success
+     */
+    _successDisconnect = () => {
+        console.log('disconnected!');
+    }
+
+    /**
+     * Disconnects the BLE connection
+     */
+    disconnectDevice = async () => {
+        const { uuid } = this.state;
+
+        if (uuid == '') {
+            uuid = await AsyncStorage.getItem('9room@device_uuid');
+        }
+
+        util.disconnectBLEDevice(uuid, this._successDisconnect);
+    }
+
     goBack_Drawer = () => {
         this.closeDrawer();
-        this.goBack();
+        this.disconnectDevice();
+
+        // pop 2 screens from the stack navigator to go back 2 screens
+        this.props.navigation.pop(2);
     }
 
     logOut_async = async () => {
-        //TODO disconnect device
+        this.closeDrawer();      //close drawer
+        this.disconnectDevice(); //disconnect BLE connection
 
         await AsyncStorage.removeItem('9room@email');
         await AsyncStorage.removeItem('9room@pw');
@@ -94,31 +119,31 @@ export default class WiFiSetting extends React.Component {
     }
 
     navigateToMainScreen = async () => {
-        //TODO disconnect device
+        this.closeDrawer();      //close drawer
+        //TODO this.disconnectDevice(); //disconnect BLE connection
 
-        this.closeDrawer();
         let email = await AsyncStorage.getItem('9room@email');
         this.props.navigation.navigate('Main', { email: email });
     }
 
     navigateToHelpScreen = () => {
-        //TODO disconnect device
+        this.closeDrawer();      //close drawer
+        //TODO this.disconnectDevice(); //disconnect BLE connection
 
-        this.closeDrawer();
         this.props.navigation.navigate('Help');
     }
 
     navigateToCopyrightScreen = () => {
-        //TODO disconnect device
+        this.closeDrawer();      //close drawer
+        //TODO this.disconnectDevice(); //disconnect BLE connection
 
-        this.closeDrawer();
         this.props.navigation.navigate('Copyright');
     }
 
     navigateToProfileScreen = async () => {
-        //TODO disconnect device
+        this.closeDrawer();      //close drawer
+        //TODO this.disconnectDevice(); //disconnect BLE connection
 
-        this.closeDrawer();
         let email = await AsyncStorage.getItem('9room@email');
         this.props.navigation.navigate('Profile', { email: email });
     }
