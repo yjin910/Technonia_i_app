@@ -72,13 +72,24 @@ export default class LoginScreen extends React.Component {
         this.getEmail_async();
 
         if (Platform.OS == 'android') {
-            //TODO
+
+            this.focusListener = this.props.navigation.addListener('didFocus', () => {
+                this.backhandler = BackHandler.addEventListener('hardwareBackPress', () => {
+                    this.handleBackButtonPressed();
+                    return true;
+                });
+            });
+
+            this.blurListener = this.props.navigation.addListener('willBlur', payload => {
+                this.backhandler.remove();
+            })
         }
     }
 
     componentWillUnmount = () => {
         if (Platform.OS == 'android') {
-            //TODO
+            this.focusListener.remove();
+            this.blurListener.remove();
         }
     }
 
@@ -97,6 +108,13 @@ export default class LoginScreen extends React.Component {
                 console.log(user);
                 this.storeAsync(email, pw);
 
+                if (Platform.OS == 'android') {
+                    // remove the event listeners to prevent unexpected errors
+                    this.focusListener.remove();
+                    this.blurListener.remove();
+                    this.backhandler.remove();
+                }
+
                 const resetAction = StackActions.reset({
                     index: 0,
                     actions: [NavigationActions.navigate({
@@ -108,7 +126,31 @@ export default class LoginScreen extends React.Component {
                 this.props.navigation.dispatch(resetAction);
             }).catch(err => {
                 console.log(err);
-                alert('Sign in failed');
+                let msg = '';
+
+                // check the error code
+                if (err.code == 'UserNotConfirmedException') {
+                    // This error happens if the user didn't finish the confirmation step.
+                    msg = 'Please finish the confirmation step';
+
+                } else if (err.code === 'PasswordResetRequiredException') {
+                    // This error happens when the password is reset in the Cognito console.
+                    // In this case you need to call forgotPassword to reset the password
+                    msg = 'Password reset required';
+
+                } else if (err.code === 'NotAuthorizedException') {
+                    // This error happens when the incorrect password is provided
+                    msg = 'Invalid password';
+
+                } else if (err.code == 'UserNotFoundException') {
+                    // This error happens when the supplied username/email does not exist
+                    msg = 'Invalid email';
+
+                } else {
+                    msg = 'Sing in failed';
+                }
+
+                alert(msg);
             })
         }
     }
