@@ -47,6 +47,8 @@ export default class TemperatureGraph extends React.Component {
         this.makeDatePickerVisible_end = this.makeDatePickerVisible_end.bind(this);
         this.hideDateTimePicker_end = this.hideDateTimePicker_end.bind(this);
         this.requestDataWithCustomDateRange = this.requestDataWithCustomDateRange.bind(this);
+        this.refreshTab = this.refreshTab.bind(this);
+        this.changePickerData_tabT = this.changePickerData_tabT.bind(this);
     }
 
     static propTypes = {
@@ -107,10 +109,29 @@ export default class TemperatureGraph extends React.Component {
         this.setState({ isLoaded: true });
     }
 
+    /**
+     * Refresh the screen, and navigate the tab navigator ot the temperature tab.
+     */
+    refreshTab = () => {
+        let {refresh} = this.props;
+        refresh('T');
+    }
+
+    /**
+     * Change the date picker data.
+     * Let the app know that the current tab is 'T', which is the Temperature tab.
+     *
+     * @param data The date picker data.
+     */
+    changePickerData_tabT = (data) => {
+        let { changePickerData } = this.props;
+        changePickerData(data, 'T');
+    }
+
 
     render() {
         let { isLoaded, isListViewMode, isDatePicker1Visible, isDatePicker2Visible, startDate_picker, endDate_picker } = this.state;
-        let { temperatureData, t, min, max, pickerData, changePickerData, customPicker } = this.props;
+        let { temperatureData, t, min, max, pickerData, customPicker } = this.props;
 
         if (!isLoaded) {
             return (
@@ -150,7 +171,7 @@ export default class TemperatureGraph extends React.Component {
                         <Text style={styles.text}>{I18n.t('period')}</Text>
                         <RadioGroup
                             radioButtons={pickerData}
-                            onPress={changePickerData}
+                            onPress={this.changePickerData_tabT}
                             flexDirection='row'
                         ></RadioGroup>
                     </View>
@@ -196,7 +217,7 @@ export default class TemperatureGraph extends React.Component {
                     </View>
                     <View style={styles.emptyListViewButtonContainer}>
                         {/* <ListViewButton changeListView={this.changeListViewMode} /> */}
-                        <RefreshButton refresh={this.props.refresh} />
+                        <RefreshButton refresh={this.refreshTab} />
                     </View>
                 </View>
             );
@@ -233,7 +254,7 @@ export default class TemperatureGraph extends React.Component {
                             <Text style={styles.text}>{I18n.t('period')}</Text>
                             <RadioGroup
                                 radioButtons={pickerData}
-                                onPress={changePickerData}
+                                onPress={this.changePickerData_tabT}
                                 flexDirection='row'
                             ></RadioGroup>
                         </View>
@@ -287,7 +308,7 @@ export default class TemperatureGraph extends React.Component {
                         />
                         <View style={styles.listViewButtonContainer}>
                             {/* <ListViewButton changeListView={this.changeListViewMode} /> */}
-                            <RefreshButton refresh={this.props.refresh} />
+                            <RefreshButton refresh={this.refreshTab} />
                         </View>
                         <DateTimePicker
                             isVisible={isDatePicker1Visible}

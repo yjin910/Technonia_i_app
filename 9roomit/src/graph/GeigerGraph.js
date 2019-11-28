@@ -46,6 +46,8 @@ export default class GeigerGraph extends React.Component {
         this.makeDatePickerVisible_end = this.makeDatePickerVisible_end.bind(this);
         this.hideDateTimePicker_end = this.hideDateTimePicker_end.bind(this);
         this.requestDataWithCustomDateRange = this.requestDataWithCustomDateRange.bind(this);
+        this.refreshTab = this.refreshTab.bind(this);
+        this.changePickerData_tabG = this.changePickerData_tabG.bind(this);
     }
 
     static propTypes = {
@@ -106,6 +108,25 @@ export default class GeigerGraph extends React.Component {
         this.setState({ isLoaded: true });
     }
 
+    /**
+     * Refresh the screen, and navigate the tab navigator ot the geiger tab.
+     */
+    refreshTab = () => {
+        let { refresh } = this.props;
+        refresh('G');
+    }
+
+    /**
+     * Change the date picker data.
+     * Let the app know that the current tab is 'G', which is the Geiger tab.
+     *
+     * @param data The date picker data.
+     */
+    changePickerData_tabG = (data) => {
+        let { changePickerData } = this.props;
+        changePickerData(data, 'G');
+    }
+
 
     render() {
         let { isLoaded, isListViewMode, isDatePicker1Visible, isDatePicker2Visible, startDate_picker, endDate_picker } = this.state;
@@ -147,7 +168,7 @@ export default class GeigerGraph extends React.Component {
                         <Text style={styles.text}>{I18n.t('period')}</Text>
                         <RadioGroup
                             radioButtons={pickerData}
-                            onPress={changePickerData}
+                            onPress={this.changePickerData_tabG}
                             flexDirection='row'
                         ></RadioGroup>
                     </View>
@@ -192,7 +213,7 @@ export default class GeigerGraph extends React.Component {
                     </View>
                     <View style={styles.listViewButtonContainer}>
                         {/* <ListViewButton changeListView={this.changeListViewMode} /> */}
-                        <RefreshButton refresh={this.props.refresh} />
+                        <RefreshButton refresh={this.refreshTab} />
                     </View>
                 </View>
             );
@@ -228,7 +249,7 @@ export default class GeigerGraph extends React.Component {
                             <Text style={styles.text}>{I18n.t('period')}</Text>
                             <RadioGroup
                                 radioButtons={pickerData}
-                                onPress={changePickerData}
+                                onPress={this.changePickerData_tabG}
                                 flexDirection='row'
                             ></RadioGroup>
                         </View>
@@ -282,7 +303,7 @@ export default class GeigerGraph extends React.Component {
                         />
                         <View style={styles.listViewButtonContainer}>
                             {/* <ListViewButton changeListView={this.changeListViewMode} /> */}
-                            <RefreshButton refresh={this.props.refresh} />
+                            <RefreshButton refresh={this.refreshTab} />
                         </View>
                         {/* <DateTimePicker
                             isVisible={isDatePicker1Visible}

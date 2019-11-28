@@ -47,6 +47,7 @@ export default class MainScreen extends React.Component {
         super(props);
 
         this.state = {
+            currentTab: 'G',
             data_t: [],
             data_h: [],
             data_g: [],
@@ -107,7 +108,7 @@ export default class MainScreen extends React.Component {
         let email = this.props.navigation.getParam('email', '');
 
         if (email != '') {
-            this.fetchData_Async(email);
+            this.fetchData_Async(email, undefined, undefined, 'G');
             //TODO this.setInterval(email);
         } else {
             this.getEmail_async();
@@ -141,30 +142,30 @@ export default class MainScreen extends React.Component {
         );
     }
 
-    changeDatePickerData = async (data) => {
+    changeDatePickerData = async (data, newTabName) => {
         let selectedVal = data.find(e => e.selected == true).value;
 
         if (selectedVal == 4) {
-            this.setState({ datePickerData: data, customPicker: true })
+            this.setState({ datePickerData: data, customPicker: true, currentTab: newTabName })
         } else {
-            this.setState({ datePickerData: data, customPicker: false });
+            this.setState({ datePickerData: data, customPicker: false, currentTab: newTabName });
             let email = this.props.navigation.getParam('email', '');
             if (email == '') email = await AsyncStorage.getItem('9room@email');
-            this.fetchData_Async(email, selectedVal);
+            this.fetchData_Async(email, selectedVal, undefined, newTabName);
         }
     }
 
     getEmail_async = async () => {
         let email = await AsyncStorage.getItem('9room@email');
 
-        this.fetchData_Async(email, 1);
+        this.fetchData_Async(email, 1, undefined, 'G');
         //TODO this.setInterval(email);
     }
 
     setInterval = (email) => {
         this._timer = setInterval(() => {
             console.log('fetch data start');
-            this.fetchData_Async(email, 1);
+            this.fetchData_Async(email, 1, undefined, 'G');
         }, INTERVAL_TIME);
     }
 
@@ -222,7 +223,7 @@ export default class MainScreen extends React.Component {
     }
 
     componentWillUnmount = () => {
-        this.removeInterval();
+        //TODO this.removeInterval();
 
         if (Platform.OS == 'android') {
             this.focusListener.remove();
@@ -234,6 +235,13 @@ export default class MainScreen extends React.Component {
         await AsyncStorage.removeItem('9room@email');
         await AsyncStorage.removeItem('9room@pw');
         await AsyncStorage.removeItem('9room@autoLogin');
+
+        if (Platform.OS == 'android') {
+            // remove the event listeners to prevent unexpected errors
+            this.focusListener.remove();
+            this.blurListener.remove();
+            this.backhandler.remove();
+        }
 
         const resetAction = StackActions.reset({
             index: 0,
@@ -265,45 +273,47 @@ export default class MainScreen extends React.Component {
         this.props.navigation.navigate('BLEManaer');
     }
 
-    refresh = async () => {
+    refresh = async (newTabName) => {
         let { url } = this.state;
-        if (url != '') this.processDataFetching_async(url);
+        if (url != '') this.processDataFetching_async(url, newTabName);
     }
 
     fetchDataWithCustomTerm_async = async (term) => {
         let email = this.props.navigation.getParam('email', '');
         if (email == '') email = await AsyncStorage.getItem('9room@email');
-        this.fetchData_Async(email, 4, term);
+        this.fetchData_Async(email, 4, term, 'G'); //TODO
     }
 
-    fetchData_Async = async (email, val, term) => {
+    fetchData_Async = async (email, val, term, newTabName) => {
         let url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/main/representative?email=${email}`;
 
         if (val) {
             let currentDate = new Date();
             let currentDate_str = moment(currentDate).format('YYYY-MM-DD HH:mm:ss');
+            let startDate = new Date();
+            let startDate_str = '';
 
             switch (val) {
                 case 1 :
                     // date object for yesterday
-                    let startDate = (d => new Date(d.setDate(d.getDate() - 1)))(new Date);
-                    let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+                    startDate = (d => new Date(d.setDate(d.getDate() - 1)))(new Date);
+                    startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
 
                     // request the data for last 24 hours
                     url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 2 :
                     // date object for last week
-                    let startDate = (d => new Date(d.setDate(d.getDate() - 7)))(new Date);
-                    let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+                    startDate = (d => new Date(d.setDate(d.getDate() - 7)))(new Date);
+                    startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
 
                     // request the data for last 1 week
                     url += `&start=${startDate_str}&end=${currentDate_str}`;
                     break;
                 case 3 :
                     // date object for last month
-                    let startDate = (d => new Date(d.setMonth(d.getMonth() - 1)))(new Date);
-                    let startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
+                    startDate = (d => new Date(d.setMonth(d.getMonth() - 1)))(new Date);
+                    startDate_str = moment(startDate).format('YYYY-MM-DD HH:mm:ss');
 
                     // request the data for last 1 month
                     url += `&start=${startDate_str}&end=${currentDate_str}`;
@@ -316,10 +326,10 @@ export default class MainScreen extends React.Component {
             }
         }
 
-        this.processDataFetching_async(url);
+        this.processDataFetching_async(url, newTabName);
     }
 
-    processDataFetching_async = async (url) => {
+    processDataFetching_async = async (url, newTabName) => {
         fetch(url)
             .then(res => res.json())
             .then(
@@ -409,7 +419,8 @@ export default class MainScreen extends React.Component {
                         max_t: max_t,
                         max_h: max_h,
                         max_g: max_g,
-                        isLoaded: true
+                        isLoaded: true,
+                        currentTab: newTabName
                     });
                 }
             )
@@ -419,7 +430,7 @@ export default class MainScreen extends React.Component {
     }
 
     render() {
-        let { data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded, datePickerData, customPicker } = this.state;
+        let { currentTab, data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded, datePickerData, customPicker } = this.state;
 
         if (isLoaded) {
 
@@ -476,6 +487,8 @@ export default class MainScreen extends React.Component {
                         tabBarLabel: <Text style={{ fontSize: width / 30, color: 'white' }}> Humidity </Text>,
                     }
                 }
+            },{
+                initialRouteName: currentTab
             });
 
             const GraphApp = createAppContainer(AppNavigator);
