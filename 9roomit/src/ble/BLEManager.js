@@ -384,7 +384,7 @@ export default class BluetoothManager extends React.Component {
                             }
                         >
                             {(list.length != 0) && Peripherals}
-                            {scanning && <ActivityIndicator size="large" color="red" />}
+                            {/* {scanning && <ActivityIndicator size="large" color="red" />} */}
                         </ScrollView>
                     </View>
                     <Footer/>

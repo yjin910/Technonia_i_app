@@ -12,7 +12,8 @@ import {
     Keyboard,
     Platform,
     ScrollView,
-    Image
+    Image,
+    AsyncStorage
 } from 'react-native';
 import Drawer from 'react-native-drawer'
 import uuidv1 from 'uuid/v1';
