@@ -161,7 +161,7 @@ export default class TemperatureGraph extends React.Component {
         let timeStr_start = startDate_picker == undefined ? '시작' : `${year_s}/${month_s}/${date_s}`;
         let timeStr_end = endDate_picker == undefined ? '종료' : `${year_e}/${month_e}/${date_e}`;
 
-        if (temperatureData.length == 0) {
+        if (temperatureData == null || temperatureData.includes(null) || temperatureData.length == 0) {
             let dummyData = [{ x: 1, y: 22 }, { x: 2, y: 24 }, { x: 3, y: 26 }, { x: 4, y: 28 }, { x: 5, y: 30 }];
             let dummyYData = [22, 24, 26, 28, 30];
 

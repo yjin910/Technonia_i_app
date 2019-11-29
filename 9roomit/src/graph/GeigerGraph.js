@@ -158,7 +158,7 @@ export default class GeigerGraph extends React.Component {
         let timeStr_start = startDate_picker == undefined ? '시작' : `${year_s}/${month_s}/${date_s}`;
         let timeStr_end = endDate_picker == undefined ? '종료' : `${year_e}/${month_e}/${date_e}`;
 
-        if (geigerData.length == 0) {
+        if (geigerData == null || geigerData.includes(null) || geigerData.length == 0) {
             let dummyData = [{ x: 1, y: 0.1 }, { x: 2, y: 0.2 }, { x: 3, y: 0.3 }, { x: 4, y: 0.4 }, { x: 5, y: 0.5 }];
             let dummyYData = [0.1, 0.2, 0.3, 0.4, 0.5];
 

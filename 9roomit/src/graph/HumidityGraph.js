@@ -159,7 +159,7 @@ export default class HumidityGraph extends React.Component {
         let timeStr_start = startDate_picker == undefined ? '시작' : `${year_s}/${month_s}/${date_s}`;
         let timeStr_end = endDate_picker == undefined ? '종료' : `${year_e}/${month_e}/${date_e}`;
 
-        if (humidityData.length == 0) {
+        if (humidityData == null || humidityData.includes(null) || humidityData.length == 0) {
             let dummyData = [{ x: 1, y: 52 }, { x: 2, y: 54 }, { x: 3, y: 56 }, { x: 4, y: 58 }, { x: 5, y: 60 }];
             let dummyYData = [52, 54, 56, 58, 60];
 
@@ -288,6 +288,7 @@ export default class HumidityGraph extends React.Component {
                             />
                             <LineChart
                                 contentInset={contentInset}
+                                //style={{ height: height / 8 * 3, width: width / 3 * 2 }}
                                 style={{ height: height / 8 * 3, width: width / 3 * 2 }}
                                 //style={{flex: 1}}
                                 yAccessor={({ item }) => item.y}

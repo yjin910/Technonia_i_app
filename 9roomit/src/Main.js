@@ -357,6 +357,9 @@ export default class MainScreen extends React.Component {
                         switch (type) {
                             case 't':
                                 let t = d['val'];
+
+                                if (!t) continue;
+
                                 if (isNotFirst_t) {
                                     min_t = (min_t < t) ? min_t : t;
                                     max_t = (max_t > t) ? max_t : t;
@@ -373,6 +376,8 @@ export default class MainScreen extends React.Component {
                             case 'h':
                                 let h = d['val'];
 
+                                if (!h) continue;
+
                                 if (isNotFirst_h) {
                                     min_h = (min_h < h) ? min_h : h;
                                     max_h = (max_h > h) ? max_h : h;
@@ -388,6 +393,8 @@ export default class MainScreen extends React.Component {
                                 break;
                             case 'g':
                                 let g = d['val'];
+
+                                if (!g) continue;
 
                                 if (isNotFirst_g) {
                                     min_g = (min_g < g) ? min_g : g;
@@ -426,6 +433,7 @@ export default class MainScreen extends React.Component {
             )
             .catch((error) => {
                 console.log(error);
+                alert('Data fetching error!');
             });
     }
 
