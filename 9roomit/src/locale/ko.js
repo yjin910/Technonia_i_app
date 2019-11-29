@@ -23,5 +23,11 @@ export default {
     currentGeiger: '현재 방사능 :',
     currentTemp: '현재 온도  :',
     currentHumi: '현재 습도  :',
-    minPasswordLen: '비밀번호는 8자 이상이어야 합니다!'
+    minPasswordLen: '비밀번호는 8자 이상이어야 합니다!',
+    passwordInvald: '비밀번호가 올바르지 않습니다!',
+    emailInvalid: '등록되지 않은 이메일 주소입니다!',
+    passwordResetRequired: '비밀번호를 다시 설정하십시오',
+    comfirmationNotFinished: '본인 인증을 먼저 완료하셔야 합니다',
+    autoLogin: '자동 로그인',
+    storeEmail: '이메일 저장'
 };

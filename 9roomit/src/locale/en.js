@@ -23,5 +23,11 @@ export default {
     currentGeiger: 'Geiger           :',
     currentTemp: 'Temperature :',
     currentHumi: 'Humidity       :',
-    minPasswordLen: 'Minimum password length is 8!'
+    minPasswordLen: 'Minimum password length is 8!',
+    passwordInvald: 'Wrong password!',
+    emailInvalid: 'This email is not registered!',
+    passwordResetRequired: 'Password reset required!',
+    comfirmationNotFinished: 'Please finish the confirmation step',
+    autoLogin: 'auto login',
+    storeEmail: 'store email'
 };

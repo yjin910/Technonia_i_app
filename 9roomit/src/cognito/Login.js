@@ -131,23 +131,23 @@ export default class LoginScreen extends React.Component {
                 // check the error code
                 if (err.code == 'UserNotConfirmedException') {
                     // This error happens if the user didn't finish the confirmation step.
-                    msg = 'Please finish the confirmation step';
+                    msg = I18n.t('comfirmationNotFinished');
 
                 } else if (err.code === 'PasswordResetRequiredException') {
                     // This error happens when the password is reset in the Cognito console.
                     // In this case you need to call forgotPassword to reset the password
-                    msg = 'Password reset required';
+                    msg = I18n.t('passwordResetRequired');
 
                 } else if (err.code === 'NotAuthorizedException') {
                     // This error happens when the incorrect password is provided
-                    msg = 'Invalid password';
+                    msg = I18n.t('passwordInvald');
 
                 } else if (err.code == 'UserNotFoundException') {
                     // This error happens when the supplied username/email does not exist
-                    msg = 'Invalid email';
+                    msg = I18n.t('emailInvalid');
 
                 } else {
-                    msg = 'Sing in failed';
+                    msg = 'Sign in failed';
                 }
 
                 alert(msg);
@@ -197,7 +197,7 @@ export default class LoginScreen extends React.Component {
                                 </TouchableOpacity>
                                 <View style={{flexDirection: 'row'}}>
                                     <Checkbox
-                                        label='auto login'
+                                        label={I18n.t('autoLogin')}
                                         onChange={(checked) => {
                                             if (checked) {
                                                 if (this.state.storeEmail) {
@@ -215,7 +215,7 @@ export default class LoginScreen extends React.Component {
                                         labelStyle={{ color: 'white' }}
                                     />
                                     <Checkbox
-                                        label='store email'
+                                        label={I18n.t('storeEmail')}
                                         onChange={(checked) => {
                                             if (this.state.autoLogin) {
                                                 if (!checked) {
