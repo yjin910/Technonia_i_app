@@ -353,10 +353,13 @@ export default class MainScreen extends React.Component {
                         let d = result[i];
                         let type = d['type'];
                         let time_val = new Date(d['time']);
+                        let t = null;
+                        let h = null;
+                        let g = null;
 
                         switch (type) {
                             case 't':
-                                let t = d['val'];
+                                t = d['val'];
 
                                 if (!t) continue;
 
@@ -374,7 +377,7 @@ export default class MainScreen extends React.Component {
 
                                 break;
                             case 'h':
-                                let h = d['val'];
+                                h = d['val'];
 
                                 if (!h) continue;
 
@@ -392,7 +395,7 @@ export default class MainScreen extends React.Component {
 
                                 break;
                             case 'g':
-                                let g = d['val'];
+                                g = d['val'];
 
                                 if (!g) continue;
 
