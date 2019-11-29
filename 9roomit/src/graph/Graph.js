@@ -386,7 +386,11 @@ export default class MainScreen extends React.Component {
             .catch((error) => {
                 console.log(error);
 
-                this.setState({ isLoaded: true, errorOccured: true });
+                this.setState({
+                    isLoaded: true,
+                    errorOccured: true,
+                    currentTab: newTabName
+                });
             });
     }
 

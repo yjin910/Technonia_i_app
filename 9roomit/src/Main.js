@@ -449,7 +449,6 @@ export default class MainScreen extends React.Component {
                     currentTab: newTabName
                 });
 
-                alert('Data fetching error!'); //TODO
             });
     }
 
