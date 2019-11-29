@@ -433,7 +433,20 @@ export default class MainScreen extends React.Component {
             )
             .catch((error) => {
                 console.log(error);
-                alert('Data fetching error!');
+
+                this.setState({
+                    url: url,
+                    data_t: [],
+                    data_h: [],
+                    data_g: [],
+                    ts: [],
+                    hs: [],
+                    gs: [],
+                    isLoaded: true,
+                    currentTab: newTabName
+                });
+
+                alert('Data fetching error!'); //TODO
             });
     }
 
