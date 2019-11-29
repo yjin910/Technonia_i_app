@@ -169,7 +169,7 @@ export default class DeviceListSettingScreen extends React.Component {
             return;
         }
 
-        let url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/profile/userInfo?u=${uuid}&email=${email}`
+        let url = `http://groom.techtest.shop:8090/profile/userInfo?u=${uuid}&email=${email}`
 
         fetch(url, {
             method: 'POST',

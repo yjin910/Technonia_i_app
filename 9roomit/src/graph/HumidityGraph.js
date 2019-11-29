@@ -288,7 +288,6 @@ export default class HumidityGraph extends React.Component {
                             />
                             <LineChart
                                 contentInset={contentInset}
-                                //style={{ height: height / 8 * 3, width: width / 3 * 2 }}
                                 style={{ height: height / 8 * 3, width: width / 3 * 2 }}
                                 //style={{flex: 1}}
                                 yAccessor={({ item }) => item.y}

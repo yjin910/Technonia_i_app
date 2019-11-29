@@ -244,7 +244,7 @@ export default class MainScreen extends React.Component {
     }
 
     fetchData_Async = async (deviceNum, val, term, newTabName) => {
-        let url = `http://ec2-15-164-218-172.ap-northeast-2.compute.amazonaws.com:8090/getdata?u=${deviceNum}`;
+        let url = `http://groom.techtest.shop:8090/getdata?u=${deviceNum}`;
 
         if (val) {
             let currentDate = new Date();
