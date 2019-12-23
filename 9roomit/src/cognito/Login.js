@@ -73,6 +73,8 @@ export default class LoginScreen extends React.Component {
 
         if (Platform.OS == 'android') {
 
+            /* add the event listeners for the back button handling */
+
             this.focusListener = this.props.navigation.addListener('didFocus', () => {
                 this.backhandler = BackHandler.addEventListener('hardwareBackPress', () => {
                     this.handleBackButtonPressed();
@@ -90,6 +92,7 @@ export default class LoginScreen extends React.Component {
         if (Platform.OS == 'android') {
             this.focusListener.remove();
             this.blurListener.remove();
+            this.backhandler.remove();
         }
     }
 
