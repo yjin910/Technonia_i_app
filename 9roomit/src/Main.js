@@ -228,9 +228,14 @@ export default class MainScreen extends React.Component {
         if (Platform.OS == 'android') {
             this.focusListener.remove();
             this.blurListener.remove();
+            this.backhandler.remove();
         }
     }
 
+    /**
+     * Process the log out asynchronously.
+     * Basically, this method removes the event listeners, and reset the react navigation to change the screen to the Log In screen.
+     */
     logOut_async = async () => {
         await AsyncStorage.removeItem('9room@email');
         await AsyncStorage.removeItem('9room@pw');
@@ -273,9 +278,13 @@ export default class MainScreen extends React.Component {
         this.props.navigation.navigate('BLEManaer');
     }
 
-    refresh = async (newTabName) => {
+    /**
+     * Resend the request to the server to refresh the line charts.
+     * @param tabName the name of the current tab.
+     */
+    refresh = async (tabName) => {
         let { url } = this.state;
-        if (url != '') this.processDataFetching_async(url, newTabName);
+        if (url != '') this.processDataFetching_async(url, tabName);
     }
 
     fetchDataWithCustomTerm_async = async (term) => {
@@ -284,7 +293,18 @@ export default class MainScreen extends React.Component {
         this.fetchData_Async(email, 4, term, 'G'); //TODO
     }
 
+    /**
+     * Build the URL string that will be used for the data fetching.
+     * After finish building the url string, call the processDataFetching_async() method to
+     * perform the data fetching asynchronously.
+     *
+     * @param email The email address of the user
+     * @param val The value of the selected radio button.
+     * @param term The value that is used for the date picker - TODO {this might be removed in the future version}
+     * @param newTabName The name of the new tab.
+     */
     fetchData_Async = async (email, val, term, newTabName) => {
+        // build the url with suitable query
         let url = `http://groom.techtest.shop:8090/main/representative?email=${email}`;
 
         if (val) {
@@ -329,6 +349,11 @@ export default class MainScreen extends React.Component {
         this.processDataFetching_async(url, newTabName);
     }
 
+    /**
+     * Performs the data fetching process asynchronously by sending the HTTP request to the server.
+     * @param url The url that will be used for the data fetching.
+     * @param newTabName The name of the new tab
+     */
     processDataFetching_async = async (url, newTabName) => {
         fetch(url)
             .then(res => res.json())
@@ -353,15 +378,14 @@ export default class MainScreen extends React.Component {
                         let d = result[i];
                         let type = d['type'];
                         let time_val = new Date(d['time']);
-                        let t = null;
-                        let h = null;
-                        let g = null;
+
+                        let val = d['val'];
+                        let t = val;
+                        let h = val;
+                        let g = val;
 
                         switch (type) {
                             case 't':
-                                t = d['val'];
-
-                                if (!t) continue;
 
                                 if (isNotFirst_t) {
                                     min_t = (min_t < t) ? min_t : t;
@@ -377,9 +401,6 @@ export default class MainScreen extends React.Component {
 
                                 break;
                             case 'h':
-                                h = d['val'];
-
-                                if (!h) continue;
 
                                 if (isNotFirst_h) {
                                     min_h = (min_h < h) ? min_h : h;
@@ -395,9 +416,6 @@ export default class MainScreen extends React.Component {
 
                                 break;
                             case 'g':
-                                g = d['val'];
-
-                                if (!g) continue;
 
                                 if (isNotFirst_g) {
                                     min_g = (min_g < g) ? min_g : g;

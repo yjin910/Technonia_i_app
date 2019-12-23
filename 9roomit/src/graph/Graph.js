@@ -45,7 +45,6 @@ export default class MainScreen extends React.Component {
         this.state = {
             currentTab: 'G',
             url: '',
-            errorOccured: false,
             data_t: [],
             data_h: [],
             data_g: [],
@@ -313,9 +312,13 @@ export default class MainScreen extends React.Component {
                         let type = d['type'];
                         let time_val = new Date(d['time']);
 
+                        let val = d['val'];
+                        let t = val;
+                        let h = val;
+                        let g = val;
+
                         switch (type) {
                             case 't':
-                                let t = d['val'];
                                 if (isNotFirst_t) {
                                     min_t = (min_t < t) ? min_t : t;
                                     max_t = (max_t > t) ? max_t : t;
@@ -330,8 +333,6 @@ export default class MainScreen extends React.Component {
 
                                 break;
                             case 'h':
-                                let h = d['val'];
-
                                 if (isNotFirst_h) {
                                     min_h = (min_h < h) ? min_h : h;
                                     max_h = (max_h > h) ? max_h : h;
@@ -346,8 +347,6 @@ export default class MainScreen extends React.Component {
 
                                 break;
                             case 'g':
-                                let g = d['val'];
-
                                 if (isNotFirst_g) {
                                     min_g = (min_g < g) ? min_g : g;
                                     max_g = (max_g > g) ? max_g : g;
@@ -387,57 +386,24 @@ export default class MainScreen extends React.Component {
                 console.log(error);
 
                 this.setState({
+                    url: url,
+                    data_t: [],
+                    data_h: [],
+                    data_g: [],
+                    ts: [],
+                    hs: [],
+                    gs: [],
                     isLoaded: true,
-                    errorOccured: true,
                     currentTab: newTabName
                 });
             });
     }
 
     render() {
-        let { currentTab, errorOccured, data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded, datePickerData, customPicker } = this.state;
+        let { currentTab, data_t, data_h, data_g, ts, hs, gs, min_t, min_h, min_g, max_t, max_h, max_g, isLoaded, datePickerData, customPicker } = this.state;
 
+        // check if the screen is loaded
         if (isLoaded) {
-
-            if (errorOccured) {
-                return (
-                    <SafeAreaView style={styles.root}>
-                        <Drawer
-                            ref={(ref) => this.drawer = ref}
-                            content={this.renderDrawer()}
-                            type='overlay'
-                            tapToClose={true}
-                            openDrawerOffset={0.6}
-                            styles={drawerStyles}
-                            side={'right'}
-                        >
-                            <View style={styles.headerContainer}>
-                                <View style={styles.menuButton}>
-                                    <TouchableOpacity
-                                        onPress={() => this.goBack()}
-                                        style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
-                                        <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
-                                    </TouchableOpacity>
-                                </View>
-                                <Image style={{ width: width / 3, height: height / 12 - 15, marginTop: 10 }} source={LOGO_IMAGE} />
-                                <View style={styles.menuButton}>
-                                    <TouchableOpacity
-                                        onPress={() => this.openDrawer()}
-                                        style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
-                                        <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            <View style={styles.requestFailedContainer}>
-                                <Text style={styles.requestFailedText}>
-                                    Request failed
-                                </Text>
-                            </View>
-                            <Footer />
-                        </Drawer>
-                    </SafeAreaView>
-                );
-            }
 
             const Temperature = (props) => (<TemperatureGraph
                 temperatureData={props.screenProps.temperatureData}
