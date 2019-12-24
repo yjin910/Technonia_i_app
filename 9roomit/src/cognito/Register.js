@@ -19,6 +19,9 @@ import {
 import { Auth } from 'aws-amplify';
 import { StackActions, NavigationActions } from 'react-navigation';
 
+import I18n from '../i18n';
+
+
 const { width, height } = Dimensions.get('window');
 const LOGO_IMAGE = require('../../assets/logo.png')
 
@@ -86,13 +89,28 @@ export default class SignUpScreen extends React.Component {
         const { email, password, name } = this.state;
 
         if (email && password && name) {
+            // check if the length of the password is less than 8
             if (password.length < 8) {
                 Alert.alert(
-                    'Password too short',
-                    'The minimum length is 8',
+                    I18n.t('passwordTooShort'),
+                    I18n.t('minPasswordLen'),
                     [{ text: 'OK', onPress: () => console.log('Password too short!'), style: 'default' }],
                     { cancelable: false },
                 );
+
+                return;
+            }
+
+            // check if the email address includes the '@' character.
+            if (!email.includes('@')) {
+                Alert.alert(
+                    I18n.t('invalidEmailFormat'),
+                    I18n.t('fullEmailAddressRequired'),
+                    [{ text: 'OK', onPress: () => console.log('Please input the full email address!'), style: 'default' }],
+                    { cancelable: false },
+                );
+
+                return;
             }
 
             Auth.signUp({

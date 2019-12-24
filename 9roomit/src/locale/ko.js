@@ -24,10 +24,13 @@ export default {
     currentTemp: '현재 온도  :',
     currentHumi: '현재 습도  :',
     minPasswordLen: '비밀번호는 8자 이상이어야 합니다!',
+    passwordTooShort: '비밀번호가 너무 짧습니다',
     passwordInvald: '비밀번호가 올바르지 않습니다!',
     emailInvalid: '등록되지 않은 이메일 주소입니다!',
     passwordResetRequired: '비밀번호를 다시 설정하십시오',
     comfirmationNotFinished: '본인 인증을 먼저 완료하셔야 합니다',
     autoLogin: '자동 로그인',
-    storeEmail: '이메일 저장'
+    storeEmail: '이메일 저장',
+    invalidEmailFormat: '올바른 이메일 주소가 아닙니다',
+    fullEmailAddressRequired: '올바른 이메일 주소를 입력해주십시오!'
 };

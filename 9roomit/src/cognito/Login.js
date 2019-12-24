@@ -107,6 +107,18 @@ export default class LoginScreen extends React.Component {
                 return;
             }
 
+            // check if the email address includes the '@' character.
+            if (!email.includes('@')) {
+                Alert.alert(
+                    I18n.t('invalidEmailFormat'),
+                    I18n.t('fullEmailAddressRequired'),
+                    [{ text: 'OK', onPress: () => console.log('Please input the full email address!'), style: 'default' }],
+                    { cancelable: false },
+                );
+
+                return;
+            }
+
             Auth.signIn(email, pw).then(user => {
                 console.log(user);
                 this.storeAsync(email, pw);

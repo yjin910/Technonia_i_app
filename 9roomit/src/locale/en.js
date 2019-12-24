@@ -24,10 +24,13 @@ export default {
     currentTemp: 'Temperature :',
     currentHumi: 'Humidity       :',
     minPasswordLen: 'Minimum password length is 8!',
+    passwordTooShort: 'Password too short',
     passwordInvald: 'Wrong password!',
     emailInvalid: 'This email is not registered!',
     passwordResetRequired: 'Password reset required!',
     comfirmationNotFinished: 'Please finish the confirmation step',
     autoLogin: 'auto login',
-    storeEmail: 'store email'
+    storeEmail: 'store email',
+    invalidEmailFormat: 'Invalid email format',
+    fullEmailAddressRequired: 'Please input the full email address!'
 };
