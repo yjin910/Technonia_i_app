@@ -25,7 +25,7 @@ import I18n from '../i18n'
 
 
 const { width, height } = Dimensions.get('window');
-const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
+const contentInset = { top: 10, bottom: 10 }
 
 export default class GeigerGraph extends React.Component {
     constructor(props) {
@@ -228,16 +228,17 @@ export default class GeigerGraph extends React.Component {
             let startDate = moment(geigerData[0]['x']).format(I18n.t('dateFormatStr'));
             let endDate = moment(geigerData[geigerData.length - 1]['x']).format(I18n.t('dateFormatStr'));
 
-            let min_grid = min;
-            let max_grid = max;
+            let min_grid = min - 0.05;
+            let max_grid = max + 0.05;
 
-            if (max - min < 0.5) {
-                max_grid += 0.35;
-                min_grid -= 0.1;
-            } else {
-                max_grid += 0.1;
-                min_grid -= 0.1;
-            }
+            //TODO
+            // if (max - min > 0.5) {
+            //     max_grid += 0.35;
+            //     min_grid -= 0.1;
+            // } else {
+            //     max_grid += 0.1;
+            //     min_grid -= 0.1;
+            // }
 
             return (
                 <Animated.View style={styles.container}>

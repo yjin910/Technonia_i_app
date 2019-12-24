@@ -25,7 +25,7 @@ import I18n from '../i18n'
 
 
 const { width, height } = Dimensions.get('window');
-const contentInset = { top: 20, bottom: 20, left: 20, right: 20 }
+const contentInset = { top: 20, bottom: 20 }
 
 export default class HumidityGraph extends React.Component {
     constructor(props) {
