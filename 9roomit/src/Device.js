@@ -13,7 +13,6 @@ import I18n from './i18n';
 
 const { width, height } = Dimensions.get("window");
 
-const IMG = require('../assets/ble_geiger_icon.png');
 
 export default class Device extends Component {
     constructor(props) {
@@ -39,31 +38,27 @@ export default class Device extends Component {
     }
 
     render() {
-        let { deviceNum, onPressed, currentGeiger, currentTemp, currentHumi, geigerIsNull, temperatureIsNull, humidityIsNull } = this.props;
+        let { deviceNum, currentGeiger, currentTemp, currentHumi, geigerIsNull, temperatureIsNull, humidityIsNull } = this.props;
 
         let geiger = geigerIsNull ? `${I18n.t('currentGeiger')} N/A` : `${I18n.t('currentGeiger')} ${currentGeiger} μSv`
         let temperature = temperatureIsNull ? `${I18n.t('currentTemp')} N/A` : `${I18n.t('currentTemp')} ${currentTemp} °C`
         let humidity = humidityIsNull ? `${I18n.t('currentHumi')} N/A` : `${I18n.t('currentHumi')} ${currentHumi} %`;
 
         return (
-            <View style={styles.container}>
+            <View style={styles.root}>
                 <TouchableOpacity
                     style={styles.container}
                     onPress={this.changePage}
                 >
-                {/* <View style={styles.imgContainer}>
-                    <Image source={IMG} style={styles.img} />
-                </View> */}
-                <View>
-                    <Text style={styles.labelText}>Device</Text>
-                    <Text style={styles.deviceNumText}>{': ' + deviceNum}</Text>
-                </View>
-                <View style={styles.itemContainer}>
-                    {/* <GraphButton deviceNum={deviceNum} onPressed={onPressed}/> */}
-                    <Text style={styles.valueText}>{geiger}</Text>
-                    <Text style={styles.valueText}>{temperature}</Text>
-                    <Text style={styles.valueText}>{humidity}</Text>
-                </View>
+                    <View style={styles.labelContainer}>
+                        <Text style={styles.labelText}>Device</Text>
+                        <Text style={styles.deviceNumText}>{': ' + deviceNum}</Text>
+                    </View>
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.valueText}>{geiger}</Text>
+                        <Text style={styles.valueText}>{temperature}</Text>
+                        <Text style={styles.valueText}>{humidity}</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         );
@@ -72,6 +67,13 @@ export default class Device extends Component {
 
 
 const styles = StyleSheet.create({
+    root: {
+        flex: 1,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
     container: {
         backgroundColor: "white",
         width: width,
@@ -80,19 +82,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         flexDirection: "row",
         justifyContent: 'space-between',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         paddingLeft: 10,
         paddingRight: 10,
-    },
-    imgContainer: {
-        paddingTop: 10,
-        width: height / 8,
-        height: height / 8
-    },
-    img: {
-        width: height / 8,
-        height: height / 8,
-        borderRadius: height / 16,
     },
     deviceNumText: {
         fontSize: width / 20,
@@ -101,6 +93,9 @@ const styles = StyleSheet.create({
     itemContainer: {
         flex: 1,
         marginLeft: width / 4
+    },
+    labelContainer: {
+        width: width / 4
     },
     labelText: {
         color: 'black',
