@@ -247,7 +247,7 @@ export default class BLEMenu extends React.Component {
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.goBack()}
-                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center', alignItems: 'center' }}>
                                     <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
                                 </TouchableOpacity>
                             </View>
@@ -255,7 +255,7 @@ export default class BLEMenu extends React.Component {
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.openDrawer()}
-                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center', alignItems: 'center' }}>
                                     <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
                                 </TouchableOpacity>
                             </View>

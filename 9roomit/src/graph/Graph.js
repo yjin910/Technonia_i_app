@@ -243,7 +243,7 @@ export default class MainScreen extends React.Component {
     }
 
     fetchData_Async = async (deviceNum, val, term, newTabName) => {
-        let url = `http://groom.techtest.shop:8090/getdata?u=${deviceNum}`;
+        let url = `http://groom.techtest.shop:8090/main/graphInfo?u=${deviceNum}`;
 
         if (val) {
             let currentDate = new Date();
@@ -479,7 +479,7 @@ export default class MainScreen extends React.Component {
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.goBack()}
-                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, marginRight: width / 30, justifyContent: 'center' }}>
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center', alignItems: 'center' }}>
                                     <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
                                 </TouchableOpacity>
                             </View>
@@ -487,7 +487,7 @@ export default class MainScreen extends React.Component {
                             <View style={styles.menuButton}>
                                 <TouchableOpacity
                                     onPress={() => this.openDrawer()}
-                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center' }}>
+                                    style={{ tintColor: 'white', width: width / 9, height: width / 9, justifyContent: 'center', alignItems: 'center' }}>
                                     <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={MENU_IMAGE} />
                                 </TouchableOpacity>
                             </View>
