@@ -3,7 +3,8 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
-    Image
+    Image,
+    View
 } from 'react-native';
 import PropTypes from "prop-types";
 
@@ -51,33 +52,43 @@ export default class DrawerButton extends React.Component {
 
         return (
             <TouchableOpacity onPress={onPress} style={styles.menuTitleContainer}>
-                <Image source={img} style={styles.img} />
-                <Text style={styles.menuTitle}>{title}</Text>
+                <View style={styles.innerContainer}>
+                    <Image source={img} style={styles.img} />
+                    <Text style={styles.menuTitle}>{title}</Text>
+                </View>
             </TouchableOpacity>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    menuTitleContainer: {
-        alignItems: 'center',
-        height: 60,
-        width: '100%',
-        flexDirection: 'row',
-        borderBottomColor: "#bbbbbb",
-        justifyContent: 'space-around',
-        borderBottomWidth: 0.5,
-    },
-    menuTitle: {
-        width: '100%',
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 17,
-        alignSelf: 'center',
-    },
-    img: {
-        width: 30,
-        height: 30,
-        marginLeft: 15
-    }
+  menuTitleContainer: {
+    alignItems: "center",
+    height: 60,
+    width: "100%",
+    //flexDirection: "row",
+    borderBottomColor: "#bbbbbb",
+    //justifyContent: "space-around",
+    justifyContent: "center",
+    borderBottomWidth: 0.5
+  },
+  menuTitle: {
+    //width: '100%',
+    flex: 1,
+    color: "white",
+    textAlign: "center",
+    fontSize: 17,
+    alignSelf: "center",
+  },
+  img: {
+    width: 30,
+    height: 30,
+    alignSelf: "center",
+    marginLeft: 15
+  },
+  innerContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around"
+  }
 });

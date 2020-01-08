@@ -160,7 +160,7 @@ export default class CopyrightScreen extends React.Component {
                                 <Image style={{ tintColor: 'white', width: width / 9 - 10, height: width / 9 - 10 }} source={BACK_IMAGE} />
                             </TouchableOpacity>
                         </View>
-                        <Image style={{ width: width / 3, height: height / 12 - 15, marginTop: 10 }} source={LOGO_IMAGE} />
+                        <Image style={{ width: width / 3, height: height / 12 - 15 }} source={LOGO_IMAGE} />
                         <View style={styles.menuButton}>
                             <TouchableOpacity
                                 onPress={() => this.openDrawer()}
